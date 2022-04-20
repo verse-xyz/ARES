@@ -196,7 +196,15 @@ contract Exchange is ERC20, ReentrancyGuard {
     /// @dev Mints NFT from Hyperobject contract for caller upon success; callable by token holders with at least 1 token
     function redeem() public {
         if (balanceOf[msg.sender] < (1 * (10**18))) revert InsufficientBalance();
-        transfer(hyperobject, (1 * (10**18)));
+        if (poolBalance == 0) revert InsufficientPoolBalance();
+        uint256 ethToCreator = IBondingCurve(bondingCurve).calculateSaleReturn(
+            totalSupply,
+            poolBalance,
+            reserveRatio,
+            (1 * (10**18))
+        );
+        _burn(msg.sender, (1 * (10**18)));
+        SafeTransferLib.safeTransferETH(payable(creator), ethToCreator);
         IHyperobject(hyperobject).mint(msg.sender);
         emit Redeem(msg.sender);
     }
