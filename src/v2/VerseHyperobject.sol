@@ -2,13 +2,12 @@
 
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.11;
-import './IVerseHyperobject.sol';
+import './interfaces/IVerseHyperobject.sol';
 
 /// @title Verse Hyperobject
 /// @author neuroswish
 /// @notice Verse ERC-721 implementation designed to be integrated with Verse Exchanges.
 /// @notice Base ERC721 functionality adapted from Solmate (https://github.com/Rari-Capital/solmate/blob/main/src/tokens/ERC721.sol).
-
 
 abstract contract VerseHyperobject is IVerseHyperobject {
     /*///////////////////////////////////////////////////////////////
