@@ -1,10 +1,14 @@
-/// Luxury rap, the Hermés of verses
-/// Sophisticated ignorance, write my curses in cursive
-/// I get it custom, you a customer
-/// You ain't accustomed to going through customs, you ain't been nowhere, huh?
-
 // SPDX-License-Identifier: GPL-3.0
 pragma solidity ^0.8.11;
+
+/**
+
+    Luxury rap, the Hermés of verses
+    Sophisticated ignorance, write my curses in cursive
+    I get it custom, you a customer
+    You ain't accustomed to going through customs, you ain't been nowhere, huh?
+
+*/
 
 import "./Exchange.sol";
 import "solmate/tokens/ERC721.sol";

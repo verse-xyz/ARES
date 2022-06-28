@@ -1,4 +1,0 @@
-/// I done told y'all, all I needed was the infrastructure (Boom!)
-
-// SPDX-License-Identifier: GPL-3.0
-pragma solidity ^0.8.11;
