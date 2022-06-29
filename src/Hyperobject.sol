@@ -11,7 +11,6 @@ pragma solidity ^0.8.11;
 */
 
 import "./Exchange.sol";
-import "solmate/tokens/ERC721.sol";
 import {ERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/token/ERC1155/ERC1155Upgradeable.sol";
 import {IERC1155Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC1155Upgradeable.sol";
 import {IERC165Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC165Upgradeable.sol";
@@ -19,12 +18,26 @@ import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/acce
 import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/security/ReentrancyGuardUpgradeable.sol";
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
+import {IHyperobject} from "./interfaces/IHyperobject.sol";
+import {IOwnable} from "./interfaces/IOwnable.sol";
+
+import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
+import {FundsReceiver} from "./utils/FundsReceiver.sol";
+import {Version} from "./utils/Version.sol";
+import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
+
 
 /// @title Hyperobject
 /// @author neuroswish
 /// @notice NFT with an autonomous exchange
 
-contract Hyperobject is ERC721 {
+contract Hyperobject is 
+    ERC1155Upgradeable,
+    UUPSUpgradeable,
+    ReentrancyGuardUpgradeable,
+    AccessControlUpgradeable,
+
+{
 
     // ======== Storage ========
 
