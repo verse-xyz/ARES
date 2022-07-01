@@ -54,7 +54,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     sharedNFTLogic = _sharedNFTLogic;
   }
 
-  /// @notice Update media URIs
+  /// @notice Admin function to update media URIs
   /// @param target target for contract to update metadata for
   /// @param tokenId tokenId for target contract token to update metadata for
   /// @param imageURI new image URI address
@@ -76,4 +76,23 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
       animationURI: animationURI
     });
   }
+
+  /// @notice Admin function to update description
+  /// @param target target for contract to update description for
+  /// @param tokenId tokenId for target contract to update description for
+  /// @param newDescription new description
+  function updateDescription(address target, uint256 tokenId, string memory newDescription)
+    external
+    requireSenderAdmin(target)
+    {
+      bytes32 tokenSpec = keccak256(abi.encodePacked(target,tokenId));
+      tokenInfos[tokenSpec].description = newDescription;
+
+      emit DescriptionUpdated({
+        target: target,
+        tokenId: tokenId,
+        sender: msg.sender,
+        newDescription: newDescription
+      });
+    }
 }
