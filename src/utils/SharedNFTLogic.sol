@@ -130,7 +130,7 @@ contract SharedNFTLogic is IPublicSharedMetadata {
     /// @param imageUrl URL of image to render
     /// @param animationUrl URL of animation to render
     /// @param tokenId Token ID for object
-    /// @param maxSupply Size of entire edition to show
+    /// @param maxSupply Max total supply to show
     function createMetadata(
         string memory name,
         string memory description,
