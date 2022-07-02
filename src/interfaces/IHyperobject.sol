@@ -51,8 +51,6 @@ interface IHyperobject {
 
     /// @notice Return value for market details to use with UIs
     struct MarketDetails {
-        // Supply config status
-        bool isCapped;
         // Supply params
         /// @dev Total size of supply that can be minted
         uint256 maxSupply;
@@ -69,4 +67,7 @@ interface IHyperobject {
     /// @dev Getter for admin role associated with the contract to handle metadata
     /// @return boolean if address is admin
     function isAdmin(address user) external view returns (bool);
+
+    /// @notice Function to return global market details for contract
+    function marketDetails() external view returns (MarketDetails memory);
 }
