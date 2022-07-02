@@ -2,6 +2,8 @@
 pragma solidity ^0.8.11;
 
 import {IMetadataRenderer} from "../interfaces/IMetadataRenderer.sol";
+import {IHyperobject} from "../interfaces/IHyperobject.sol";
+import {IERC1155MetadataURIUpgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC1155MetadataURIUpgradeable.sol";
 import {SharedNFTLogic} from "../utils/SharedNFTLogic.sol";
 import {MetadataRenderAdminCheck} from "../metadata/MetadataRenderAdminCheck.sol";
 
@@ -94,5 +96,47 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
         sender: msg.sender,
         newDescription: newDescription
       });
+    }
+
+  /// @notice Default initializer for token data from a specific contract
+  /// @param data data to init with
+  function initializeWithData(bytes memory data, uint256 tokenId) external {
+    // data format: description, imageURI, animationURI
+    (
+      string memory description,
+      string memory imageURI,
+      string memory animationURI
+    ) = abi.decode(data, (string, string, string));
+
+    bytes32 tokenSpec = keccak256(abi.encodePacked(msg.sender,tokenId));
+    tokenInfos[tokenSpec] = TokenInfo({
+      tokenId: tokenId,
+      description: description,
+      imageURI: imageURI,
+      animationURI: animationURI
+    });
+
+    emit TokenInitialized({
+      target: msg.sender,
+      tokenId: tokenId,
+      description: description,
+      imageURI: imageURI,
+      animationURI: animationURI
+    });
+  }
+
+  /// @notice Token URI information getter
+  /// @param tokenId to get URI for
+  /// @return contract URI (if set)
+  function tokenURI(uint256 tokenId)
+    external
+    view
+    returns (string memory) {
+      ///address target = msg.sender;
+
+      bytes32 tokenSpec = keccak256(abi.encodePacked(msg.sender,tokenId));
+      TokenInfo memory info = tokenInfos[tokenSpec];
+      IHyperobject target = IHyperobject(msg.sender);
+
     }
 }
