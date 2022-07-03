@@ -36,7 +36,8 @@ contract Hyperobject is
     UUPSUpgradeable,
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
-
+    OwnableSkeleton,
+    FundsReceiver
 {
 
     // ======== Storage ========
@@ -61,7 +62,7 @@ contract Hyperobject is
 
     /// @notice Set factory address
     /// @param _factory Factory address
-    constructor(address _factory) ERC721("Verse", "VERSE") {
+    constructor(address _factory) initializer {
         factory = _factory;
      }
 
@@ -80,11 +81,7 @@ contract Hyperobject is
         address _exchange
     ) external {
         if (msg.sender != factory) revert Unauthorized();
-        name = _name;
-        symbol = _symbol;
-        baseURI = _baseURI;
-        exchange = _exchange;
-        currentTokenId++;
+       
     }
 
     // ======== Functions ========
@@ -92,17 +89,34 @@ contract Hyperobject is
     /// @notice Mint NFT
     /// @param _recipient NFT recipient
     /// @dev Increments currentTokenId
-    function mint(address _recipient) external {
-        if (msg.sender != exchange) revert Unauthorized();
-        if (_recipient == address(0)) revert InvalidRecipient();
-        _mint(_recipient, currentTokenId++);
-    }
+    // function mint(address _recipient) external {
+    //     if (msg.sender != exchange) revert Unauthorized();
+    //     if (_recipient == address(0)) revert InvalidRecipient();
+    //     _mint(_recipient, currentTokenId++);
+    // }
 
     /// @notice Retrieve token URI for specified NFT
     /// @param _tokenId Token id
-    function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-        if (ownerOf[_tokenId] == address(0)) revert InvalidTokenId();
-        return bytes(baseURI).length > 0 ? baseURI : "";
+    // function tokenURI(uint256 _tokenId) public view override returns (string memory) {
+    //     if (ownerOf[_tokenId] == address(0)) revert InvalidTokenId();
+    //     return bytes(baseURI).length > 0 ? baseURI : "";
+    // }
+
+    /// @notice ERC165 supports interface
+    /// @param interfaceId interface id to check if supported
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(
+            ERC1155Upgradeable,
+            AccessControlUpgradeable
+        )
+        returns (bool)
+    {
+        return
+            super.supportsInterface(interfaceId) ||
+            type(IOwnable).interfaceId == interfaceId ||
+            type(IHyperobject).interfaceId == interfaceId;
     }
 
 }
