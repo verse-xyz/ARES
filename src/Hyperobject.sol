@@ -95,13 +95,6 @@ contract Hyperobject is
     //     _mint(_recipient, currentTokenId++);
     // }
 
-    /// @notice Retrieve token URI for specified NFT
-    /// @param _tokenId Token id
-    // function tokenURI(uint256 _tokenId) public view override returns (string memory) {
-    //     if (ownerOf[_tokenId] == address(0)) revert InvalidTokenId();
-    //     return bytes(baseURI).length > 0 ? baseURI : "";
-    // }
-
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported
     function supportsInterface(bytes4 interfaceId)
