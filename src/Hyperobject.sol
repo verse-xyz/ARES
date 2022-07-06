@@ -86,14 +86,7 @@ contract Hyperobject is
 
     // ======== Functions ========
 
-    /// @notice Mint NFT
-    /// @param _recipient NFT recipient
-    /// @dev Increments currentTokenId
-    // function mint(address _recipient) external {
-    //     if (msg.sender != exchange) revert Unauthorized();
-    //     if (_recipient == address(0)) revert InvalidRecipient();
-    //     _mint(_recipient, currentTokenId++);
-    // }
+
 
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported
@@ -111,6 +104,8 @@ contract Hyperobject is
             type(IOwnable).interfaceId == interfaceId ||
             type(IHyperobject).interfaceId == interfaceId;
     }
+
+
 
 }
 
