@@ -85,9 +85,6 @@ contract Hyperobject is
     }
 
     // ======== Functions ========
-
-
-
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported
     function supportsInterface(bytes4 interfaceId)
