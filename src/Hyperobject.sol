@@ -103,7 +103,4 @@ contract Hyperobject is
             type(IHyperobject).interfaceId == interfaceId;
     }
 
-
-
 }
-
