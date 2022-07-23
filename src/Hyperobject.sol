@@ -32,7 +32,7 @@ import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
 /// @notice NFT with an autonomous exchange
 
 contract Hyperobject is 
-    ERC1155Upgradeable,
+    ERC721AUpgradeable,
     UUPSUpgradeable,
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
@@ -92,7 +92,8 @@ contract Hyperobject is
         public
         view
         override(
-            ERC1155Upgradeable,
+            /// TODO add IERC165Upgradeable
+            ERC721AUpgradeable,
             AccessControlUpgradeable
         )
         returns (bool)

@@ -12,11 +12,6 @@ interface IHyperobject {
     /// @notice Missing the given role or admin access
     error Access_MissingRoleOrAdmin(bytes32 role);
 
-    // ======== Market Errors ========
-
-    /// @notice NFT sold out
-    error Hyperobject_SoldOut();
-
     // ======== Admin Errors ========
 
     /// @notice Royalty percentage too high
@@ -31,8 +26,6 @@ interface IHyperobject {
     struct Configuration {
         /// @dev Metadata renderer
         IMetadataRenderer metadataRenderer;
-        /// @dev Total size of supply that can be minted
-        uint64 supplySize;
         /// @dev Transaction royalty bps
         uint16 royaltyBPS;
         /// @dev Royalty recipient
@@ -42,23 +35,18 @@ interface IHyperobject {
     /// @notice Market states and configuration
     /// @dev Uses 1 storage slot
     struct MarketConfiguration {
-        /// @notice Minimum token price
+        /// @notice Starting token price
         //TODO check if this is ok to be uint128
-        uint128 minPrice;
-        /// @notice Maximum token price
-        uint128 maxPrice;
+        uint256 startingPrice;
     } 
 
     /// @notice Return value for market details to use with UIs
     struct MarketDetails {
         // Supply params
-        /// @dev Total size of supply that can be minted
-        uint256 maxSupply;
         /// @dev Total supply in circulation
         uint256 totalSupply;
         // Price params
-        uint128 minPrice;
-        uint128 maxPrice;
+        uint256 startingPrice;
 
     }
 
