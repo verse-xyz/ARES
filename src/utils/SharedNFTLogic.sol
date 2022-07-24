@@ -90,20 +90,12 @@ contract SharedNFTLogic is IPublicSharedMetadata {
     /// @param description Description of NFT in metadata
     /// @param mediaData Data for media to include in json object
     /// @param tokenId Token ID for specific token
-    /// @param maxSupply Max supply of token to show
     function createMetadataJSON(
         string memory name,
         string memory description,
         string memory mediaData,
-        uint256 tokenId,
-        uint256 maxSupply
+        uint256 tokenId
     ) public pure returns (bytes memory) {
-        bytes memory maxSupplyText;
-        if (maxSupply > 0) {
-            maxSupplyText = abi.encodePacked(
-                numberToString(maxSupply)
-            );
-        }
         return
             abi.encodePacked(
                 '{"name": "',
@@ -115,10 +107,6 @@ contract SharedNFTLogic is IPublicSharedMetadata {
                 mediaData,
                 'properties": {"tokenId": ',
                 numberToString(tokenId),
-                ', "maxTotalSupply": "',
-                maxSupplyText,
-                ', "name": "',
-                name,
                 '"}}'
             );
     }
@@ -130,14 +118,12 @@ contract SharedNFTLogic is IPublicSharedMetadata {
     /// @param imageUrl URL of image to render
     /// @param animationUrl URL of animation to render
     /// @param tokenId Token ID for object
-    /// @param maxSupply Max total supply to show
     function createMetadata(
         string memory name,
         string memory description,
         string memory imageUrl,
         string memory animationUrl,
-        uint256 tokenId,
-        uint256 maxSupply
+        uint256 tokenId
     ) external pure returns (string memory) {
         string memory _tokenMediaData = tokenMediaData(
             imageUrl,
@@ -148,8 +134,7 @@ contract SharedNFTLogic is IPublicSharedMetadata {
             name,
             description,
             _tokenMediaData,
-            tokenId,
-            maxSupply
+            tokenId
         );
         return encodeMetadataJSON(json);
     }
