@@ -3,7 +3,7 @@ pragma solidity ^0.8.11;
 
 import {IMetadataRenderer} from "../interfaces/IMetadataRenderer.sol";
 import {IHyperobject} from "../interfaces/IHyperobject.sol";
-import {IERC1155MetadataURIUpgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC1155MetadataURIUpgradeable.sol";
+import {IERC721MetadataUpgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC721MetadataUpgradeable.sol";
 import {SharedNFTLogic} from "../utils/SharedNFTLogic.sol";
 import {MetadataRenderAdminCheck} from "../metadata/MetadataRenderAdminCheck.sol";
 
@@ -13,17 +13,17 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     uint256 tokenId;
     string name;
     string description;
-    string imageUrl;
-    string animationUrl;
+    string imageURI;
+    string animationURI;
   }
 
-  /// @notice Event for updated media Urls
-  event MediaUrlsUpdated(
+  /// @notice Event for updated media URIs
+  event MediaURIsUpdated(
     address indexed target,
     address sender,
     uint256 tokenId,
-    string imageUrl,
-    string animationUrl
+    string imageURI,
+    string animationURI
   );
 
   /// @notice Event for a new token initialized
@@ -33,8 +33,8 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     uint256 tokenId,
     string name,
     string description,
-    string imageUrl,
-    string animationUrl
+    string imageURI,
+    string animationURI
   );
 
   /// @notice Description updated for this token
@@ -54,8 +54,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
   );
 
   /// @notice Token information mapping storage
-  /// @dev keccak256(abi.encodePacked(target, tokenId))
-  mapping(bytes32 => TokenInfo) public tokenInfos;
+  mapping(address => TokenInfo) public tokenInfos;
 
   /// @notice Reference to shared NFT logic library
   SharedNFTLogic private immutable sharedNFTLogic;
@@ -66,26 +65,25 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     sharedNFTLogic = _sharedNFTLogic;
   }
 
-  /// @notice Admin function to update media Urls
+  /// @notice Admin function to update media URIs
   /// @param target target for contract to update metadata for
   /// @param tokenId tokenId for target contract token to update metadata for
-  /// @param imageUrl new image Url address
-  /// @param animationUrl new animation Url address
-  function updateMediaUrls(
+  /// @param imageURI new image URI address
+  /// @param animationURI new animation URI address
+  function updateMediaURIs(
     address target,
     uint256 tokenId,
-    string memory imageUrl,
-    string memory animationUrl
+    string memory imageURI,
+    string memory animationURI
   ) external requireSenderAdmin(target) {
-    bytes32 tokenSpec = keccak256(abi.encodePacked(target,tokenId));
-    tokenInfos[tokenSpec].imageUrl = imageUrl;
-    tokenInfos[tokenSpec].animationUrl = animationUrl;
-    emit MediaUrlsUpdated({
+    tokenInfos[target].imageURI = imageURI;
+    tokenInfos[target].animationURI = animationURI;
+    emit MediaURIsUpdated({
       target: target, 
       sender: msg.sender, 
       tokenId: tokenId, 
-      imageUrl: imageUrl, 
-      animationUrl: animationUrl
+      imageURI: imageURI, 
+      animationURI: animationURI
     });
   }
 
@@ -97,8 +95,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     external
     requireSenderAdmin(target)
     {
-      bytes32 tokenSpec = keccak256(abi.encodePacked(target,tokenId));
-      tokenInfos[tokenSpec].description = newDescription;
+      tokenInfos[target].description = newDescription;
 
       emit DescriptionUpdated({
         target: target,
@@ -116,8 +113,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
       external
       requireSenderAdmin(target)
       {
-        bytes32 tokenSpec = keccak256(abi.encodePacked(target,tokenId));
-        tokenInfos[tokenSpec].name = newName;
+        tokenInfos[target].name = newName;
 
         emit NameUpdated({
           target: target,
@@ -130,21 +126,19 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
   /// @notice Default initializer for token data from a specific contract
   /// @param data data to init with
   function initializeWithData(bytes memory data, uint256 tokenId) external {
-    // data format: name, description, imageUrl, animationUrl
+    // data format: name, description, imageURI, animationURI
     (
       string memory name,
       string memory description,
-      string memory imageUrl,
-      string memory animationUrl
+      string memory imageURI,
+      string memory animationURI
     ) = abi.decode(data, (string, string, string, string));
-
-    bytes32 tokenSpec = keccak256(abi.encodePacked(msg.sender,tokenId));
-    tokenInfos[tokenSpec] = TokenInfo({
+    tokenInfos[msg.sender] = TokenInfo({
       tokenId: tokenId,
       name: name,
       description: description,
-      imageUrl: imageUrl,
-      animationUrl: animationUrl
+      imageURI: imageURI,
+      animationURI: animationURI
     });
 
     emit TokenInitialized({
@@ -152,10 +146,36 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
       tokenId: tokenId,
       name: name,
       description: description,
-      imageUrl: imageUrl,
-      animationUrl: animationUrl
+      imageURI: imageURI,
+      animationURI: animationURI
     });
   }
+
+  /// @notice Contract URI information getter
+  /// @return contract uri (if set)
+  function contractURI() external view override returns (string memory) {
+    address target = msg.sender;
+    bytes memory imageSpace = bytes("");
+    if (bytes(tokenInfos[target].imageURI).length > 0) {
+      imageSpace = abi.encodePacked(
+        '", "image": "',
+        tokenInfos[target].imageURI
+      );
+    }
+    return string(
+      sharedNFTLogic.encodeMetadataJSON(
+        abi.encodePacked(
+          '{"name": "',
+          IERC721MetadataUpgradeable(target).name(),
+          '", "description": "',
+          tokenInfos[target].description,
+          imageSpace,
+          '"}'
+        )
+      )
+    );
+  }
+
 
   /// @notice Token URI information getter
   /// @param tokenId to get URI for
@@ -166,21 +186,14 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     override
     returns (string memory) {
       address target = msg.sender;
-
-      bytes32 tokenSpec = keccak256(abi.encodePacked(target,tokenId));
-      TokenInfo memory info = tokenInfos[tokenSpec];
-      IHyperobject hyperobject = IHyperobject(msg.sender);
-
-      // For uncapped supply, this value will be 0
-      uint256 maxSupply = hyperobject.marketDetails().maxSupply;
+      TokenInfo memory info = tokenInfos[target];
       
       return sharedNFTLogic.createMetadata({
         name: info.name,
         description: info.description,
-        imageUrl: info.imageUrl,
-        animationUrl: info.animationUrl,
-        tokenId: info.tokenId,
-        maxSupply: maxSupply
+        imageUrl: info.imageURI,
+        animationUrl: info.animationURI,
+        tokenId: tokenId
       });
     }
 }
