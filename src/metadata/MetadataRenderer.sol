@@ -13,28 +13,26 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     uint256 tokenId;
     string name;
     string description;
-    string imageURI;
-    string animationURI;
+    address creator;
+    bool isKnit;
+    string knitURI;
   }
 
   /// @notice Event for updated media URIs
-  event MediaURIsUpdated(
+  event tokenKnitted(
     address indexed target,
     address sender,
     uint256 tokenId,
-    string imageURI,
-    string animationURI
+    string knitURI
   );
 
   /// @notice Event for a new token initialized
   /// @dev Admin function indexer feedback
   event TokenInitialized(
     address indexed target,
-    uint256 tokenId,
     string name,
     string description,
-    string imageURI,
-    string animationURI
+    string initialURI
   );
 
   /// @notice Description updated for this token
