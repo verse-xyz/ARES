@@ -14,8 +14,6 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     string name;
     string description;
     address creator;
-    bool isKnit;
-    bool isMirror;
     string knitURI;
   }
 
