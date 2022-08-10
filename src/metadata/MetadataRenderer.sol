@@ -14,7 +14,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     string name;
     string description;
     address creator;
-    string knitURI;
+    
   }
 
   /// @notice Event for updated media URIs
