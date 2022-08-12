@@ -12,6 +12,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     Knit,
     Mirror
   }
+  
   /// @notice Storage for token information
   struct TokenInfo {
     uint256 tokenId;
