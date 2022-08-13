@@ -12,7 +12,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     Knit,
     Mirror
   }
-  
+
   /// @notice Storage for token information
   struct TokenInfo {
     uint256 tokenId;
@@ -25,7 +25,7 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
   /// @notice Event for updated media URIs
   event tokenKnitted(
     address indexed target,
-    address sender,
+    address creator,
     uint256 tokenId,
     string knitURI
   );
