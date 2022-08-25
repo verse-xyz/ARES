@@ -8,10 +8,6 @@ import {SharedNFTLogic} from "../utils/SharedNFTLogic.sol";
 import {MetadataRenderAdminCheck} from "../metadata/MetadataRenderAdminCheck.sol";
 
 contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
-  enum TokenType {
-    Knit,
-    Mirror
-  }
 
   /// @notice Storage for token information
   struct TokenInfo {
