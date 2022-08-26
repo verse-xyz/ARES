@@ -13,9 +13,8 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
   struct TokenInfo {
     uint256 tokenId;
     string name;
-    string description;
+    string caption;
     address creator;
-    TokenType tokenType;
   }
 
   /// @notice Event for updated media URIs
