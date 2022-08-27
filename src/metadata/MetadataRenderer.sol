@@ -25,14 +25,14 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
     string knitURI
   );
 
-  /// @notice Event for a new token initialized
-  /// @dev Admin function indexer feedback
-  event TokenInitialized(
-    address indexed target,
-    string name,
-    string description,
-    string initialURI
-  );
+  // /// @notice Event for a new token initialized
+  // /// @dev Admin function indexer feedback
+  // event TokenInitialized(
+  //   address indexed target,
+  //   string name,
+  //   string description,
+  //   string initialURI
+  // );
 
   /// @notice Description updated for this token
   event DescriptionUpdated(
