@@ -35,20 +35,20 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
   // );
 
   /// @notice Description updated for this token
-  event DescriptionUpdated(
-    address indexed target,
-    address sender,
-    uint256 tokenId,
-    string newDescription
-  );
+  // event DescriptionUpdated(
+  //   address indexed target,
+  //   address sender,
+  //   uint256 tokenId,
+  //   string newDescription
+  // );
 
   /// @notice Name updated for this token
-  event NameUpdated(
-    address indexed target,
-    address sender,
-    uint256 tokenId,
-    string newName
-  );
+  // event NameUpdated(
+  //   address indexed target,
+  //   address sender,
+  //   uint256 tokenId,
+  //   string newName
+  // );
 
   /// @notice Token information mapping storage
   mapping(address => TokenInfo) public tokenInfos;
