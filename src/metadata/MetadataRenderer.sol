@@ -2,10 +2,10 @@
 pragma solidity ^0.8.11;
 
 import {IMetadataRenderer} from "../interfaces/IMetadataRenderer.sol";
+import {MetadataRenderAdminCheck} from "../metadata/MetadataRenderAdminCheck.sol";
+import {NFTMetadataRenderer} from "../utils/NFTMetadataRenderer.sol";
 import {IHyperobject} from "../interfaces/IHyperobject.sol";
 import {IERC721MetadataUpgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC721MetadataUpgradeable.sol";
-import {SharedNFTLogic} from "../utils/SharedNFTLogic.sol";
-import {MetadataRenderAdminCheck} from "../metadata/MetadataRenderAdminCheck.sol";
 
 contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
 

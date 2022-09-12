@@ -31,7 +31,7 @@ interface IHyperobject {
         /// @dev Creator reward percentage in basis points
         uint16 rewardBPS;
         /// @dev Reward recipient (new slot, uint160)
-        address payable rewardRecipient;
+        // address payable rewardRecipient;
     }
 
     /// @notice Market states and configuration

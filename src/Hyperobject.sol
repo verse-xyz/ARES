@@ -79,10 +79,33 @@ contract Hyperobject is
         _;
     }
 
+    /// @notice Only a given role can access this function
+    /// @param role Role to check alongside admin role
+    modifier onlyRoleOrAdmin(bytes32 role) {
+        if (!hasRole(role, _msgSender()) && !hasRole(DEFAULT_ADMIN_ROLE, _msgSender())) {
+            revert Access_MissingRoleOrAdmin(role);
+        }
+        _;
+    }
+
 
     /*//////////////////////////////////////////////////////////////
-                                FUNCTIONS
+                               CORE FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
+    /// @notice Global constructor - variables will not change with further proxy deploys
+    /// @dev Marked as initializer to prevent storage of base implementation being used. Can only be initialized by proxy.
+    constructor(
+        IFactoryUpgradeGate _factoryUpgradeGate
+    ) initializer {
+        factoryUpgradeGate = _factoryUpgradeGate;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                               UTILITY FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+
+    
 
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported
