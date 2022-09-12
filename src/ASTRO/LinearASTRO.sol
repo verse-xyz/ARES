@@ -9,7 +9,7 @@ import {ASTRO} from "./ASTRO.sol";
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice VRGDA with a linear issuance curve.
-abstract contract LinearVRGDA is ASTRO {
+abstract contract LinearASTRO is ASTRO {
     /*//////////////////////////////////////////////////////////////
                            PRICING PARAMETERS
     //////////////////////////////////////////////////////////////*/
