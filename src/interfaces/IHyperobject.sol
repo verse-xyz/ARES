@@ -19,17 +19,19 @@ interface IHyperobject {
     /// @notice Invalid admin upgrade address
     error Admin_InvalidUpgradeAddress(address proposedAddress);
 
+    // ======== Market Errors ========
+
     // ======== Events ========
 
     // ======== Structs ========
     /// @notice Configuration for NFT Market
     struct Configuration {
-        /// @dev Metadata renderer
+        /// @dev Metadata renderer (uint160)
         IMetadataRenderer metadataRenderer;
-        /// @dev Transaction royalty bps
-        uint16 royaltyBPS;
-        /// @dev Royalty recipient
-        address payable royaltyRecipient;
+        /// @dev Creator reward percentage in basis points
+        uint16 rewardBPS;
+        /// @dev Reward recipient (new slot, uint160)
+        address payable rewardRecipient;
     }
 
     /// @notice Market states and configuration
@@ -37,7 +39,9 @@ interface IHyperobject {
     struct MarketConfiguration {
         /// @notice Starting token price
         //TODO check if this is ok to be uint128
-        uint256 startingPrice;
+        int256 targetPrice;
+        int256 priceDecreasePercent;
+        int256 perTimeUnit;
     } 
 
     /// @notice Return value for market details to use with UIs
@@ -46,8 +50,10 @@ interface IHyperobject {
         /// @dev Total supply in circulation
         uint256 totalSupply;
         // Price params
-        uint256 startingPrice;
-
+        int256 targetPrice;
+        int256 priceDecreasePercent;
+        int256 perTimeUnit;
+        int256 currentPrice;
     }
 
     // ======== Functions ========
@@ -56,6 +62,21 @@ interface IHyperobject {
     /// @return boolean if address is admin
     function isAdmin(address user) external view returns (bool);
 
+    /// @notice This is the public owner setting that can be set by the contract admin
+    function owner() external view returns (address);
+
     /// @notice Function to return global market details for contract
     function marketDetails() external view returns (MarketDetails memory);
+
+    /// @notice Update the metadata renderer
+    /// @param newRenderer new address for renderer
+    /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
+    function setMetadataRenderer(IMetadataRenderer newRenderer, bytes memory setupRenderer) external;
+
+    function knit() external payable returns (uint256);
+
+    function mirror() external payable returns (uint256);
+
+    function burn(uint256 tokenId) external returns (uint256);
+    
 }
