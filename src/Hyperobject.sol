@@ -25,6 +25,7 @@ import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
 import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
+import {HyperobjectStorage} from "./storage/HyperobjectStorage.sol";
 
 
 /// @title Hyperobject
@@ -37,54 +38,51 @@ contract Hyperobject is
     ReentrancyGuardUpgradeable,
     AccessControlUpgradeable,
     OwnableSkeleton,
-    FundsReceiver
+    FundsReceiver,
+    Version(1),
+    IHyperobject,
+    HyperobjectStorage
 {
 
-    // ======== Storage ========
+    /*//////////////////////////////////////////////////////////////
+                                STORAGE
+    //////////////////////////////////////////////////////////////*/
 
-    address public exchange; // Exchange token pair address
-    address public immutable factory; // Pair factory address
-    string public baseURI; // NFT base URI
-    uint256 currentTokenId; // Counter keeping track of last minted token id
+    /// @dev Gas limit to send funds
+    uint256 internal constant FUNDS_SEND_GAS_LIMIT = 210_000;
 
-    // ======== Errors ========
+    /// @notice Access control roles
+    bytes32 public immutable CREATOR_ROLE = keccak256("CREATOR");
+    bytes32 public immutable MANAGER_ROLE = keccak256("MANAGER");
 
-	/// @notice Thrown when function caller is unauthorized
-	error Unauthorized();
+    // TODO ZORA V3 transfer helper address for auto-approval
+    //address internal immutable zoraERC721TransferHelper;
 
-	/// @notice Thrown when transfer recipient is invalid
-	error InvalidRecipient();
+    /// @dev Factory upgrade gate
+    IFactoryUpgradeGate internal immutable factoryUpgradeGate;
 
-    /// @notice Thrown when token id is invalid
-	error InvalidTokenId();
+    /// TODO Zora Fee Manager address
+    //IZoraFeeManager public immutable zoraFeeManager;
 
-    // ======== Constructor ========
+    /// @notice Max reward BPS
+    uint16 constant MAX_REWARD_BPS = 50_00;
 
-    /// @notice Set factory address
-    /// @param _factory Factory address
-    constructor(address _factory) initializer {
-        factory = _factory;
-     }
+    /*//////////////////////////////////////////////////////////////
+                                MODIFIERS
+    //////////////////////////////////////////////////////////////*/
 
-    // ======== Initializer ========
-
-    /// @notice Initialize a new exchange
-    /// @param _name Hyperobject name
-    /// @param _symbol Hyperobject symbol
-    /// @param _baseURI Token base URI
-    /// @param _exchange Exchange address
-    /// @dev Called by factory at time of deployment
-    function initialize(
-        string calldata _name,
-        string calldata _symbol,
-        string calldata _baseURI,
-        address _exchange
-    ) external {
-        if (msg.sender != factory) revert Unauthorized();
-       
+    /// @notice Only admin can access this function
+    modifier onlyAdmin() {
+        if (!hasRole(DEFAULT_ADMIN_ROLE, _msgSender())) {
+            revert Access_OnlyAdmin();
+        }
+        _;
     }
 
-    // ======== Functions ========
+
+    /*//////////////////////////////////////////////////////////////
+                                FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
 
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported
@@ -93,6 +91,7 @@ contract Hyperobject is
         view
         override(
             /// TODO add IERC165Upgradeable
+            IERC165Upgradeable,
             ERC721AUpgradeable,
             AccessControlUpgradeable
         )
