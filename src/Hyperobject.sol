@@ -18,6 +18,7 @@ import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/se
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IHyperobject} from "./interfaces/IHyperobject.sol";
+import {IImage} from "./interfaces/IImage.sol";
 import {IFactoryUpgradeGate} from "./interfaces/IFactoryUpgradeGate.sol";
 import {IOwnable} from "./interfaces/IOwnable.sol";
 
@@ -26,6 +27,7 @@ import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
 import {HyperobjectStorage} from "./storage/HyperobjectStorage.sol";
+import {Image} from "./image/Image.sol";
 
 
 /// @title Hyperobject
@@ -108,8 +110,8 @@ contract Hyperobject is
         address payable _creator,
         uint16 _rewardBPS,
         MarketConfiguration memory _marketConfig,
-        //IMetadataRenderer _metadataRenderer,
-        bytes memory _metadataRendererInit
+        IImage _image,
+        bytes memory _imageInit
     ) public initializer {
         // Init ERC721A
         __ERC721A_init(_networkName, _networkSymbol);
@@ -126,6 +128,15 @@ contract Hyperobject is
         if (config.rewardBPS > MAX_REWARD_BPS) {
             revert Setup_RewardPercentageTooHigh(MAX_REWARD_BPS);
         }
+
+        // Update marketConfig
+        marketConfig = _marketConfig;
+
+        // Setup config variables
+        config.image = _image;
+        config.rewardBPS = _rewardBPS;
+        config.rewardRecipient = _creator;
+        
     }
 
     /*//////////////////////////////////////////////////////////////
