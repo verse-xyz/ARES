@@ -9,21 +9,29 @@ import {IERC721MetadataUpgradeable} from "@openzeppelin/contracts-upgradeable/in
 
 contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
 
+  // this is how we're going to render metadata for a given token
+  // each token is going to have a name (common), image, caption, like data hash, comment data hash, creator, and an owner
+  // we also need a mirror counter
+
   /// @notice Storage for token information
   struct TokenInfo {
     uint256 tokenId;
     string name;
+    string imageURI;
     string caption;
     address creator;
+    address owner;
+    string likesURI;
+    string commentsURI;
   }
 
-  /// @notice Event for updated media URIs
-  event tokenKnitted(
-    address indexed target,
-    address creator,
-    uint256 tokenId,
-    string knitURI
-  );
+  // /// @notice Event for updated media URIs
+  // event tokenKnitted(
+  //   address indexed target,
+  //   address creator,
+  //   uint256 tokenId,
+  //   string knitURI
+  // );
 
   // /// @notice Event for a new token initialized
   // /// @dev Admin function indexer feedback
@@ -52,15 +60,6 @@ contract MetadataRenderer is IMetadataRenderer, MetadataRenderAdminCheck {
 
   /// @notice Token information mapping storage
   mapping(address => TokenInfo) public tokenInfos;
-
-  /// @notice Reference to shared NFT logic library
-  SharedNFTLogic private immutable sharedNFTLogic;
-
-  /// @notice Constructor for library
-  /// @param _sharedNFTLogic reference to shared NFT logic library
-  constructor(SharedNFTLogic _sharedNFTLogic) {
-    sharedNFTLogic = _sharedNFTLogic;
-  }
 
   /// @notice Admin function to update media URIs
   /// @param target target for contract to update metadata for

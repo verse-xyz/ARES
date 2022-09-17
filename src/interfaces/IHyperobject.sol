@@ -14,8 +14,8 @@ interface IHyperobject {
 
     // ======== Admin Errors ========
 
-    /// @notice Royalty percentage too high
-    error Setup_RoyaltyPercentageTooHigh(uint16 maxRoyaltyBPS);
+    /// @notice Reward percentage too high
+    error Setup_RewardPercentageTooHigh(uint16 maxRoyaltyBPS);
     /// @notice Invalid admin upgrade address
     error Admin_InvalidUpgradeAddress(address proposedAddress);
 

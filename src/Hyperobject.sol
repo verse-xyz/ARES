@@ -10,7 +10,6 @@ pragma solidity ^0.8.11;
 
 */
 
-import "./Exchange.sol";
 import {ERC721AUpgradeable} from  "erc721a-upgradeable/ERC721AUpgradeable.sol";
 import {IERC721AUpgradeable} from "erc721a-upgradeable/IERC721AUpgradeable.sol";
 import {IERC165Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC165Upgradeable.sol";
@@ -19,6 +18,7 @@ import {ReentrancyGuardUpgradeable} from "@openzeppelin/contracts-upgradeable/se
 import {UUPSUpgradeable} from "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
 
 import {IHyperobject} from "./interfaces/IHyperobject.sol";
+import {IFactoryUpgradeGate} from "./interfaces/IFactoryUpgradeGate.sol";
 import {IOwnable} from "./interfaces/IOwnable.sol";
 
 import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
@@ -97,8 +97,35 @@ contract Hyperobject is
     /// @dev Marked as initializer to prevent storage of base implementation being used. Can only be initialized by proxy.
     constructor(
         IFactoryUpgradeGate _factoryUpgradeGate
+        // TODO transfer helper and fee manager 
     ) initializer {
         factoryUpgradeGate = _factoryUpgradeGate;
+    }
+
+    function initialize(
+        string memory _networkName,
+        string memory _networkSymbol,
+        address payable _creator,
+        uint16 _rewardBPS,
+        MarketConfiguration memory _marketConfig,
+        //IMetadataRenderer _metadataRenderer,
+        bytes memory _metadataRendererInit
+    ) public initializer {
+        // Init ERC721A
+        __ERC721A_init(_networkName, _networkSymbol);
+        // Setup access control
+        __AccessControl_init();
+        // Setup reentrancy guard
+        __ReentrancyGuard_init();
+        // Setup the owner role
+        _setupRole(DEFAULT_ADMIN_ROLE, _creator);
+        // Set ownership to original sender of contract call
+        _setOwner(_creator);
+
+        // Reward BPS check
+        if (config.rewardBPS > MAX_REWARD_BPS) {
+            revert Setup_RewardPercentageTooHigh(MAX_REWARD_BPS);
+        }
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -114,7 +141,6 @@ contract Hyperobject is
         view
         override(
             /// TODO add IERC165Upgradeable
-            IERC165Upgradeable,
             ERC721AUpgradeable,
             AccessControlUpgradeable
         )
