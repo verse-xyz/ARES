@@ -25,7 +25,7 @@ contract Image is IImage {
   /// @notice Storage for token information
   mapping (uint256 => tokenInfo) public tokenInfos;
 
-  // we're going to store the address of the hyperobject contract
+  // we're going to store the address of the associated hyperobject contract
   Hyperobject public immutable source;
 
   constructor(

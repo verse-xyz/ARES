@@ -2,6 +2,7 @@
 pragma solidity ^0.8.11;
 
 import {IMetadataRenderer} from "./IMetadataRenderer.sol";
+import {IImage} from "../interfaces/IImage.sol";
 
 /// @notice Interface for Verse Hyperobject Contract
 interface IHyperobject {
@@ -26,12 +27,12 @@ interface IHyperobject {
     // ======== Structs ========
     /// @notice Configuration for NFT Market
     struct Configuration {
-        /// @dev Metadata renderer (uint160)
-        IMetadataRenderer metadataRenderer;
+        /// @dev Image renderer (uint160)
+        IImage image;
         /// @dev Creator reward percentage in basis points
         uint16 rewardBPS;
         /// @dev Reward recipient (new slot, uint160)
-        // address payable rewardRecipient;
+        address payable rewardRecipient;
     }
 
     /// @notice Market states and configuration
