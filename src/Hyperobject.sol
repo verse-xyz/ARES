@@ -26,8 +26,12 @@ import {OwnableSkeleton} from "./utils/OwnableSkeleton.sol";
 import {FundsReceiver} from "./utils/FundsReceiver.sol";
 import {Version} from "./utils/Version.sol";
 import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
-import {HyperobjectStorage} from "./storage/HyperobjectStorage.sol";
 import {Image} from "./image/Image.sol";
+
+import { UUPS } from "./proxy/UUPS.sol";
+import { ReentrancyGuard } from "./utils/ReentrancyGuard.sol";
+import { ERC721 } from "./token/ERC721.sol";
+import { HyperobjectStorage } from "./storage/HyperobjectStorage.sol";
 
 
 /// @title Hyperobject
@@ -35,14 +39,9 @@ import {Image} from "./image/Image.sol";
 /// @notice NFT with an autonomous exchange
 
 contract Hyperobject is 
-    ERC721AUpgradeable,
-    UUPSUpgradeable,
-    ReentrancyGuardUpgradeable,
-    AccessControlUpgradeable,
-    OwnableSkeleton,
-    FundsReceiver,
-    Version(1),
     IHyperobject,
+    ReentrancyGuard,
+    ERC721,
     HyperobjectStorage
 {
 
@@ -109,41 +108,38 @@ contract Hyperobject is
         string memory _networkSymbol,
         address payable _creator,
         uint16 _rewardBPS,
-        MarketConfiguration memory _marketConfig,
-        IImage _image,
-        bytes memory _imageInit
+        bytes calldata _hyperimageInitData, // going to be the above 4 params encoded into a byte string
+        IHyperobject.MarketConfiguration calldata _marketConfig, // market params
+        IImage _image, // image rederer stuff
+        bytes memory _imageInit // first image init data
     ) public initializer {
         // Init ERC721A
-        __ERC721A_init(_networkName, _networkSymbol);
-        // Setup access control
-        __AccessControl_init();
+        __ERC721_init(_networkName, _networkSymbol);
         // Setup reentrancy guard
         __ReentrancyGuard_init();
-        // Setup the owner role
-        _setupRole(DEFAULT_ADMIN_ROLE, _creator);
-        // Set ownership to original sender of contract call
-        _setOwner(_creator);
+        // // Setup the owner role
+        // _setupRole(DEFAULT_ADMIN_ROLE, _creator);
+        // // Set ownership to original sender of contract call
+        // _setOwner(_creator);
 
         // Reward BPS check
         if (config.rewardBPS > MAX_REWARD_BPS) {
             revert Setup_RewardPercentageTooHigh(MAX_REWARD_BPS);
         }
-
         // Update marketConfig
         marketConfig = _marketConfig;
-
         // Setup config variables
         config.image = _image;
         config.rewardBPS = _rewardBPS;
         config.rewardRecipient = _creator;
-        
+
     }
+
+
 
     /*//////////////////////////////////////////////////////////////
                                UTILITY FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-
-    
 
     /// @notice ERC165 supports interface
     /// @param interfaceId interface id to check if supported

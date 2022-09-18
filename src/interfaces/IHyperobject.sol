@@ -35,6 +35,12 @@ interface IHyperobject {
         address payable rewardRecipient;
     }
 
+    /// @notice Configuration for token
+    /// @param initStrings The encoded token name, symbol, foundational image uri, foundational image caption
+    struct TokenConfiguration {
+        bytes initStrings;
+    }
+
     /// @notice Market states and configuration
     /// @dev Uses 1 storage slot
     struct MarketConfiguration {
@@ -43,6 +49,10 @@ interface IHyperobject {
         int256 targetPrice;
         int256 priceDecreasePercent;
         int256 perTimeUnit;
+        /// @dev Creator reward percentage in basis points
+        uint16 rewardBPS;
+        /// @dev Reward recipient (new slot, uint160)
+        address payable rewardRecipient;
     } 
 
     /// @notice Return value for market details to use with UIs
