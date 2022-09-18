@@ -53,7 +53,7 @@ interface IHyperobject {
         uint16 rewardBPS;
         /// @dev Reward recipient (new slot, uint160)
         address payable rewardRecipient;
-    } 
+    }
 
     /// @notice Return value for market details to use with UIs
     struct MarketDetails {
@@ -89,5 +89,4 @@ interface IHyperobject {
     function mirror() external payable returns (uint256);
 
     function burn(uint256 tokenId) external returns (uint256);
-    
 }

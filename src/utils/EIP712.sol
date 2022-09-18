@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IEIP712 } from "../interfaces/IEIP712.sol";
-import { Initializable } from "../utils/Initializable.sol";
+import {IEIP712} from "../interfaces/IEIP712.sol";
+import {Initializable} from "../utils/Initializable.sol";
 
 /// @title EIP712
 /// @author Rohan Kulkarni
@@ -16,7 +16,8 @@ abstract contract EIP712 is IEIP712, Initializable {
     //////////////////////////////////////////////////////////////*/
 
     /// @dev The EIP-712 domain typehash
-    bytes32 internal constant DOMAIN_TYPEHASH = keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
+    bytes32 internal constant DOMAIN_TYPEHASH =
+        keccak256("EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)");
 
     /*//////////////////////////////////////////////////////////////
                                 STORAGE

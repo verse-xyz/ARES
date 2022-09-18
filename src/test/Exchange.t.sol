@@ -17,7 +17,6 @@ contract ExchangeTest is DSTest {
     address exchangeAddress;
     address hyperobjectAddress;
 
-
     function setUp() public {
         // Cheat codes
         vm = VM(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
@@ -25,7 +24,8 @@ contract ExchangeTest is DSTest {
         // Deploy exchange and hyperobject
         bondingCurve = new BondingCurve();
         pairFactory = new PairFactory(address(bondingCurve));
-        (exchangeAddress, hyperobjectAddress) = pairFactory.create("Verse", "VERSE", 242424, 724223089680545, 500, "verse.xyz");
+        (exchangeAddress, hyperobjectAddress) =
+            pairFactory.create("Verse", "VERSE", 242424, 724223089680545, 500, "verse.xyz");
         exchange = Exchange(exchangeAddress);
         hyperobject = Hyperobject(hyperobjectAddress);
 
@@ -35,11 +35,21 @@ contract ExchangeTest is DSTest {
     }
 
     // Non-factory address cannot call initialize function
-    function testFail_Initialize(string memory _name, string memory _symbol, uint256 _reserveRatio, uint256 _slopeInit, uint256 _transactionShare, address _hyperobject, address _creator) public {
+    function testFail_Initialize(
+        string memory _name,
+        string memory _symbol,
+        uint256 _reserveRatio,
+        uint256 _slopeInit,
+        uint256 _transactionShare,
+        address _hyperobject,
+        address _creator
+    )
+        public
+    {
         vm.prank(address(0));
         exchange.initialize(_name, _symbol, _reserveRatio, _slopeInit, _transactionShare, _hyperobject, _creator);
     }
-    
+
     // User can buy tokens and initialize token supply
     function test_BuyInitial() public {
         vm.prank(address(1));
@@ -51,7 +61,7 @@ contract ExchangeTest is DSTest {
     function test_Buy() public {
         vm.prank(address(1));
         exchange.buy{value: 1 ether}(1);
-        vm.prank(address(2));   
+        vm.prank(address(2));
         exchange.buy{value: 8 ether}(1);
         emit log_uint(exchange.balanceOf(address(2)));
     }
@@ -60,7 +70,7 @@ contract ExchangeTest is DSTest {
     function test_BuyInvalidValue() public {
         vm.prank(address(1));
         //vm.expectRevert("INVALID_VALUE");
-        vm.expectRevert(abi.encodeWithSignature('InvalidValue()'));
+        vm.expectRevert(abi.encodeWithSignature("InvalidValue()"));
         exchange.buy{value: 0 ether}(1);
     }
 
@@ -68,7 +78,7 @@ contract ExchangeTest is DSTest {
     function test_BuyInsufficientInitialPrice() public {
         vm.prank(address(1));
         //vm.expectRevert("INSUFFICIENT_INITIAL_PRICE");
-        vm.expectRevert(abi.encodeWithSignature('InsufficientInitialPrice()'));
+        vm.expectRevert(abi.encodeWithSignature("InsufficientInitialPrice()"));
         exchange.buy{value: 0.001 ether}(1);
     }
 
@@ -76,7 +86,7 @@ contract ExchangeTest is DSTest {
     function test_BuyInvalidSlippage() public {
         vm.prank(address(1));
         //vm.expectRevert("INVALID_SLIPPAGE");
-        vm.expectRevert(abi.encodeWithSignature('InvalidSlippage()'));
+        vm.expectRevert(abi.encodeWithSignature("InvalidSlippage()"));
         exchange.buy{value: 0.1 ether}(0);
     }
 
@@ -84,8 +94,8 @@ contract ExchangeTest is DSTest {
     function test_BuySlippage() public {
         vm.prank(address(1));
         //vm.expectRevert("SLIPPAGE");
-        vm.expectRevert(abi.encodeWithSignature('Slippage()'));
-        exchange.buy{value: 1 ether}(50 * (10**18));
+        vm.expectRevert(abi.encodeWithSignature("Slippage()"));
+        exchange.buy{value: 1 ether}(50 * (10 ** 18));
     }
 
     // Token holder can sell tokens for ETH
@@ -94,31 +104,30 @@ contract ExchangeTest is DSTest {
         exchange.buy{value: 1 ether}(1);
         vm.startPrank(address(2));
         exchange.buy{value: 8 ether}(1);
-        exchange.sell(2 * (10**18), 0.1 ether);
+        exchange.sell(2 * (10 ** 18), 0.1 ether);
     }
 
     // Non-holder cannot sell
     function test_NonHolderCannotSell() public {
         vm.prank(address(3));
         //vm.expectRevert("INSUFFICIENT_BALANCE");
-        vm.expectRevert(abi.encodeWithSignature('InsufficientBalance()'));
+        vm.expectRevert(abi.encodeWithSignature("InsufficientBalance()"));
         exchange.sell(1, 1 ether);
     }
 
     function test_SellInvalidAmount() public {
         vm.prank(address(1));
         //vm.expectRevert("INSUFFICIENT_BALANCE");
-        vm.expectRevert(abi.encodeWithSignature('InsufficientBalance()'));
-        exchange.sell(500 * (10**18), 1 ether);
+        vm.expectRevert(abi.encodeWithSignature("InsufficientBalance()"));
+        exchange.sell(500 * (10 ** 18), 1 ether);
     }
 
     function test_SellInvalidAmountArgZero() public {
         vm.prank(address(1));
         //vm.expectRevert("INVALID_SELL_AMOUNT");
-        vm.expectRevert(abi.encodeWithSignature('InvalidSellAmount()'));
+        vm.expectRevert(abi.encodeWithSignature("InvalidSellAmount()"));
         exchange.sell(0, 1 ether);
     }
-
 
     function test_SellInvalidSlippage() public {
         vm.prank(address(1));
@@ -127,7 +136,7 @@ contract ExchangeTest is DSTest {
         exchange.buy{value: 8 ether}(1);
         vm.prank(address(1));
         //vm.expectRevert("INVALID_SLIPPAGE");
-        vm.expectRevert(abi.encodeWithSignature('InvalidSlippage()'));
+        vm.expectRevert(abi.encodeWithSignature("InvalidSlippage()"));
         exchange.sell(10 * (10 ** 18), 0 ether);
     }
 
@@ -138,7 +147,7 @@ contract ExchangeTest is DSTest {
         exchange.buy{value: 8 ether}(1);
         vm.prank(address(1));
         //vm.expectRevert("SLIPPAGE");
-        vm.expectRevert(abi.encodeWithSignature('Slippage()'));
+        vm.expectRevert(abi.encodeWithSignature("Slippage()"));
         exchange.sell(10 * (10 ** 18), 10 ether);
     }
 
@@ -152,10 +161,9 @@ contract ExchangeTest is DSTest {
         vm.prank(address(1));
         exchange.buy{value: 0.01 ether}(1);
         //vm.expectRevert("INSUFFICIENT_BALANCE");
-        vm.expectRevert(abi.encodeWithSignature('InsufficientBalance()'));
+        vm.expectRevert(abi.encodeWithSignature("InsufficientBalance()"));
         exchange.redeem();
     }
 
     receive() external payable {}
-
 }

@@ -2,15 +2,13 @@
 pragma solidity ^0.8.11;
 
 /**
+ * Luxury rap, the Hermés of verses
+ * Sophisticated ignorance, write my curses in cursive
+ * I get it custom, you a customer
+ * You ain't accustomed to going through customs, you ain't been nowhere, huh?
+ */
 
-    Luxury rap, the Hermés of verses
-    Sophisticated ignorance, write my curses in cursive
-    I get it custom, you a customer
-    You ain't accustomed to going through customs, you ain't been nowhere, huh?
-
-*/
-
-import {ERC721AUpgradeable} from  "erc721a-upgradeable/ERC721AUpgradeable.sol";
+import {ERC721AUpgradeable} from "erc721a-upgradeable/ERC721AUpgradeable.sol";
 import {IERC721AUpgradeable} from "erc721a-upgradeable/IERC721AUpgradeable.sol";
 import {IERC165Upgradeable} from "@openzeppelin/contracts-upgradeable/interfaces/IERC165Upgradeable.sol";
 import {AccessControlUpgradeable} from "@openzeppelin/contracts-upgradeable/access/AccessControlUpgradeable.sol";
@@ -28,23 +26,16 @@ import {Version} from "./utils/Version.sol";
 import {FactoryUpgradeGate} from "./FactoryUpgradeGate.sol";
 import {Image} from "./image/Image.sol";
 
-import { UUPS } from "./proxy/UUPS.sol";
-import { ReentrancyGuard } from "./utils/ReentrancyGuard.sol";
-import { ERC721 } from "./token/ERC721.sol";
-import { HyperobjectStorage } from "./storage/HyperobjectStorage.sol";
-
+import {UUPS} from "./proxy/UUPS.sol";
+import {ReentrancyGuard} from "./utils/ReentrancyGuard.sol";
+import {ERC721} from "./token/ERC721.sol";
+import {HyperobjectStorage} from "./storage/HyperobjectStorage.sol";
 
 /// @title Hyperobject
 /// @author neuroswish
 /// @notice NFT with an autonomous exchange
 
-contract Hyperobject is 
-    IHyperobject,
-    ReentrancyGuard,
-    ERC721,
-    HyperobjectStorage
-{
-
+contract Hyperobject is IHyperobject, ReentrancyGuard, ERC721, HyperobjectStorage {
     /*//////////////////////////////////////////////////////////////
                                 STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -89,17 +80,16 @@ contract Hyperobject is
         _;
     }
 
-
     /*//////////////////////////////////////////////////////////////
                                CORE FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Global constructor - variables will not change with further proxy deploys
     /// @dev Marked as initializer to prevent storage of base implementation being used. Can only be initialized by proxy.
-    constructor(
-        IFactoryUpgradeGate _factoryUpgradeGate
-        // TODO transfer helper and fee manager 
-    ) initializer {
+    constructor(IFactoryUpgradeGate _factoryUpgradeGate)
+        // TODO transfer helper and fee manager
+        initializer
+    {
         factoryUpgradeGate = _factoryUpgradeGate;
     }
 
@@ -112,7 +102,10 @@ contract Hyperobject is
         IHyperobject.MarketConfiguration calldata _marketConfig, // market params
         IImage _image, // image rederer stuff
         bytes memory _imageInit // first image init data
-    ) public initializer {
+    )
+        public
+        initializer
+    {
         // Init ERC721A
         __ERC721_init(_networkName, _networkSymbol);
         // Setup reentrancy guard
@@ -132,10 +125,7 @@ contract Hyperobject is
         config.image = _image;
         config.rewardBPS = _rewardBPS;
         config.rewardRecipient = _creator;
-
     }
-
-
 
     /*//////////////////////////////////////////////////////////////
                                UTILITY FUNCTIONS
@@ -146,17 +136,14 @@ contract Hyperobject is
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(
+        override (
             /// TODO add IERC165Upgradeable
             ERC721AUpgradeable,
             AccessControlUpgradeable
         )
         returns (bool)
     {
-        return
-            super.supportsInterface(interfaceId) ||
-            type(IOwnable).interfaceId == interfaceId ||
-            type(IHyperobject).interfaceId == interfaceId;
+        return super.supportsInterface(interfaceId) || type(IOwnable).interfaceId == interfaceId
+            || type(IHyperobject).interfaceId == interfaceId;
     }
-
 }

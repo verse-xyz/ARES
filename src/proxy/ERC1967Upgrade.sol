@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IERC1822Proxiable } from "@openzeppelin/contracts/interfaces/draft-IERC1822.sol";
-import { StorageSlot } from "@openzeppelin/contracts/utils/StorageSlot.sol";
+import {IERC1822Proxiable} from "@openzeppelin/contracts/interfaces/draft-IERC1822.sol";
+import {StorageSlot} from "@openzeppelin/contracts/utils/StorageSlot.sol";
 
-import { IERC1967Upgrade } from "../interfaces/IERC1967Upgrade.sol";
-import { Address } from "../utils/Address.sol";
+import {IERC1967Upgrade} from "../interfaces/IERC1967Upgrade.sol";
+import {Address} from "../utils/Address.sol";
 
 /// @title ERC1967Upgrade
 /// @author Rohan Kulkarni
@@ -30,11 +30,7 @@ abstract contract ERC1967Upgrade is IERC1967Upgrade {
     /// @dev Upgrades to an implementation with security checks for UUPS proxies and an additional function call
     /// @param _newImpl The new implementation address
     /// @param _data The encoded function call
-    function _upgradeToAndCallUUPS(
-        address _newImpl,
-        bytes memory _data,
-        bool _forceCall
-    ) internal {
+    function _upgradeToAndCallUUPS(address _newImpl, bytes memory _data, bool _forceCall) internal {
         if (StorageSlot.getBooleanSlot(_ROLLBACK_SLOT).value) {
             _setImplementation(_newImpl);
         } else {
@@ -51,11 +47,7 @@ abstract contract ERC1967Upgrade is IERC1967Upgrade {
     /// @dev Upgrades to an implementation with an additional function call
     /// @param _newImpl The new implementation address
     /// @param _data The encoded function call
-    function _upgradeToAndCall(
-        address _newImpl,
-        bytes memory _data,
-        bool _forceCall
-    ) internal {
+    function _upgradeToAndCall(address _newImpl, bytes memory _data, bool _forceCall) internal {
         _upgradeTo(_newImpl);
 
         if (_data.length > 0 || _forceCall) {

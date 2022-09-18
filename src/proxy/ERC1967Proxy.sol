@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { Proxy } from "@openzeppelin/contracts/proxy/Proxy.sol";
+import {Proxy} from "@openzeppelin/contracts/proxy/Proxy.sol";
 
-import { IERC1967Upgrade } from "../interfaces/IERC1967Upgrade.sol";
-import { ERC1967Upgrade } from "../proxy/ERC1967Upgrade.sol";
+import {IERC1967Upgrade} from "../interfaces/IERC1967Upgrade.sol";
+import {ERC1967Upgrade} from "../proxy/ERC1967Upgrade.sol";
 
 /// @title ERC1967Proxy
 /// @author Rohan Kulkarni

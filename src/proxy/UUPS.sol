@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IUUPS } from "../interfaces/IUUPS.sol";
-import { ERC1967Upgrade } from "./ERC1967Upgrade.sol";
+import {IUUPS} from "../interfaces/IUUPS.sol";
+import {ERC1967Upgrade} from "./ERC1967Upgrade.sol";
 
 /// @title UUPS
 /// @author Rohan Kulkarni

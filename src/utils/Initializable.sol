@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IInitializable } from "../interfaces/IInitializable.sol";
-import { Address } from "../utils/Address.sol";
+import {IInitializable} from "../interfaces/IInitializable.sol";
+import {Address} from "../utils/Address.sol";
 
 /// @title Initializable
 /// @author Rohan Kulkarni
@@ -33,7 +33,9 @@ abstract contract Initializable is IInitializable {
     modifier initializer() {
         bool isTopLevelCall = !_initializing;
 
-        if ((!isTopLevelCall || _initialized != 0) && (Address.isContract(address(this)) || _initialized != 1)) revert ALREADY_INITIALIZED();
+        if ((!isTopLevelCall || _initialized != 0) && (Address.isContract(address(this)) || _initialized != 1)) {
+            revert ALREADY_INITIALIZED();
+        }
 
         _initialized = 1;
 

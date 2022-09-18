@@ -17,7 +17,6 @@ contract HyperobjectTest is DSTest {
     address exchangeAddress;
     address hyperobjectAddress;
 
-
     function setUp() public {
         // Cheat codes
         vm = VM(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
@@ -25,17 +24,20 @@ contract HyperobjectTest is DSTest {
         // Deploy exchange and hyperobject
         bondingCurve = new BondingCurve();
         pairFactory = new PairFactory(address(bondingCurve));
-        (exchangeAddress, hyperobjectAddress) = pairFactory.create("Verse", "VERSE", 242424, 724223089680545, 0, "verse.xyz");
+        (exchangeAddress, hyperobjectAddress) =
+            pairFactory.create("Verse", "VERSE", 242424, 724223089680545, 0, "verse.xyz");
         exchange = Exchange(exchangeAddress);
         hyperobject = Hyperobject(hyperobjectAddress);
-        
+
         // Set user balances
         vm.deal(address(1), 100 ether);
         vm.deal(address(2), 100 ether);
     }
 
     // make sure non-factory address cannot call initialize function
-    function testFail_Initialize(string memory _name, string memory _symbol, string memory _baseURI, address _exchange) public {
+    function testFail_Initialize(string memory _name, string memory _symbol, string memory _baseURI, address _exchange)
+        public
+    {
         vm.prank(address(0));
         hyperobject.initialize(_name, _symbol, _baseURI, _exchange);
     }
@@ -52,7 +54,6 @@ contract HyperobjectTest is DSTest {
         if (_recipient != address(0x0000000000000000000000000000000000000000)) {
             hyperobject.mint(_recipient);
         }
-        
     }
 
     // return tokenURI for token ID that exists
@@ -73,7 +74,7 @@ contract HyperobjectTest is DSTest {
         exchange.redeem();
         hyperobject.tokenURI(2);
         //vm.expectRevert("TOKEN_DOES_NOT_EXIST");
-        vm.expectRevert(abi.encodeWithSignature('InvalidTokenId()'));
+        vm.expectRevert(abi.encodeWithSignature("InvalidTokenId()"));
         hyperobject.tokenURI(3);
     }
 
@@ -86,5 +87,4 @@ contract HyperobjectTest is DSTest {
     }
 
     receive() external payable {}
-
 }

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IOwnable } from "../interfaces/IOwnable.sol";
-import { Initializable } from "../utils/Initializable.sol";
+import {IOwnable} from "../interfaces/IOwnable.sol";
+import {Initializable} from "../utils/Initializable.sol";
 
 /// @title Ownable
 /// @author Rohan Kulkarni

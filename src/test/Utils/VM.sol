@@ -12,20 +12,10 @@ interface VM {
     function load(address, bytes32) external returns (bytes32);
 
     /// @dev Stores a value to an address' storage slot, (who, slot, value)
-    function store(
-        address,
-        bytes32,
-        bytes32
-    ) external;
+    function store(address, bytes32, bytes32) external;
 
     /// @dev Signs data, (privateKey, digest) => (r, v, s)
-    function sign(uint256, bytes32)
-        external
-        returns (
-            uint8,
-            bytes32,
-            bytes32
-        );
+    function sign(uint256, bytes32) external returns (uint8, bytes32, bytes32);
 
     /// @dev Gets address for a given private key, (privateKey) => (address)
     function addr(uint256) external returns (address);
@@ -52,22 +42,13 @@ interface VM {
     function expectRevert(bytes calldata) external;
 
     /// @dev Expects the next emitted event. Params check topic 1, topic 2, topic 3 and data are the same.
-    function expectEmit(
-        bool,
-        bool,
-        bool,
-        bool
-    ) external;
+    function expectEmit(bool, bool, bool, bool) external;
 
     /// @dev Mocks a call to an address, returning specified data.
     /// Calldata can either be strict or a partial match, e.g. if you only
     /// pass a Solidity selector to the expected calldata, then the entire Solidity
     /// function will be mocked.
-    function mockCall(
-        address,
-        bytes calldata,
-        bytes calldata
-    ) external;
+    function mockCall(address, bytes calldata, bytes calldata) external;
 
     /// @dev Clears all mocked calls
     function clearMockedCalls() external;

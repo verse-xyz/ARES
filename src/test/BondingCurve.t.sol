@@ -17,7 +17,6 @@ contract BondingCurveTest is DSTest {
     address exchangeAddress;
     address cryptomediaAddress;
 
-
     function setUp() public {
         // Cheat codes
         vm = VM(0x7109709ECfa91a80626fF3989D68f67F5b1DD12D);
@@ -35,25 +34,28 @@ contract BondingCurveTest is DSTest {
     // }
 
     function test_getTokensForEth() public {
-        uint256 tokens = bondingCurve.calculatePurchaseReturn(19360000000000000000, 161522353159983588, 242424, 17000000000000000000);
+        uint256 tokens =
+            bondingCurve.calculatePurchaseReturn(19360000000000000000, 161522353159983588, 242424, 17000000000000000000);
         emit log_uint(tokens);
     }
 
     function test_getEthForTokens() public {
-        uint256 eth = bondingCurve.calculatePurchasePrice(19360000000000000000, 161522353159983588, 242424, 40637716687212255142);
+        uint256 eth =
+            bondingCurve.calculatePurchasePrice(19360000000000000000, 161522353159983588, 242424, 40637716687212255142);
         emit log_uint(eth);
     }
 
     function test_sellEthForTokens() public {
-        uint256 eth = bondingCurve.calculateSaleReturn(19360000000000000000, 161522353159983588, 242424, 13825644997184428275);
+        uint256 eth =
+            bondingCurve.calculateSaleReturn(19360000000000000000, 161522353159983588, 242424, 13825644997184428275);
         emit log_uint(eth);
     }
 
     function test_sellTokensForEth() public {
-        uint256 tokens = bondingCurve.calculateSalePrice(19360000000000000000, 161522353159983588, 242424, 160599999999999999);
+        uint256 tokens =
+            bondingCurve.calculateSalePrice(19360000000000000000, 161522353159983588, 242424, 160599999999999999);
         emit log_uint(tokens);
     }
 
     receive() external payable {}
-
 }
