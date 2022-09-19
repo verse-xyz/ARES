@@ -34,7 +34,7 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
       bytes calldata _initStrings,
       address _token
     ) external initializer {
-      (string memory _name, string memory _symbol) = abi.decode(_initStrings, (string, string));
+      (string memory _name, string memory _initImageURI, string memory ) = abi.decode(_initStrings, (string, string));
 
       config.name = _name;
       config.symbol = _symbol;

@@ -7,8 +7,8 @@ interface TokenTypes {
   /// @notice The settings type
   /// @param totalSupply The number of tokens minted
   /// @param metadatarenderer The token metadata renderer
-  struct Settings {
-      uint256 totalSupply;
-      //IBaseMetadata metadataRenderer;
+  struct Config {
+      address image;
+      address market;
   }
 }
