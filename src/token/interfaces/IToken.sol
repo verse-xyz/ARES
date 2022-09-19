@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IImage } from "../interfaces/IImage.sol";
-import { TokenTypes } from "./types/TokenTypes.sol";
+import { IImage } from "../../image/interfaces/IImage.sol";
+import { TokenTypes } from "../types/TokenTypes.sol";
 
 /// @notice Interface for Verse Hyperobject Contract
 interface IToken {
@@ -70,10 +70,10 @@ interface IToken {
     /// @notice Function to return global market details for contract
     function marketDetails() external view returns (MarketDetails memory);
 
-    /// @notice Update the metadata renderer
-    /// @param newRenderer new address for renderer
-    /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
-    function setMetadataRenderer(IMetadataRenderer newRenderer, bytes memory setupRenderer) external;
+    // /// @notice Update the metadata renderer
+    // /// @param newRenderer new address for renderer
+    // /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
+    // function setMetadataRenderer(IMetadataRenderer newRenderer, bytes memory setupRenderer) external;
 
     function knit() external payable returns (uint256);
 
