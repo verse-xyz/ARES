@@ -86,24 +86,24 @@ contract Hyperobject is IHyperobject, ReentrancyGuard, ERC721, HyperobjectStorag
 
     /// @notice Global constructor - variables will not change with further proxy deploys
     /// @dev Marked as initializer to prevent storage of base implementation being used. Can only be initialized by proxy.
-    constructor(IFactoryUpgradeGate _factoryUpgradeGate)
-        // TODO transfer helper and fee manager
-        initializer
-    {
-        factoryUpgradeGate = _factoryUpgradeGate;
-    }
+    // constructor(IFactoryUpgradeGate _factoryUpgradeGate)
+    //     // TODO transfer helper and fee manager
+    //     initializer
+    // {
+    //     factoryUpgradeGate = _factoryUpgradeGate;
+    // }
 
     function initialize(
-        string memory _networkName,
-        string memory _networkSymbol,
-        address payable _creator,
-        uint16 _rewardBPS,
+        // string memory _networkName,
+        // string memory _networkSymbol,
+        // address payable _creator,
+        // uint16 _rewardBPS,
         bytes calldata _hyperimageInitData, // going to be the above 4 params encoded into a byte string
         IHyperobject.MarketConfiguration calldata _marketConfig, // market params
         IImage _image, // image rederer stuff
         bytes memory _imageInit // first image init data
     )
-        public
+        external
         initializer
     {
         // Init ERC721A
@@ -131,19 +131,19 @@ contract Hyperobject is IHyperobject, ReentrancyGuard, ERC721, HyperobjectStorag
                                UTILITY FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice ERC165 supports interface
-    /// @param interfaceId interface id to check if supported
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        override (
-            /// TODO add IERC165Upgradeable
-            ERC721AUpgradeable,
-            AccessControlUpgradeable
-        )
-        returns (bool)
-    {
-        return super.supportsInterface(interfaceId) || type(IOwnable).interfaceId == interfaceId
-            || type(IHyperobject).interfaceId == interfaceId;
-    }
+    // /// @notice ERC165 supports interface
+    // /// @param interfaceId interface id to check if supported
+    // function supportsInterface(bytes4 interfaceId)
+    //     public
+    //     view
+    //     override (
+    //         /// TODO add IERC165Upgradeable
+    //         ERC721AUpgradeable,
+    //         AccessControlUpgradeable
+    //     )
+    //     returns (bool)
+    // {
+    //     return super.supportsInterface(interfaceId) || type(IOwnable).interfaceId == interfaceId
+    //         || type(IHyperobject).interfaceId == interfaceId;
+    // }
 }

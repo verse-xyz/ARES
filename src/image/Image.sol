@@ -30,7 +30,7 @@ contract Image is IImage, UUPSUpgradeable, AccessControlUpgradeable, OwnableSkel
         string commentsURI;
     }
 
-    /// @notice Storage for token information
+    /// @notice Storage for token information from tokenId to tokenInfo
     mapping(uint256 => tokenInfo) public tokenInfos;
 
     // we're going to store the address of the associated hyperobject contract
@@ -44,3 +44,6 @@ contract Image is IImage, UUPSUpgradeable, AccessControlUpgradeable, OwnableSkel
     // what do we need in this contract?
     // in the knit function the caller passes in the relevant data and then we store it in the tokenInfo mapping
 }
+
+// when someone knits, they're gonna pass in the imageURI
+// we're gonna store the imageURI in the base mapping
