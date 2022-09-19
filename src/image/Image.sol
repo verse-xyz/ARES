@@ -5,6 +5,7 @@ import { IImage } from "../interfaces/IImage.sol";
 import { UUPS } from "../proxy/UUPS.sol";
 import { Ownable } from "../utils/Ownable.sol";
 import { ImageStorage } from "./storage/ImageStorage.sol";
+import { MetadataRenderer } from "./utils/MetadataRenderer.sol";
 //import { Token } from "../token/Token.sol";
 
 
@@ -25,6 +26,7 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     /*//////////////////////////////////////////////////////////////
                             INITIALIZER
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Initializes a Token's image contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _token The associated ERC-721 token address
@@ -40,8 +42,82 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     }
 
     /*//////////////////////////////////////////////////////////////
-                            INITIALIZER
+                            FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
+    /// @notice Assign token to image
+    function knitToken(
+      uint256 tokenId, 
+      address creator, 
+      bytes calldata imageStrings
+    ) external {
+      // only token contract can call this function
+      (string memory _imageURI, string memory _interactionsURI) = abi.decode(imageStrings, (string, string));
+      bytes32 contentHash = _createImage(tokenId, creator, _imageURI, _interactionsURI);
+      tokenToImage[tokenId] = images[contentHash];
+      provenanceCount[contentHash]++;
+    }
+
+    function mirrorToken(
+      uint256 tokenId,
+      uint256 mirrorTokenId
+    ) external {
+      bytes32 contentHashToMirror = tokenToImage[mirrorTokenId].contentHash;
+      tokenToImage[tokenId] = images[contentHashToMirror];
+      provenanceCount[contentHashToMirror]++;
+    }
+
+    function burnToken(
+      uint256 tokenId
+    ) external {
+      bytes32 contentHashToBurn = tokenToImage[tokenId].contentHash;
+      provenanceCount[contentHashToBurn]--;
+    }
+
+    function tokenURI(uint256 tokenId) external view returns (string memory) {
+      return 
+        MetadataRenderer.createMetadata(
+          config.name, 
+          tokenToImage[tokenId].imageURI,
+          tokenToImage[tokenId].interactionsURI, 
+          tokenToImage[tokenId].creator,
+          provenanceCount[tokenToImage[tokenId].contentHash]
+        );
+    }
+
+    function contractURI() external view returns (string memory) {
+      return MetadataRenderer.encodeMetadataJSON(
+        abi.encodePacked(
+          '{"name": "',
+          config.name,
+          '", "image": "',
+          tokenToImage[1].imageURI,
+          '"}'
+        )
+      );
+    }
+
+    function token() external view returns (address) {
+      return config.token;
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                            UTILITY
+    //////////////////////////////////////////////////////////////*/
+
+    /// @notice Add new image to network
+    function _createImage(uint256 _tokenId, address _creator, string memory _imageURI, string memory _interactionsURI) private returns (bytes32) {
+      // only token contract can call this function
+      bytes32 contentHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
+      images[contentHash] = Image({
+        imageURI: _imageURI,
+        creator: _creator,
+        interactionsURI: _interactionsURI,
+        contentHash: contentHash
+      });
+      
+      return contentHash;
+    }
     // what do we need in this contract?
     // in the knit function the caller passes in the relevant data and then we store it in the tokenInfo mapping
 }
