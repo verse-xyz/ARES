@@ -32,28 +32,34 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     /// @param _token The associated ERC-721 token address
     function initialize(
       bytes calldata _initStrings,
+      address _creator,
       address _token
     ) external initializer {
-      (string memory _name, string memory _initImageURI, string memory ) = abi.decode(_initStrings, (string, string));
-
+      (string memory _name, string memory _initImageURI) = abi.decode(_initStrings, (string, string));
       config.name = _name;
-      config.symbol = _symbol;
       config.token = _token;
+
+      // foundational image added to the network
+      bytes32 initContentHash = _createImage(_creator, _initImageURI);
+      tokenToImage[1] = images[initContentHash];
+      provenanceCount[initContentHash]++;
     }
 
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
+    // images should only "die" when there are no active nodes propagating them
+
     /// @notice Assign token to image
     function knitToken(
       uint256 tokenId, 
       address creator, 
-      bytes calldata imageStrings
+      bytes calldata imageString
     ) external {
       // only token contract can call this function
-      (string memory _imageURI, string memory _interactionsURI) = abi.decode(imageStrings, (string, string));
-      bytes32 contentHash = _createImage(tokenId, creator, _imageURI, _interactionsURI);
+      (string memory _imageURI) = abi.decode(imageString, (string));
+      bytes32 contentHash = _createImage(creator, _imageURI);
       tokenToImage[tokenId] = images[contentHash];
       provenanceCount[contentHash]++;
     }
@@ -63,6 +69,9 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
       uint256 mirrorTokenId
     ) external {
       bytes32 contentHashToMirror = tokenToImage[mirrorTokenId].contentHash;
+      require(contentHashToMirror != bytes32(0), "Image: token does not exist");
+      // image must be "alive" for it to be mirrored
+      require(provenanceCount[contentHashToMirror] > 0, "Image is dead");
       tokenToImage[tokenId] = images[contentHashToMirror];
       provenanceCount[contentHashToMirror]++;
     }
@@ -73,13 +82,13 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
       bytes32 contentHashToBurn = tokenToImage[tokenId].contentHash;
       provenanceCount[contentHashToBurn]--;
     }
+    
 
     function tokenURI(uint256 tokenId) external view returns (string memory) {
       return 
         MetadataRenderer.createMetadata(
           config.name, 
           tokenToImage[tokenId].imageURI,
-          tokenToImage[tokenId].interactionsURI, 
           tokenToImage[tokenId].creator,
           provenanceCount[tokenToImage[tokenId].contentHash]
         );
@@ -106,13 +115,12 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Add new image to network
-    function _createImage(uint256 _tokenId, address _creator, string memory _imageURI, string memory _interactionsURI) private returns (bytes32) {
+    function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
       // only token contract can call this function
       bytes32 contentHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
       images[contentHash] = Image({
         imageURI: _imageURI,
         creator: _creator,
-        interactionsURI: _interactionsURI,
         contentHash: contentHash
       });
       

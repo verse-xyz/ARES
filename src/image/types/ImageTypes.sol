@@ -5,13 +5,11 @@ interface ImageTypes {
   struct Image {
     string imageURI;
     address creator;
-    string interactionsURI;
     bytes32 contentHash;
   }
 
   struct Config {
     address token;
     string name;
-    string symbol;
   }
 }

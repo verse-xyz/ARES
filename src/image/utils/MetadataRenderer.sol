@@ -11,20 +11,17 @@ library MetadataRenderer {
     /// Combines the media data and metadata
     /// @param name Name of NFT in metadata
     /// @param imageURI URL of image to render for edition
-    /// @param interactionsURI URL of animation to render for edition
     /// @param creator Token ID for specific token
     /// @param provenanceCount Size of entire edition to show
     function createMetadata(
         string memory name,
         string memory imageURI,
-        string memory interactionsURI,
         address creator,
         uint256 provenanceCount
     ) internal pure returns (string memory) {
         bytes memory json = createMetadataJSON(
             name,
             imageURI,
-            interactionsURI,
             creator,
             provenanceCount
         );
@@ -35,13 +32,11 @@ library MetadataRenderer {
     /// Function to create the metadata json string for the nft edition
     /// @param name Name of NFT in metadata
     /// @param imageURI Description of NFT in metadata
-    /// @param interactionsURI Data for media to include in json object
     /// @param creator Token ID for specific token
     /// @param provenanceCount Size of entire edition to show
     function createMetadataJSON(
         string memory name,
         string memory imageURI,
-        string memory interactionsURI,
         address creator,
         uint256 provenanceCount
     ) internal pure returns (bytes memory) {
@@ -51,8 +46,6 @@ library MetadataRenderer {
                 name,
                 '", "image": "',
                 imageURI,
-                '", "interactions": "',
-                interactionsURI,
                 '", "creator": "',
                 Strings.toHexString(uint256(uint160(creator)), 20),
                 '", "provenanceCount": "',
