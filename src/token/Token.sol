@@ -8,6 +8,11 @@ import { TokenStorage } from "./storage/TokenStorage.sol";
 import { IToken } from "./interfaces/IToken.sol";
 import { IImage } from "../image/interfaces/IImage.sol";
 import { Image } from "../image/Image.sol";
+import { LinearASTRO } from "../market/LinearASTRO.sol";
+
+import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
+
+import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
 
 contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
@@ -23,18 +28,32 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
     bytes calldata _initStrings,
     address creator,
     uint16 rewardBPS,
-    address _image
+    address _image,
+    address _market
   ) external initializer {
     __ReentrancyGuard_init();
     (string memory _name, string memory _symbol, string memory _initImageURI) = abi.decode(_initStrings, (string, string, string));
     __ERC721_init(_name, _symbol);
     config.image = _image;
+    config.market = _market;
 
   }
 
   /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
   //////////////////////////////////////////////////////////////*/
+
+  function knit() public payable returns (uint256 tokenId) {
+    unchecked {
+
+    }
+  }
+
+  function burn(uint256 tokenId) public returns (uint256) {
+    unchecked {
+      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime));
+    }
+  }
 
   // knit
   // mirror

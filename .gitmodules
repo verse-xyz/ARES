@@ -14,3 +14,5 @@
 [submodule "lib/solmate"]
 	path = lib/solmate
 	url = https://github.com/transmissions11/solmate
+[submodule "/Users/kirancherukuri/Documents/verse/Public/verse-v2/lib/solmate"]
+	branch = v7
