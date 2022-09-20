@@ -36,22 +36,42 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
     __ERC721_init(_name, _symbol);
     config.image = _image;
     config.market = _market;
-
   }
+
+  uint256 public totalMinted;
+  uint256 public circulatingSupply;
+
+  uint256 public immutable startTime = block.timestamp;
 
   /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
   //////////////////////////////////////////////////////////////*/
 
-  function knit() public payable returns (uint256 tokenId) {
+  function knit(string memory imageURI) public payable returns (uint256 tokenId) {
     unchecked {
+      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+      circulatingSupply++;
+      require(msg.value >= price, "Token: Insufficient payment");
+    }
+  }
 
+  function mirror(uint256 mirrorTokenId) public payable returns (uint256 tokenId) {
+    unchecked {
+      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+      circulatingSupply++;
+      require(msg.value >= price, "Token: Insufficient payment");
     }
   }
 
   function burn(uint256 tokenId) public returns (uint256) {
     unchecked {
-      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime));
+      require(ownerOf(tokenId) == msg.sender, "Token: Not owner");
+      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply--);
+      _burn(tokenId);
+      // Note: We do this at the end to avoid creating a reentrancy vector.
+      // Refund the user any ETH they spent over the current price of the NFT.
+      // Unchecked is safe here because we validate msg.value >= price above.
+      SafeTransferLib.safeTransferETH(msg.sender, price);
     }
   }
 
