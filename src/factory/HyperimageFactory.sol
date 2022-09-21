@@ -8,7 +8,7 @@ import {ERC1967Proxy} from "../proxy/ERC1967Proxy.sol";
 import {IImage} from "../image/interfaces/IImage.sol";
 import {IToken} from "../token/interfaces/IToken.sol";
 import {IHyperimageFactory} from "./interfaces/IHyperimageFactory.sol";
-import {HyperimageStorage} from "./storage/HyperimageStorage.sol";
+import { HyperimageStorage } from "./storage/HyperimageStorage.sol";
 
 contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownable {
     /*//////////////////////////////////////////////////////////////
@@ -21,6 +21,9 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
     ///@notice The image implementation address
     address public immutable imageImpl;
 
+    ///@notice The image implementation hash
+    bytes32 private immutable imageHash;
+
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
   //////////////////////////////////////////////////////////////*/
@@ -28,6 +31,7 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
         tokenImpl = _token;
         imageImpl = _image;
 
+        // hash of proxy bytecode and image implementation
         imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, "")));
     }
 
@@ -55,7 +59,7 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
         // Use the token address to precompute the network's remaining addresses
         bytes32 salt = bytes32(uint256(uint160(token)) << 96);
 
-        // Deploy the network's image
+        // Deploy the network's image contract using the salt 
         image = address(new ERC1967Proxy{ salt: salt }(imageImpl, ""));
 
         // Initialize instances with provided config
