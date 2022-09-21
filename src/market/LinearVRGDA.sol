@@ -9,6 +9,7 @@ import { VRGDA } from "./VRGDA.sol";
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice VRGDA with a linear issuance curve.
+/// @notice Modified to enable initializable proxy
 abstract contract LinearVRGDA is VRGDA {
     /*//////////////////////////////////////////////////////////////
                            PRICING PARAMETERS
@@ -16,15 +17,17 @@ abstract contract LinearVRGDA is VRGDA {
 
     /// @dev The total number of tokens to target selling every full unit of time.
     /// @dev Represented as an 18 decimal fixed point number.
-    int256 internal immutable perTimeUnit;
+    int256 internal perTimeUnit;
 
     /// @notice Sets pricing parameters for the VRGDA.
     /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18.
     /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
     /// @param _perTimeUnit The number of tokens to target selling in 1 full unit of time, scaled by 1e18.
-    constructor(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit)
-        VRGDA(_targetPrice, _priceDecreasePercent)
+    function __LinearVRGDA_init(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit)
+        internal
+        onlyInitializing
     {
+        __VRGDA_init(_targetPrice, _priceDecreasePercent);
         perTimeUnit = _perTimeUnit;
     }
 

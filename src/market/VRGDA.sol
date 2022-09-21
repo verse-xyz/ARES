@@ -9,6 +9,7 @@ import { Initializable } from "../utils/Initializable.sol";
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice Sell tokens roughly according to an issuance schedule.
+/// @notice Modified to enable initializable proxy
 abstract contract VRGDA is IVRGDA, Initializable {
     /*//////////////////////////////////////////////////////////////
                             VRGDA PARAMETERS
