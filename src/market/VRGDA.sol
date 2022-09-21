@@ -7,7 +7,7 @@ import { wadExp, wadLn, wadMul, unsafeWadMul, toWadUnsafe } from "./utils/Signed
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice Sell tokens roughly according to an issuance schedule.
-abstract contract ASTRO {
+abstract contract VRGDA {
     /*//////////////////////////////////////////////////////////////
                             VRGDA PARAMETERS
     //////////////////////////////////////////////////////////////*/

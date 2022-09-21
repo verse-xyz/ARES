@@ -3,13 +3,13 @@ pragma solidity >=0.8.0;
 
 import { unsafeWadDiv } from "./utils/SignedWadMath.sol";
 
-import { ASTRO } from "./ASTRO.sol";
+import { VRGDA } from "./VRGDA.sol";
 
 /// @title Linear Variable Rate Gradual Dutch Auctions
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice VRGDA with a linear issuance curve.
-abstract contract LinearASTRO is ASTRO {
+abstract contract LinearVRGDA is VRGDA {
     /*//////////////////////////////////////////////////////////////
                            PRICING PARAMETERS
     //////////////////////////////////////////////////////////////*/
@@ -23,7 +23,7 @@ abstract contract LinearASTRO is ASTRO {
     /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
     /// @param _perTimeUnit The number of tokens to target selling in 1 full unit of time, scaled by 1e18.
     constructor(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit)
-        ASTRO(_targetPrice, _priceDecreasePercent)
+        VRGDA(_targetPrice, _priceDecreasePercent)
     {
         perTimeUnit = _perTimeUnit;
     }
