@@ -102,10 +102,7 @@ contract Hyperobject is IHyperobject, ReentrancyGuard, ERC721, HyperobjectStorag
         IHyperobject.MarketConfiguration calldata _marketConfig, // market params
         IImage _image, // image rederer stuff
         bytes memory _imageInit // first image init data
-    )
-        external
-        initializer
-    {
+    ) external initializer {
         // Init ERC721A
         __ERC721_init(_networkName, _networkSymbol);
         // Setup reentrancy guard

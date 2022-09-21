@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import { wadExp, wadLn, wadMul, unsafeWadMul, toWadUnsafe } from "./utils/SignedWadMath.sol";
-import { IVRGDA } from "./interfaces/IVRGDA.sol";
-import { Initializable } from "../utils/Initializable.sol";
+import {wadExp, wadLn, wadMul, unsafeWadMul, toWadUnsafe} from "./utils/SignedWadMath.sol";
+import {IVRGDA} from "./interfaces/IVRGDA.sol";
+import {Initializable} from "../utils/Initializable.sol";
 
 /// @title Variable Rate Gradual Dutch Auction
 /// @author transmissions11 <t11s@paradigm.xyz>
@@ -32,7 +32,6 @@ abstract contract VRGDA is IVRGDA, Initializable {
 
         // The decay constant must be negative for VRGDAs to work.
         if (decayConstant < 0) revert NON_NEGATIVE_DECAY_CONSTANT();
-
     }
 
     /*//////////////////////////////////////////////////////////////

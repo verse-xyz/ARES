@@ -43,9 +43,7 @@ contract ExchangeTest is DSTest {
         uint256 _transactionShare,
         address _hyperobject,
         address _creator
-    )
-        public
-    {
+    ) public {
         vm.prank(address(0));
         exchange.initialize(_name, _symbol, _reserveRatio, _slopeInit, _transactionShare, _hyperobject, _creator);
     }

@@ -22,11 +22,7 @@ library NFTMetadataRenderer {
         string memory animationUrl,
         uint256 tokenOfEdition,
         uint256 editionSize
-    )
-        internal
-        pure
-        returns (string memory)
-    {
+    ) internal pure returns (string memory) {
         string memory _tokenMediaData = tokenMediaData(imageUrl, animationUrl, tokenOfEdition);
         bytes memory json = createMetadataJSON(name, description, _tokenMediaData, tokenOfEdition, editionSize);
         return encodeMetadataJSON(json);
@@ -38,11 +34,7 @@ library NFTMetadataRenderer {
         string memory imageURI,
         uint256 royaltyBPS,
         address royaltyRecipient
-    )
-        internal
-        pure
-        returns (string memory)
-    {
+    ) internal pure returns (string memory) {
         bytes memory imageSpace = bytes("");
         if (bytes(imageURI).length > 0) {
             imageSpace = abi.encodePacked('", "image": "', imageURI);
@@ -78,11 +70,7 @@ library NFTMetadataRenderer {
         string memory mediaData,
         uint256 tokenOfEdition,
         uint256 editionSize
-    )
-        internal
-        pure
-        returns (bytes memory)
-    {
+    ) internal pure returns (bytes memory) {
         bytes memory editionSizeText;
         if (editionSize > 0) {
             editionSizeText = abi.encodePacked("/", Strings.toString(editionSize));

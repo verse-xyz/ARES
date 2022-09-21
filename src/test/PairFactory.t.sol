@@ -24,9 +24,7 @@ contract PairFactoryTest is DSTest {
         uint256 _reserveRatio,
         uint256 _transactionShare,
         string memory _baseURI
-    )
-        public
-    {
+    ) public {
         if (_reserveRatio <= 1000000 && _transactionShare <= 10000) {
             (exchange, hyperobject) =
                 pairFactory.create(_name, _symbol, _reserveRatio, 724223089680545, _transactionShare, _baseURI);

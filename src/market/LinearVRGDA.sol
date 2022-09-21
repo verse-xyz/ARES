@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0;
 
-import { unsafeWadDiv } from "./utils/SignedWadMath.sol";
+import {unsafeWadDiv} from "./utils/SignedWadMath.sol";
 
-import { VRGDA } from "./VRGDA.sol";
+import {VRGDA} from "./VRGDA.sol";
 
 /// @title Linear Variable Rate Gradual Dutch Auctions
 /// @author transmissions11 <t11s@paradigm.xyz>
