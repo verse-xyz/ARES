@@ -25,7 +25,7 @@ interface IImage is IUUPS, IOwnable {
 /// @param token The associated ERC-721 token address
 function initialize(
     bytes calldata initStrings,
-    address creator
+    address creator,
     address token
 ) external;
 
