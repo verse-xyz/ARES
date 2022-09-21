@@ -16,14 +16,14 @@ interface IHyperimageFactory is IUUPS, IOwnable {
   event HyperimageDeployed(address token, address image);
 
   /// @notice Emitted when an upgrade is registered by Verse
-  /// @param base The base implementation address
-  /// @param upgrade The upgrade implementation address
-  event UpgradeRegistered(address base, address upgrade);
+  /// @param baseImpl The base implementation address
+  /// @param upgradeImpl The upgrade implementation address
+  event UpgradeRegistered(address baseImpl, address upgradeImpl);
 
   /// @notice Emitted when an upgrade is unregistered by Verse
-  /// @param base The base implementation address
-  /// @param upgrade The upgrade implementation address
-  event UpgradeRemoved(address base, address upgrade);
+  /// @param baseImpl The base implementation address
+  /// @param upgradeImpl The upgrade implementation address
+  event UpgradeRemoved(address baseImpl, address upgradeImpl);
 
   /*//////////////////////////////////////////////////////////////
                               ERRORS
@@ -43,11 +43,5 @@ interface IHyperimageFactory is IUUPS, IOwnable {
     int256 targetPrice;
     int256 priceDecayPercent;
     int256 perTimeUnit;
-  }
-
-  /// @notice The Image parameters
-  /// @param initStrings The encoded token name, symbol, collection description, collection image uri, renderer base uri
-  struct ImageParams {
-    bytes initStrings;
   }
 }
