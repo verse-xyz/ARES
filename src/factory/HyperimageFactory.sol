@@ -9,16 +9,16 @@ import { IImage } from "../image/interfaces/IImage.sol";
 import { IToken } from "../token/interfaces/IToken.sol";
 import { IHyperimageFactory } from "./interfaces/IHyperimageFactory.sol";
 
-contract HyperimageFactory is IHyperimageFactory UUPS, Ownable {
+contract HyperimageFactory is IHyperimageFactory, UUPS, Ownable {
   /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
   //////////////////////////////////////////////////////////////*/
 
   ///@notice The token implementation address
-  address public immutable token;
+  address public immutable tokenImpl;
 
   ///@notice The image implementation address
-  address public immutable image;
+  address public immutable imageImpl;
 
   /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
@@ -27,8 +27,8 @@ contract HyperimageFactory is IHyperimageFactory UUPS, Ownable {
     address _token,
     address _image
   ) payable initializer {
-    token = _token;
-    image = _image;
+    tokenImpl = _token;
+    imageImpl = _image;
   }
 
   /*//////////////////////////////////////////////////////////////
@@ -49,7 +49,37 @@ contract HyperimageFactory is IHyperimageFactory UUPS, Ownable {
                           HYPERIMAGE DEPLOY
   //////////////////////////////////////////////////////////////*/
   function deploy(
-    // need token params and image params
-    TokenPara
-  )
+    TokenParams calldata _tokenParams,
+    ImageParams calldata _imageParams
+  ) external returns (
+    address token,
+    address image
+  ) {
+    // Deploy the network's token
+    token = address(new ERC1967Proxy(tokenImpl, ""));
+
+    // Use the token address to precompute the network's remaining addresses
+    bytes32 salt = bytes32(uint256(uint160(token)) << 96);
+
+    // Deploy the network's image
+    image = address(new ERC1967Proxy{ salt: salt }(imageImpl, ""));
+
+    // Initialize instances with provided config
+    IToken(token).initialize(
+      _tokenParams.initStrings,
+      msg.sender,
+      image,
+      _tokenParams.targetPrice,
+      _tokenParams.priceDecayPercent,
+      _tokenParams.perTimeUnit
+    );
+
+    IImage(image).initialize(
+      _tokenParams.initStrings,
+      msg.sender,
+      token
+    );
+
+    emit HyperimageDeployed(token, image);
+  }
 }

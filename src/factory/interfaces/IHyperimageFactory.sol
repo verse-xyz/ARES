@@ -4,7 +4,7 @@ pragma solidity ^0.8.11;
 import { IUUPS } from "../../interfaces/IUUPS.sol";
 import { IOwnable } from "../../interfaces/IOwnable.sol";
 
-interface HyperimageFactory is IUUPS, IOwnable {
+interface IHyperimageFactory is IUUPS, IOwnable {
   /*//////////////////////////////////////////////////////////////
                               EVENTS
   //////////////////////////////////////////////////////////////*/
