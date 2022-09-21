@@ -4,11 +4,13 @@ pragma solidity ^0.8.11;
 import { IImage } from "../../interfaces/IImage.sol";
 
 interface TokenTypes {
-  /// @notice The settings type
-  /// @param totalSupply The number of tokens minted
-  /// @param metadatarenderer The token metadata renderer
+  /// @notice The token config type
+  /// @param image The address of the associated image contract
   struct Config {
-      address image;
-      address market;
+    address image;
+    address creator;
+    int256 targetPrice;
+    int256 priceDecayPercent;
+    int256 perTimeUnit;
   }
 }

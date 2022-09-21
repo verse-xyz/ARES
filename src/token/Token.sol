@@ -8,13 +8,13 @@ import { TokenStorage } from "./storage/TokenStorage.sol";
 import { IToken } from "./interfaces/IToken.sol";
 import { IImage } from "../image/interfaces/IImage.sol";
 import { Image } from "../image/Image.sol";
-import { LinearASTRO } from "../market/LinearASTRO.sol";
+import { LinearVRGDA } from "../market/LinearVRGDA.sol";
 
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
 
-contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
+contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStorage {
   /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
   //////////////////////////////////////////////////////////////*/
@@ -22,19 +22,18 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
   /*//////////////////////////////////////////////////////////////
                           INITIALIZER
   //////////////////////////////////////////////////////////////*/
-  // we need to use the argu
   function initialize(
     bytes calldata _initStrings,
-    address creator,
-    uint16 rewardBPS,
+    address _creator,
     address _image,
-    address _market
+    int256 _targetPrice,
+    int256 _priceDecayPercent,
+    int256 _perTimeUnit
   ) external initializer {
     __ReentrancyGuard_init();
     (string memory _name, string memory _symbol, string memory _initImageURI) = abi.decode(_initStrings, (string, string, string));
     __ERC721_init(_name, _symbol);
     config.image = _image;
-    config.market = _market;
   }
 
   uint256 public totalMinted;
@@ -48,7 +47,7 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
 
   function knit(string memory imageURI) public payable returns (uint256 tokenId) {
     unchecked {
-      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+      uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
       circulatingSupply++;
       require(msg.value >= price, "Token: Insufficient payment");
       Image(config.image).knitToken(tokenId, msg.sender, bytes(imageURI));
@@ -57,13 +56,12 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
       // Refund the user any ETH they spent over the current price of the NFT.
       // Unchecked is safe here because we validate msg.value >= price above.
       SafeTransferLib.safeTransferETH(msg.sender, msg.value - price);
-
     }
   }
 
   function mirror(uint256 mirrorTokenId) public payable returns (uint256 tokenId) {
     unchecked {
-      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+      uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
       circulatingSupply++;
       require(msg.value >= price, "Token: Insufficient payment");
       Image(config.image).mirrorToken(tokenId, mirrorTokenId);
@@ -78,7 +76,7 @@ contract Token is IToken, ERC721, UUPS, ReentrancyGuard, TokenStorage {
   function burn(uint256 tokenId) public {
     unchecked {
       require(ownerOf(tokenId) == msg.sender, "Token: Not owner");
-      uint256 price = LinearASTRO(config.market).getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply--);
+      uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply--);
       _burn(tokenId);
       SafeTransferLib.safeTransferETH(msg.sender, price);
     }

@@ -2,34 +2,36 @@
 pragma solidity >=0.8.0;
 
 import { wadExp, wadLn, wadMul, unsafeWadMul, toWadUnsafe } from "./utils/SignedWadMath.sol";
+import { IVRGDA } from "./interfaces/IVRGDA.sol";
+import { Initializable } from "../utils/Initializable.sol";
 
 /// @title Variable Rate Gradual Dutch Auction
 /// @author transmissions11 <t11s@paradigm.xyz>
 /// @author FrankieIsLost <frankie@paradigm.xyz>
 /// @notice Sell tokens roughly according to an issuance schedule.
-abstract contract VRGDA {
+abstract contract VRGDA is IVRGDA, Initializable {
     /*//////////////////////////////////////////////////////////////
                             VRGDA PARAMETERS
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Target price for a token, to be scaled according to sales pace.
     /// @dev Represented as an 18 decimal fixed point number.
-    int256 public immutable targetPrice;
+    int256 public targetPrice;
 
     /// @dev Precomputed constant that allows us to rewrite a pow() as an exp().
     /// @dev Represented as an 18 decimal fixed point number.
-    int256 internal immutable decayConstant;
+    int256 internal decayConstant;
 
     /// @notice Sets target price and per period price decrease for the VRGDA.
     /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18.
     /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
-    constructor(int256 _targetPrice, int256 _priceDecreasePercent) {
+    function __VRGDA_init(int256 _targetPrice, int256 _priceDecreasePercent) internal onlyInitializing {
         targetPrice = _targetPrice;
-
         decayConstant = wadLn(1e18 - _priceDecreasePercent);
 
         // The decay constant must be negative for VRGDAs to work.
-        require(decayConstant < 0, "NON_NEGATIVE_DECAY_CONSTANT");
+        if (decayConstant < 0) revert NON_NEGATIVE_DECAY_CONSTANT();
+
     }
 
     /*//////////////////////////////////////////////////////////////
