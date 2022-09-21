@@ -16,6 +16,20 @@ import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
 contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStorage {
   /*//////////////////////////////////////////////////////////////
+                          STORAGE
+  //////////////////////////////////////////////////////////////*/
+  /// @notice Total number of tokens minted 
+  /// @dev This is used to generate the next token id
+  uint256 public totalMinted;
+
+  /// @notice Total number of tokens currently circulating in the market
+  /// @dev This is used to track net supply at any given time, calculated as totalMinted - number of tokens burned
+  uint256 public circulatingSupply;
+
+  /// @notice Time of market initialization
+  uint256 public immutable startTime = block.timestamp;
+
+  /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
   //////////////////////////////////////////////////////////////*/
 
@@ -32,14 +46,18 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
   ) external initializer {
     __ReentrancyGuard_init();
     (string memory _name, string memory _symbol, string memory _initImageURI) = abi.decode(_initStrings, (string, string, string));
+    
+    // setup ERC721 and Linear VRGDA
     __ERC721_init(_name, _symbol);
+    __LinearVRGDA_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
+    
+    // setup token config
     config.image = _image;
+    config.creator = _creator;
+    config.targetPrice = _targetPrice;
+    config.priceDecayPercent = _priceDecayPercent;
+    config.perTimeUnit = _perTimeUnit;
   }
-
-  uint256 public totalMinted;
-  uint256 public circulatingSupply;
-
-  uint256 public immutable startTime = block.timestamp;
 
   /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
@@ -82,14 +100,10 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
     }
   }
 
-  // knit
-  // mirror
-  // burn
-  // creator knit
-  // creator mirror
+  // function withdraw() public {
+  //   // calculate amount of ETH required to facilitate sale of all NFTs in one block
+  //   uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+  // }
 
-  // we want to give the creator "equity" 
-  // that is, they have the right to mint a certain amount of tokens at no cost
-  // show the creator how many "free mints" they have left?
 
 }
