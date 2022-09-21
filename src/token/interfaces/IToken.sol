@@ -79,5 +79,5 @@ interface IToken {
 
     function mirror() external payable returns (uint256);
 
-    function burn(uint256 tokenId) external returns (uint256);
+    function burn(uint256 tokenId) external;
 }
