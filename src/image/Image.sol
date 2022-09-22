@@ -13,7 +13,7 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     // each token is going to have a name (common), image, caption, like data hash, comment data hash, creator, and an owner
     // we also need a mirror counter
 
-    // we're going to store the address of the associated hyperobject contract
+    // we're going to store the address of the associated token contract
 
     /*//////////////////////////////////////////////////////////////
                             CONSTRUCTOR
