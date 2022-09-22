@@ -4,7 +4,7 @@ pragma solidity ^0.8.11;
 import {IUUPS} from "../../interfaces/IUUPS.sol";
 import {IOwnable} from "../../interfaces/IOwnable.sol";
 
-interface IHyperimageFactory is IUUPS, IOwnable {
+interface IFactory is IUUPS, IOwnable {
     /*//////////////////////////////////////////////////////////////
                               EVENTS
   //////////////////////////////////////////////////////////////*/
@@ -13,7 +13,7 @@ interface IHyperimageFactory is IUUPS, IOwnable {
     /// @param token The ERC-721 token address
     /// @param image The image rendering address
 
-    event HyperimageDeployed(address token, address image);
+    event NetworkDeployed(address token, address image);
 
     /// @notice Emitted when an upgrade is registered by Verse
     /// @param baseImpl The base implementation address

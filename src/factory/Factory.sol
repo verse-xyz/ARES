@@ -7,10 +7,10 @@ import {ERC1967Proxy} from "../proxy/ERC1967Proxy.sol";
 
 import {IImage} from "../image/interfaces/IImage.sol";
 import {IToken} from "../token/interfaces/IToken.sol";
-import {IHyperimageFactory} from "./interfaces/IHyperimageFactory.sol";
-import { HyperimageStorage } from "./storage/HyperimageStorage.sol";
+import {IFactory} from "./interfaces/IFactory.sol";
+import { FactoryStorage } from "./storage/FactoryStorage.sol";
 
-contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownable {
+contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
     /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
   //////////////////////////////////////////////////////////////*/
@@ -50,7 +50,7 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
     }
 
     /*//////////////////////////////////////////////////////////////
-                          HYPERIMAGE DEPLOY
+                          NETWORK DEPLOY
   //////////////////////////////////////////////////////////////*/
     function deploy(TokenParams calldata _tokenParams) external returns (address token, address image) {
         // Deploy the network's token
@@ -78,7 +78,7 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
     }
 
     /*//////////////////////////////////////////////////////////////
-                          HYPERIMAGE ADDRESSES
+                          NETWORK ADDRESSES
   //////////////////////////////////////////////////////////////*/
     function getAddresses(address _token) external view returns (address image) {
         bytes32 salt = bytes32(uint256(uint160(_token)) << 96);
@@ -86,7 +86,7 @@ contract HyperimageFactory is IHyperimageFactory, HyperimageStorage, UUPS, Ownab
     }
 
     /*//////////////////////////////////////////////////////////////
-                          HYPERIMAGE UPGRADES
+                          NETWORK UPGRADES
   //////////////////////////////////////////////////////////////*/
     /// @notice If an implementation is registered by Verse as an optional upgrade
     /// @param _baseImpl The base implementation address

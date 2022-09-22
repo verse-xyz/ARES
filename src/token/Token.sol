@@ -7,6 +7,7 @@ import {ERC721} from "../token/ERC721.sol";
 import {TokenStorage} from "./storage/TokenStorage.sol";
 import {IToken} from "./interfaces/IToken.sol";
 import {IImage} from "../image/interfaces/IImage.sol";
+import { IFactory } from "../factory/interfaces/IFactory.sol";
 import {Image} from "../image/Image.sol";
 import {LinearVRGDA} from "../market/LinearVRGDA.sol";
 
@@ -28,9 +29,14 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
     /// @notice Time of market initialization
     uint256 public immutable startTime = block.timestamp;
 
+    IFactory private immutable factory;
+
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
   //////////////////////////////////////////////////////////////*/
+  constructor(address _factory) initializer {
+    factory = IFactory(_factory);
+  }
 
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER

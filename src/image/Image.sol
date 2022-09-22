@@ -1,11 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IImage} from "../interfaces/IImage.sol";
+import {IImage} from "./interfaces/IImage.sol";
 import {UUPS} from "../proxy/UUPS.sol";
 import {Ownable} from "../utils/Ownable.sol";
 import {ImageStorage} from "./storage/ImageStorage.sol";
 import {MetadataRenderer} from "./utils/MetadataRenderer.sol";
+import { IFactory } from "../factory/interfaces/IFactory.sol";
 //import { Token } from "../token/Token.sol";
 
 contract Image is IImage, UUPS, Ownable, ImageStorage {
@@ -14,12 +15,15 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     // we also need a mirror counter
 
     // we're going to store the address of the associated token contract
+    IFactory private immutable factory;
 
     /*//////////////////////////////////////////////////////////////
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     // in the initializer we need to specify the hyperobject source and the relevant common data for all NFTs
-    constructor() {}
+    constructor(address _factory) initializer {
+        factory = IFactory(_factory);
+    }
 
     /*//////////////////////////////////////////////////////////////
                             INITIALIZER
