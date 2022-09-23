@@ -3,7 +3,7 @@ pragma solidity ^0.8.11;
 
 import {IImage} from "../../image/interfaces/IImage.sol";
 import {TokenTypes} from "../types/TokenTypes.sol";
-import {IHyperimageFactory} from "../../factory/interfaces/IHyperimageFactory.sol";
+import {IFactory} from "../../factory/interfaces/IFactory.sol";
 
 /// @notice Interface for Verse Hyperobject Contract
 interface IToken {

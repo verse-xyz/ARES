@@ -3,7 +3,6 @@ pragma solidity ^0.8.11;
 
 import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
 import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
-import {IPublicSharedMetadata} from "../../interfaces/IPublicSharedMetadata.sol";
 
 /// NFT metadata library for rendering metadata associated with editions
 library MetadataRenderer {

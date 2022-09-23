@@ -2,6 +2,7 @@
 pragma solidity ^0.8.11;
 
 import {UUPS} from "../proxy/UUPS.sol";
+import {Ownable} from "../utils/Ownable.sol";
 import {ReentrancyGuard} from "../utils/ReentrancyGuard.sol";
 import {ERC721} from "../token/ERC721.sol";
 import {TokenStorage} from "./storage/TokenStorage.sol";
@@ -14,10 +15,10 @@ import {LinearVRGDA} from "../market/LinearVRGDA.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
-contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStorage {
+contract Token is IToken, ERC721, LinearVRGDA, UUPS, Ownable, ReentrancyGuard, TokenStorage {
     /*//////////////////////////////////////////////////////////////
                           STORAGE
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     /// @notice Total number of tokens minted
     /// @dev This is used to generate the next token id
     uint256 public totalMinted;
@@ -33,14 +34,14 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
 
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
-  //////////////////////////////////////////////////////////////*/
-  constructor(address _factory) initializer {
-    factory = IFactory(_factory);
-  }
+    //////////////////////////////////////////////////////////////*/
+    constructor(address _factory) initializer {
+        factory = IFactory(_factory);
+    }
 
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     function initialize(
         bytes calldata _initStrings,
         address _creator,
@@ -67,7 +68,7 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
 
     /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     function knit(string memory imageURI) public payable returns (uint256 tokenId) {
         unchecked {
@@ -105,9 +106,4 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, ReentrancyGuard, TokenStora
             SafeTransferLib.safeTransferETH(msg.sender, price);
         }
     }
-
-    // function withdraw() public {
-    //   // calculate amount of ETH required to facilitate sale of all NFTs in one block
-    //   uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
-    // }
 }
