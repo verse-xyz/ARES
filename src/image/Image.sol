@@ -91,6 +91,10 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
         return config.token;
     }
 
+    function tokenDetails(uint256 tokenId) external view returns (Image memory) {
+        return tokenToImage[tokenId];
+    }
+
     /*//////////////////////////////////////////////////////////////
                             UTILITY
     //////////////////////////////////////////////////////////////*/

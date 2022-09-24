@@ -6,4 +6,6 @@ import {TokenTypes} from "../types/TokenTypes.sol";
 contract TokenStorage is TokenTypes {
     /// @notice Token config
     Config internal config;
+
+    mapping(uint256 => bool) internal tokenIsMirror;
 }

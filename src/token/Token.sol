@@ -4,7 +4,7 @@ pragma solidity ^0.8.11;
 import {UUPS} from "../proxy/UUPS.sol";
 import {Ownable} from "../utils/Ownable.sol";
 import {ReentrancyGuard} from "../utils/ReentrancyGuard.sol";
-import {ERC721} from "../token/ERC721.sol";
+import {ERC721} from "../utils/ERC721.sol";
 import {TokenStorage} from "./storage/TokenStorage.sol";
 import {IToken} from "./interfaces/IToken.sol";
 import {IImage} from "../image/interfaces/IImage.sol";
@@ -30,6 +30,7 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, Ownable, ReentrancyGuard, T
     /// @notice Time of market initialization
     uint256 public immutable startTime = block.timestamp;
 
+    /// @notice Address of network factory
     IFactory private immutable factory;
 
     /*//////////////////////////////////////////////////////////////
@@ -90,6 +91,7 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, Ownable, ReentrancyGuard, T
             circulatingSupply++;
             require(msg.value >= price, "Token: Insufficient payment");
             Image(config.image).mirrorToken(tokenId, mirrorTokenId);
+            tokenIsMirror[tokenId] = true;
             _mint(msg.sender, tokenId);
             // Note: We do this at the end to avoid creating a reentrancy vector.
             // Refund the user any ETH they spent over the current price of the NFT.
@@ -103,6 +105,12 @@ contract Token is IToken, ERC721, LinearVRGDA, UUPS, Ownable, ReentrancyGuard, T
             require(ownerOf(tokenId) == msg.sender, "Token: Not owner");
             uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply--);
             _burn(tokenId);
+            if (tokenIsMirror[tokenId]) {
+                // split half profit with the image creator
+                price = price / 2;
+                address payable creator = payable(Image(config.image).tokenDetails(tokenId).creator);
+                SafeTransferLib.safeTransferETH(creator, price);
+            }
             SafeTransferLib.safeTransferETH(msg.sender, price);
         }
     }
