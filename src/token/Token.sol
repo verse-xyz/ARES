@@ -58,6 +58,8 @@ contract Token is IToken, ERC721, LinearVRGDA, ReentrancyGuard, TokenStorage {
 
         // setup ERC721 and Linear VRGDA
         __ERC721_init(_name, "");
+
+        // setup market
         __LinearVRGDA_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
 
         // setup token config
