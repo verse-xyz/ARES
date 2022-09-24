@@ -7,6 +7,7 @@ import {ERC1967Proxy} from "../proxy/ERC1967Proxy.sol";
 
 import {IImage} from "../image/interfaces/IImage.sol";
 import {IToken} from "../token/interfaces/IToken.sol";
+import {IUniversalImageStorage} from "../image/interfaces/IUniversalImageStorage.sol";
 import {IFactory} from "./interfaces/IFactory.sol";
 import { FactoryStorage } from "./storage/FactoryStorage.sol";
 
@@ -21,15 +22,19 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
     ///@notice The image implementation address
     address public immutable imageImpl;
 
+    ///@notice The universal image storage address
+    address public immutable universalImageStorage;
+
     ///@notice The image implementation hash
     bytes32 private immutable imageHash;
 
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
   //////////////////////////////////////////////////////////////*/
-    constructor(address _token, address _image) payable initializer {
+    constructor(address _token, address _image, address _universalImageStorage) payable initializer {
         tokenImpl = _token;
         imageImpl = _image;
+        universalImageStorage = _universalImageStorage;
 
         // hash of proxy bytecode and image implementation
         imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, "")));

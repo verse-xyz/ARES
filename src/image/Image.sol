@@ -2,27 +2,30 @@
 pragma solidity ^0.8.11;
 
 import {IImage} from "./interfaces/IImage.sol";
+import {Initializable} from "../utils/Initializable.sol";
 import {UUPS} from "../proxy/UUPS.sol";
 import {Ownable} from "../utils/Ownable.sol";
 import {ImageStorage} from "./storage/ImageStorage.sol";
+import {IUniversalImageStorage} from "./interfaces/IUniversalImageStorage.sol";
 import {MetadataRenderer} from "./utils/MetadataRenderer.sol";
 import { IFactory } from "../factory/interfaces/IFactory.sol";
-//import { Token } from "../token/Token.sol";
 
-contract Image is IImage, UUPS, Ownable, ImageStorage {
+contract Image is IImage, Initializable, ImageStorage {
     // this is how we're going to render metadata for a given token
     // each token is going to have a name (common), image, caption, like data hash, comment data hash, creator, and an owner
     // we also need a mirror counter
 
     // we're going to store the address of the associated token contract
     IFactory private immutable factory;
+    IUniversalImageStorage private immutable universalImageStorage;
 
     /*//////////////////////////////////////////////////////////////
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
     // in the initializer we need to specify the hyperobject source and the relevant common data for all NFTs
-    constructor(address _factory) initializer {
+    constructor(address _factory, address _universalImageStorage) initializer {
         factory = IFactory(_factory);
+        universalImageStorage = IUniversalImageStorage(_universalImageStorage);
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -32,7 +35,7 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     /// @notice Initializes a Token's image contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _token The associated ERC-721 token address
-    function initialize(bytes calldata _initStrings, address _creator, address _token) external initializer {
+    function initialize(bytes calldata _initStrings, address _creator, address _token, address _universalImageStorage) external initializer {
         (string memory _name, string memory _initImageURI) = abi.decode(_initStrings, (string, string));
         config.name = _name;
         config.token = _token;
@@ -58,13 +61,12 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
         provenanceCount[contentHash]++;
     }
 
-    function mirrorToken(uint256 tokenId, uint256 mirrorTokenId) external {
-        bytes32 contentHashToMirror = tokenToImage[mirrorTokenId].contentHash;
-        require(contentHashToMirror != bytes32(0), "Image: token does not exist");
+    function mirrorToken(uint256 tokenId, bytes32 imageHash) external {
+        require(imageHash != bytes32(0), "Image: token does not exist");
         // image must be "alive" for it to be mirrored
-        require(provenanceCount[contentHashToMirror] > 0, "Image is dead");
-        tokenToImage[tokenId] = images[contentHashToMirror];
-        provenanceCount[contentHashToMirror]++;
+        require(provenanceCount[imageHash] > 0, "Image is dead");
+        tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
+        universalImageStorage.incrementProvenanceCount(imageHash);
     }
 
     function burnToken(uint256 tokenId) external {
@@ -102,10 +104,10 @@ contract Image is IImage, UUPS, Ownable, ImageStorage {
     /// @notice Add new image to network
     function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
         // only token contract can call this function
-        bytes32 contentHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
-        images[contentHash] = Image({imageURI: _imageURI, creator: _creator, contentHash: contentHash});
-
-        return contentHash;
+        bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
+        //images[imageHash] = Image({imageURI: _imageURI, creator: _creator, imageHash: imageHash});
+        IUniversalImageStorage(universalImageStorage).addUniversalImage(_imageURI, _creator, imageHash);
+        return imageHash;
     }
     // what do we need in this contract?
     // in the knit function the caller passes in the relevant data and then we store it in the tokenInfo mapping

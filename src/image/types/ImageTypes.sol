@@ -5,7 +5,7 @@ interface ImageTypes {
     struct Image {
         string imageURI;
         address creator;
-        bytes32 contentHash;
+        bytes32 imageHash;
     }
 
     struct Config {

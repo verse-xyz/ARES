@@ -7,7 +7,7 @@ import {IOwnable} from "../../interfaces/IOwnable.sol";
 /// @title IImage
 /// @author neuroswish
 /// @notice Image errors, events, and functions
-interface IImage is IUUPS, IOwnable {
+interface IImage {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
 //////////////////////////////////////////////////////////////*/

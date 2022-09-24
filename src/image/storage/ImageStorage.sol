@@ -10,12 +10,12 @@ contract ImageStorage is ImageTypes {
     /// @notice The image configuration
     Config internal config;
 
-    /// @notice Full image attributes for a content hash
+    /// @notice Full attributes for an image hash
     mapping(bytes32 => Image) internal images;
 
     /// @notice The image attributes for a token
     mapping(uint256 => Image) internal tokenToImage;
 
-    /// @notice Mirror counts for a content hash
+    /// @notice Mirror counts for an image hash
     mapping(bytes32 => uint256) internal provenanceCount;
 }
