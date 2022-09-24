@@ -31,12 +31,6 @@ interface IToken {
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 
-    /// @dev Getter for admin role associated with the contract to handle metadata
-    /// @return boolean if address is admin
-    function isAdmin(address user) external view returns (bool);
-
-    /// @notice This is the public owner setting that can be set by the contract admin
-    function owner() external view returns (address);
 
     // /// @notice Update the metadata renderer
     // /// @param newRenderer new address for renderer

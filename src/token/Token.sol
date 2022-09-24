@@ -3,6 +3,7 @@ pragma solidity ^0.8.11;
 
 import {UUPS} from "../proxy/UUPS.sol";
 import {Ownable} from "../utils/Ownable.sol";
+import {Initializable} from "../utils/Initializable.sol";
 import {ReentrancyGuard} from "../utils/ReentrancyGuard.sol";
 import {ERC721} from "../utils/ERC721.sol";
 import {TokenStorage} from "./storage/TokenStorage.sol";
@@ -15,7 +16,7 @@ import {LinearVRGDA} from "../market/LinearVRGDA.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
-contract Token is IToken, ERC721, LinearVRGDA, UUPS, Ownable, ReentrancyGuard, TokenStorage {
+contract Token is IToken, ERC721, LinearVRGDA, Initializable, ReentrancyGuard, TokenStorage {
     /*//////////////////////////////////////////////////////////////
                           STORAGE
     //////////////////////////////////////////////////////////////*/

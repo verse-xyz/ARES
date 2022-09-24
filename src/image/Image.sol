@@ -15,7 +15,6 @@ contract Image is IImage, Initializable, ImageStorage {
     // each token is going to have a name (common), image, caption, like data hash, comment data hash, creator, and an owner
     // we also need a mirror counter
 
-    // we're going to store the address of the associated token contract
     IFactory private immutable factory;
     IUniversalImageStorage private immutable universalImageStorage;
 
@@ -109,9 +108,5 @@ contract Image is IImage, Initializable, ImageStorage {
         universalImageStorage.addUniversalImage(_imageURI, _creator, block.timestamp, imageHash);
         return imageHash;
     }
-    // what do we need in this contract?
-    // in the knit function the caller passes in the relevant data and then we store it in the tokenInfo mapping
-}
 
-// when someone knits, they're gonna pass in the imageURI
-// we're gonna store the imageURI in the base mapping
+}
