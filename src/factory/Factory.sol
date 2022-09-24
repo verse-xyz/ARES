@@ -14,7 +14,7 @@ import { FactoryStorage } from "./storage/FactoryStorage.sol";
 contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
     /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     ///@notice The token implementation address
     address public immutable tokenImpl;
@@ -30,7 +30,7 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
 
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     constructor(address _token, address _image, address _universalImageStorage) payable initializer {
         tokenImpl = _token;
         imageImpl = _image;
@@ -42,7 +42,7 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
 
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     /// @notice Initializes ownership of the factory contract
     /// @param _owner The address of the owner (transferred to Verse once deployed)
 
@@ -56,7 +56,7 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
 
     /*//////////////////////////////////////////////////////////////
                           NETWORK DEPLOY
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     function deploy(TokenParams calldata _tokenParams) external returns (address token, address image) {
         // Deploy the network's token
         token = address(new ERC1967Proxy(tokenImpl, ""));
@@ -68,7 +68,8 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
         image = address(new ERC1967Proxy{ salt: salt }(imageImpl, ""));
 
         // Initialize instances with provided config
-        IToken(token).initialize(
+        // initStrings is just going to be name and imageURI
+        IToken(token).initialize( 
             _tokenParams.initStrings,
             msg.sender,
             image,
@@ -84,7 +85,7 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
 
     /*//////////////////////////////////////////////////////////////
                           NETWORK ADDRESSES
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
     function getAddresses(address _token) external view returns (address image) {
         bytes32 salt = bytes32(uint256(uint160(_token)) << 96);
         image = address(uint160(uint256(keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, imageHash)))));

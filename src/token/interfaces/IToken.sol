@@ -38,7 +38,7 @@ interface IToken {
     // function setMetadataRenderer(IMetadataRenderer newRenderer, bytes memory setupRenderer) external;
 
     function initialize(
-        bytes calldata initStrings,
+        bytes calldata _initStrings,
         address creator,
         address image,
         int256 targetPrice,
@@ -46,9 +46,10 @@ interface IToken {
         int256 perTimeUnit
     ) external;
 
-    function knit() external payable returns (uint256);
 
-    function mirror() external payable returns (uint256);
+    function knit(string memory imageURI) external payable returns (uint256);
+
+    function mirror(bytes32 imageHash) external payable returns (uint256);
 
     function burn(uint256 tokenId) external;
 }

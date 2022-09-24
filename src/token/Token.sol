@@ -16,7 +16,7 @@ import {LinearVRGDA} from "../market/LinearVRGDA.sol";
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
-contract Token is IToken, ERC721, LinearVRGDA, Initializable, ReentrancyGuard, TokenStorage {
+contract Token is IToken, ERC721, LinearVRGDA, ReentrancyGuard, TokenStorage {
     /*//////////////////////////////////////////////////////////////
                           STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -53,11 +53,11 @@ contract Token is IToken, ERC721, LinearVRGDA, Initializable, ReentrancyGuard, T
         int256 _perTimeUnit
     ) external initializer {
         __ReentrancyGuard_init();
-        (string memory _name, string memory _symbol, string memory _initImageURI) =
-            abi.decode(_initStrings, (string, string, string));
+        (string memory _name, ) =
+            abi.decode(_initStrings, (string, string));
 
         // setup ERC721 and Linear VRGDA
-        __ERC721_init(_name, _symbol);
+        __ERC721_init(_name, "");
         __LinearVRGDA_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
 
         // setup token config
@@ -86,12 +86,12 @@ contract Token is IToken, ERC721, LinearVRGDA, Initializable, ReentrancyGuard, T
         }
     }
 
-    function mirror(uint256 mirrorTokenId) public payable returns (uint256 tokenId) {
+    function mirror(bytes32 imageHash) public payable returns (uint256 tokenId) {
         unchecked {
             uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
             circulatingSupply++;
             require(msg.value >= price, "Token: Insufficient payment");
-            Image(config.image).mirrorToken(tokenId, mirrorTokenId);
+            Image(config.image).mirrorToken(tokenId, imageHash);
             tokenIsMirror[tokenId] = true;
             _mint(msg.sender, tokenId);
             // Note: We do this at the end to avoid creating a reentrancy vector.
