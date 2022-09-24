@@ -5,6 +5,7 @@ interface ImageTypes {
     struct Image {
         string imageURI;
         address creator;
+        uint256 timestamp;
         bytes32 imageHash;
     }
 

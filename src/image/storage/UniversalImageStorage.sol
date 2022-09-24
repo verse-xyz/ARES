@@ -16,12 +16,16 @@ contract UniversalImageStorage is IUniversalImageStorage {
     mapping(bytes32 => uint256) internal provenanceCount;
 
     /// @notice Full attributes for an image hash
-    function addUniversalImage(string memory _imageURI, address _creator, bytes32 _imageHash) external {
-        images[_imageHash] = Image(_imageURI, _creator, _imageHash);
+    function addUniversalImage(string memory _imageURI, address _creator, uint256 _timestamp, bytes32 _imageHash) external {
+        images[_imageHash] = Image(_imageURI, _creator, _timestamp, _imageHash);
     }
 
     function getUniversalImage(bytes32 imageHash) external view returns (Image memory) {
         return images[imageHash];
+    }
+
+    function getProvenanceCount(bytes32 imageHash) external view returns (uint256) {
+        return provenanceCount[imageHash];
     }
     
     /// @notice Mirror counts for a content hash
