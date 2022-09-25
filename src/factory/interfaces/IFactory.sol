@@ -44,4 +44,8 @@ interface IFactory is IUUPS, IOwnable {
         int256 priceDecayPercent;
         int256 perTimeUnit;
     }
+
+    // if we have multiple types of markets, this won't work
+    // we could just have bytes initStrings and bytes marketParams
+    // map the market type to the struct of the market params
 }
