@@ -28,10 +28,13 @@ contract Image is IImage, ImageStorage, Initializable {
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Initializes a hyperimage's image contract 
+    /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _creator The hyperimage creator
-    /// @param _token The associated ERC-721 token address
+    /// @param _token The ERC-721 token address
     function initialize(bytes calldata _initStrings, address _creator, address _token) external initializer {
+        // Ensure the caller is the factory contract
+        if (msg.sender != address(factory)) revert ONLY_FACTORY();
         // Store initialization variables in configuration storage
         (string memory _name, string memory _initImageURI) = abi.decode(_initStrings, (string, string));
         config.name = _name;
@@ -47,6 +50,7 @@ contract Image is IImage, ImageStorage, Initializable {
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
     /// @notice Assign token to a new image
+    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to a new image
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
@@ -63,6 +67,7 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Assign token to an existing, propagating image
+    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to the image
     /// @param imageHash The hash of the image to be mirrored
     function mirrorToken(uint256 tokenId, bytes32 imageHash) external {
@@ -80,6 +85,7 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Decrement the provenance count of the image assigned to a token being burned
+    /// @dev Only callable by the token contract
     /// @param tokenId The token being burned
     function burnToken(uint256 tokenId) external {
         // Decrement the provenance count of the image assigned to the burned token
@@ -100,7 +106,7 @@ contract Image is IImage, ImageStorage, Initializable {
         );
     }
 
-    /// @notice Return the URI of the associated token contract
+    /// @notice Return the URI of the token contract
     /// @return The URI of the token contract
     function contractURI() external view returns (string memory) {
         return MetadataRenderer.encodeMetadataJSON(
@@ -108,7 +114,7 @@ contract Image is IImage, ImageStorage, Initializable {
         );
     }
 
-    /// @notice Return the address of the associated token contract
+    /// @notice Return the address of the token contract
     /// @return The address of the token contract
     function token() external view returns (address) {
         return config.token;
@@ -124,7 +130,6 @@ contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                             UTILITY
     //////////////////////////////////////////////////////////////*/
-
     /// @notice Create an image and add it to universal image storage
     /// @param _creator The image creator
     /// @param _imageURI The URI for the image to be created

@@ -1,17 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IUUPS} from "../../interfaces/IUUPS.sol";
-import {IOwnable} from "../../interfaces/IOwnable.sol";
+import { ImageTypes } from "../types/ImageTypes.sol";
 
 /// @title IImage
 /// @author neuroswish
 /// @notice Image errors, events, and functions
-interface IImage {
+interface IImage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
     //////////////////////////////////////////////////////////////*/
-    /// @dev Reverts if the caller was not the associated token contract
+    /// @dev Reverts if the caller was not the factory contract
+    error ONLY_FACTORY();
+
+    /// @dev Reverts if the caller was not the token contract
     error ONLY_TOKEN();
 
     /// @dev Reverts if an image hash already exists
@@ -39,18 +41,46 @@ interface IImage {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-    /// @notice Initializes a hyperimage's image contract
-    /// @param initStrings The encoded token and metadata initialization strings
-    /// @param token The associated ERC-721 token address
-    function initialize(bytes calldata initStrings, address creator, address token) external;
+    /// @notice Initializes a hyperimage's image contract 
+    /// @dev Only callable by the factory contract
+    /// @param _initStrings The encoded token and metadata initialization strings
+    /// @param _creator The hyperimage creator
+    /// @param _token The ERC-721 token address
+    function initialize(bytes calldata _initStrings, address _creator, address _token) external;
 
-    /// @notice The token URI
-    /// @param tokenId The ERC-721 token id
+    /// @notice Assign token to a new image
+    /// @dev Only callable by the token contract
+    /// @param tokenId The token being assigned to a new image
+    /// @param creator The creator of the new image
+    /// @param imageURI The URI of the new image
+    function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external;
+
+    /// @notice Assign token to an existing, propagating image
+    /// @dev Only callable by the token contract
+    /// @param tokenId The token being assigned to the image
+    /// @param imageHash The hash of the image to be mirrored
+    function mirrorToken(uint256 tokenId, bytes32 imageHash) external;
+
+    /// @notice Decrement the provenance count of the image assigned to a token being burned
+    /// @param tokenId The token being burned
+    function burnToken(uint256 tokenId) external;
+
+    /// @notice Return the URI of a token
+    /// @param tokenId The specified token
+    /// @return The URI of the token
     function tokenURI(uint256 tokenId) external view returns (string memory);
 
-    /// @notice The contract URI
+    /// @notice Return the URI of the token contract
+    /// @return The URI of the token contract
     function contractURI() external view returns (string memory);
 
-    /// @notice The associated token contract
+    /// @notice Return the address of the token contract
+    /// @return The address of the token contract
     function token() external view returns (address); 
+
+    /// @notice Return the image attributes assigned to a token
+    /// @param tokenId The specified token
+    /// @return The attributes of the image assigned to the specified token
+
+    function tokenDetails(uint256 tokenId) external view returns (Image memory);
 }
