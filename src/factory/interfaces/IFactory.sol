@@ -17,8 +17,8 @@ interface IFactory is IOwnable {
                               STRUCTS
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice The ERC-721 token parameters
-    /// @param initStrings The encoded token name, symbol, collection description, collection image uri, renderer base uri
+    /// @notice The hyperimage token parameters
+    /// @param initStrings The encoded token name and initializing image URI
     /// @param targetPrice The target price for a token if sold on pace, scaled by 1e18.
     /// @param priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
     /// @param perTimeUnit The number of tokens to target selling in 1 full unit of time, scaled by 1e18.
