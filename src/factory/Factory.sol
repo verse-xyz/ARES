@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-//import {UUPS} from "../proxy/UUPS.sol";
 import { Ownable } from "../utils/Ownable.sol";
 import { ERC1967Proxy } from "../proxy/ERC1967Proxy.sol";
 import { IImage } from "../image/interfaces/IImage.sol";
@@ -53,16 +52,16 @@ contract Factory is IFactory, FactoryStorage, Ownable {
     }
 
     /*//////////////////////////////////////////////////////////////
-                          NETWORK DEPLOY
+                          HYPERIMAGE DEPLOY
     //////////////////////////////////////////////////////////////*/
     function deploy(TokenParams calldata _tokenParams) external returns (address token, address image) {
-        // Deploy the network's token
+        // Deploy the hyperimage's token
         token = address(new ERC1967Proxy(tokenImpl, ""));
 
-        // Use the token address to precompute the network's remaining addresses
+        // Use the token address to precompute the hyperimage's remaining addresses
         bytes32 salt = bytes32(uint256(uint160(token)) << 96);
 
-        // Deploy the network's image contract using the salt 
+        // Deploy the hyperimage's image contract using the salt 
         image = address(new ERC1967Proxy{ salt: salt }(imageImpl, ""));
 
         // Initialize instances with provided config
@@ -78,11 +77,11 @@ contract Factory is IFactory, FactoryStorage, Ownable {
 
         IImage(image).initialize(_tokenParams.initStrings, msg.sender, token);
 
-        emit NetworkDeployed(token, image);
+        emit HyperimageDeployed(token, image);
     }
 
     /*//////////////////////////////////////////////////////////////
-                          NETWORK ADDRESSES
+                          HYPERIMAGE ADDRESSES
     //////////////////////////////////////////////////////////////*/
     function getAddresses(address _token) external view returns (address image) {
         bytes32 salt = bytes32(uint256(uint160(_token)) << 96);

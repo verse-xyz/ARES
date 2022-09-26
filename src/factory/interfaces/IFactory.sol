@@ -12,7 +12,7 @@ interface IFactory is IOwnable {
     /// @notice Emitted when a hyperimage is deployed
     /// @param token The ERC-721 token address
     /// @param image The image rendering address
-    event NetworkDeployed(address token, address image);
+    event HyperimageDeployed(address token, address image);
 
     /// @notice Emitted when an upgrade is registered by Verse
     /// @param baseImpl The base implementation address
@@ -23,10 +23,6 @@ interface IFactory is IOwnable {
     /// @param baseImpl The base implementation address
     /// @param upgradeImpl The upgrade implementation address
     event UpgradeRemoved(address baseImpl, address upgradeImpl);
-
-    /*//////////////////////////////////////////////////////////////
-                              ERRORS
-    //////////////////////////////////////////////////////////////*/
 
     /*//////////////////////////////////////////////////////////////
                               STRUCTS
