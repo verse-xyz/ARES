@@ -88,37 +88,4 @@ contract Factory is IFactory, FactoryStorage, Ownable {
         image = address(uint160(uint256(keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, imageHash)))));
     }
 
-    /*//////////////////////////////////////////////////////////////
-                          NETWORK UPGRADES
-    //////////////////////////////////////////////////////////////*/
-    /// @notice If an implementation is registered by Verse as an optional upgrade
-    /// @param _baseImpl The base implementation address
-    /// @param _upgradeImpl The upgrade implementation address
-    function isRegisteredUpgrade(address _baseImpl, address _upgradeImpl) external view returns (bool) {
-        return isUpgrade[_baseImpl][_upgradeImpl];
-    }
-
-    /// @notice Called by Verse to offer implementation upgrades for created DAOs
-    /// @param _baseImpl The base implementation address
-    /// @param _upgradeImpl The upgrade implementation address
-    function registerUpgrade(address _baseImpl, address _upgradeImpl) external onlyOwner {
-        isUpgrade[_baseImpl][_upgradeImpl] = true;
-        emit UpgradeRegistered(_baseImpl, _upgradeImpl);
-    }
-
-    /// @notice Called by Verse to remove an upgrade
-    /// @param _baseImpl The base implementation address
-    /// @param _upgradeImpl The upgrade implementation address
-    function removeUpgrade(address _baseImpl, address _upgradeImpl) external onlyOwner {
-        delete isUpgrade[_baseImpl][_upgradeImpl];
-        emit UpgradeRemoved(_baseImpl, _upgradeImpl);
-    }
-
-    // /*//////////////////////////////////////////////////////////////
-    //                       FACTORY UPGRADES
-    // //////////////////////////////////////////////////////////////*/
-    // /// @notice Ensures the caller is authorized to upgrade the contract
-    // /// @dev This function is called in `upgradeTo` & `upgradeToAndCall`
-    // /// @param _newImpl The new implementation address
-    // function _authorizeUpgrade(address _newImpl) internal override onlyOwner {}
 }
