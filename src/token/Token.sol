@@ -73,12 +73,16 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         // Setup market
         __ARES_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
 
-        // setup token config
+        // Setup token config
         config.image = _image;
         config.creator = _creator;
         config.targetPrice = _targetPrice;
         config.priceDecayPercent = _priceDecayPercent;
         config.perTimeUnit = _perTimeUnit;
+        
+        // Mint first token for creator with a tokenId of 1
+        _mint(_creator, 1);
+        totalMinted++;
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -130,15 +134,20 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         unchecked {
             if (ownerOf(tokenId) != msg.sender) revert ONLY_OWNER();
             uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply--);
+            if (price > address(this).balance) revert INSUFFICIENT_RESERVES();
             _burn(tokenId);
+            // If token is a mirror, split returned ETH evenly between the owner and the original image creator
             if (tokenIsMirror[tokenId]) {
-                // split the returned ETH evenly between the creator and the owner
                 price = price / 2;
                 address payable creator = payable(Image(config.image).tokenDetails(tokenId).creator);
                 SafeTransferLib.safeTransferETH(creator, price);
+                SafeTransferLib.safeTransferETH(msg.sender, price);
+                emit Burned(tokenId, price * 2);
+            } else {
+                SafeTransferLib.safeTransferETH(msg.sender, price);
+                emit Burned(tokenId, price);
             }
-            SafeTransferLib.safeTransferETH(msg.sender, price);
-            emit Burned(tokenId, price);
+            
         }
     }
 

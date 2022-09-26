@@ -22,6 +22,9 @@ interface IToken {
     /// @dev Reverts if the caller was not the hyperimage creator
     error ONLY_CREATOR();
 
+    /// @dev Reverts if the contract contains insufficient reserves
+    error INSUFFICIENT_RESERVES();
+
     /*//////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
