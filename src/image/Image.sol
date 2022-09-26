@@ -59,6 +59,7 @@ contract Image is IImage, ImageStorage, Initializable {
         bytes32 imageHash = _createImage(creator, _imageURI);
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
+        emit ImageProvenanceCountUpdated(_imageURI, imageHash, universalImageStorage.getProvenanceCount(imageHash));
     }
 
     /// @notice Assign token to an existing, propagating image
@@ -74,6 +75,8 @@ contract Image is IImage, ImageStorage, Initializable {
         // Assign the token to the image
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
+        emit ImageProvenanceCountUpdated(universalImageStorage.getUniversalImage(imageHash).imageURI, imageHash, universalImageStorage.getProvenanceCount(imageHash));
+
     }
 
     /// @notice Decrement the provenance count of the image assigned to a token being burned
@@ -82,6 +85,7 @@ contract Image is IImage, ImageStorage, Initializable {
         // Decrement the provenance count of the image assigned to the burned token
         bytes32 imageHash = tokenToImage[tokenId].imageHash;
         universalImageStorage.decrementProvenanceCount(imageHash);
+        emit ImageProvenanceCountUpdated(universalImageStorage.getUniversalImage(imageHash).imageURI, imageHash, universalImageStorage.getProvenanceCount(imageHash));
     }
 
     /// @notice Return the URI of a token
@@ -129,6 +133,7 @@ contract Image is IImage, ImageStorage, Initializable {
         bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
         if (universalImageStorage.getProvenanceCount(imageHash) > 0) revert EXISTING_IMAGE();
         universalImageStorage.addUniversalImage(_imageURI, _creator, block.timestamp, imageHash);
+        emit ImageCreated(_creator, _imageURI, imageHash, block.timestamp);
         return imageHash;
     }
 

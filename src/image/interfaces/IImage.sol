@@ -23,7 +23,19 @@ interface IImage {
     /*//////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
+    /// @notice Emitted when a new image is created
+    /// @param creator The image creator
+    /// @param imageURI The imageURI
+    /// @param imageHash The imageHash
+    /// @param timestamp The timestamp of creation
+    event ImageCreated(address creator, string imageURI, bytes32 imageHash, uint256 timestamp);
 
+    /// @notice Emitted when an image's provenance count is updated
+    /// @param imageURI The imageURI
+    /// @param imageHash The imageHash
+    /// @param updatedProvenanceCount The updated provenanceCount
+    event ImageProvenanceCountUpdated(string imageURI, bytes32 imageHash, uint256 updatedProvenanceCount);
+    
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
