@@ -4,15 +4,14 @@ pragma solidity ^0.8.11;
 import {IUUPS} from "../../interfaces/IUUPS.sol";
 import {IOwnable} from "../../interfaces/IOwnable.sol";
 
-interface IFactory is IUUPS, IOwnable {
+interface IFactory is IOwnable {
     /*//////////////////////////////////////////////////////////////
                               EVENTS
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     /// @notice Emitted when a hyperimage is deployed
     /// @param token The ERC-721 token address
     /// @param image The image rendering address
-
     event NetworkDeployed(address token, address image);
 
     /// @notice Emitted when an upgrade is registered by Verse
@@ -27,11 +26,11 @@ interface IFactory is IUUPS, IOwnable {
 
     /*//////////////////////////////////////////////////////////////
                               ERRORS
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     /*//////////////////////////////////////////////////////////////
                               STRUCTS
-  //////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     /// @notice The ERC-721 token parameters
     /// @param initStrings The encoded token name, symbol, collection description, collection image uri, renderer base uri
@@ -44,8 +43,4 @@ interface IFactory is IUUPS, IOwnable {
         int256 priceDecayPercent;
         int256 perTimeUnit;
     }
-
-    // if we have multiple types of markets, this won't work
-    // we could just have bytes initStrings and bytes marketParams
-    // map the market type to the struct of the market params
 }

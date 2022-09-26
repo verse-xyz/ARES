@@ -1,17 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {UUPS} from "../proxy/UUPS.sol";
-import {Ownable} from "../utils/Ownable.sol";
-import {ERC1967Proxy} from "../proxy/ERC1967Proxy.sol";
-
-import {IImage} from "../image/interfaces/IImage.sol";
-import {IToken} from "../token/interfaces/IToken.sol";
-import {IUniversalImageStorage} from "../image/interfaces/IUniversalImageStorage.sol";
-import {IFactory} from "./interfaces/IFactory.sol";
+//import {UUPS} from "../proxy/UUPS.sol";
+import { Ownable } from "../utils/Ownable.sol";
+import { ERC1967Proxy } from "../proxy/ERC1967Proxy.sol";
+import { IImage } from "../image/interfaces/IImage.sol";
+import { IToken } from "../token/interfaces/IToken.sol";
+import { IUniversalImageStorage } from "../image/interfaces/IUniversalImageStorage.sol";
+import { IFactory } from "./interfaces/IFactory.sol";
 import { FactoryStorage } from "./storage/FactoryStorage.sol";
 
-contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
+contract Factory is IFactory, FactoryStorage, Ownable {
     /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
     //////////////////////////////////////////////////////////////*/
@@ -29,15 +28,9 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
     bytes32 private immutable imageHash;
 
     /*//////////////////////////////////////////////////////////////
-                          STORAGE
-    //////////////////////////////////////////////////////////////*/
-
-    
-
-    /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    constructor(address _token, address _image, address _universalImageStorage) payable initializer {
+    constructor(address _token, address _image, address _universalImageStorage) {
         tokenImpl = _token;
         imageImpl = _image;
         universalImageStorage = _universalImageStorage;
@@ -55,7 +48,6 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
     function initialize(address _owner) external initializer {
         // Ensure owner is specified
         if (_owner == address(0)) revert ADDRESS_ZERO();
-
         // Set contract owner
         __Ownable_init(_owner);
     }
@@ -123,11 +115,11 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
         emit UpgradeRemoved(_baseImpl, _upgradeImpl);
     }
 
-    /*//////////////////////////////////////////////////////////////
-                          FACTORY UPGRADES
-    //////////////////////////////////////////////////////////////*/
-    /// @notice Ensures the caller is authorized to upgrade the contract
-    /// @dev This function is called in `upgradeTo` & `upgradeToAndCall`
-    /// @param _newImpl The new implementation address
-    function _authorizeUpgrade(address _newImpl) internal override onlyOwner {}
+    // /*//////////////////////////////////////////////////////////////
+    //                       FACTORY UPGRADES
+    // //////////////////////////////////////////////////////////////*/
+    // /// @notice Ensures the caller is authorized to upgrade the contract
+    // /// @dev This function is called in `upgradeTo` & `upgradeToAndCall`
+    // /// @param _newImpl The new implementation address
+    // function _authorizeUpgrade(address _newImpl) internal override onlyOwner {}
 }
