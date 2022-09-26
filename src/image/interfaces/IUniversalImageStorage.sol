@@ -10,6 +10,7 @@ interface IUniversalImageStorage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+    
     /// @notice Add an image to universal image storage
     /// @param imageURI The imageURI
     /// @param creator The imageURI

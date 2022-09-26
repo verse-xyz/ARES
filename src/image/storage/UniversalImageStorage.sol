@@ -7,7 +7,6 @@ import { IUniversalImageStorage } from "../interfaces/IUniversalImageStorage.sol
 /// @author neuroswish
 /// @notice Universal storage of image hashes
 contract UniversalImageStorage is IUniversalImageStorage {
-
     /// @notice Full attributes for an image hash
     mapping(bytes32 => Image) internal images;
 

@@ -10,6 +10,7 @@ interface IImage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
     //////////////////////////////////////////////////////////////*/
+    
     /// @dev Reverts if the caller was not the factory contract
     error ONLY_FACTORY();
 
@@ -25,6 +26,7 @@ interface IImage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Emitted when a new image is created
     /// @param creator The image creator
     /// @param imageURI The imageURI
@@ -41,6 +43,7 @@ interface IImage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Initializes a hyperimage's image contract 
     /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings

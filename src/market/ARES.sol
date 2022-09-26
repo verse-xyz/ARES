@@ -14,6 +14,7 @@ contract ARES is IARES, Initializable {
   /*//////////////////////////////////////////////////////////////
                           STORAGE
   //////////////////////////////////////////////////////////////*/
+
   /// @notice Target price for a token, to be scaled according to sales pace
   /// @dev Represented as an 18 decimal fixed point number
   int256 public targetPrice;
@@ -29,6 +30,7 @@ contract ARES is IARES, Initializable {
   /*//////////////////////////////////////////////////////////////
                             INITIALIZER
   //////////////////////////////////////////////////////////////*/
+
   /// @notice Sets target price and per period price decrease for the ARES
   /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
   /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18
@@ -45,6 +47,7 @@ contract ARES is IARES, Initializable {
   /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
   //////////////////////////////////////////////////////////////*/
+  
   /// @notice Calculate the price of a token according to the VRGDA formula.
   /// @param timeSinceStart Time passed since the VRGDA began, scaled by 1e18.
   /// @param sold The total number of tokens that have been sold so far.

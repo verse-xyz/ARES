@@ -16,6 +16,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////
                           STORAGE
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Total number of tokens minted
     /// @dev This is used to generate the next token id
     uint256 private totalMinted;
@@ -33,6 +34,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
+
     constructor(address _factory) initializer {
         factory = IFactory(_factory);
     }
@@ -40,6 +42,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Initializes a hyperimage's token contract 
     /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings
@@ -81,6 +84,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+    
     /// @notice Knit a new token to the hyperimage
     /// @param imageURI The URI of the image to knit
     /// @return tokenId The ID of the newly knitted token

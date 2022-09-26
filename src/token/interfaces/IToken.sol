@@ -12,6 +12,7 @@ interface IToken {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
     //////////////////////////////////////////////////////////////*/
+
     /// @dev Reverts if the caller was not the factory contract
     error ONLY_FACTORY();
 
@@ -24,6 +25,7 @@ interface IToken {
     /*//////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Emitted when a new token is knitted
     /// @param tokenId The ID of the knitted token
     /// @param creator The image creator
@@ -50,6 +52,7 @@ interface IToken {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+    
     /// @notice Initializes a hyperimage's token contract 
     /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings

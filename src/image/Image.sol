@@ -12,12 +12,14 @@ contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                             IMMUTABLES
     /////////////////////////////////////////////////////////////*/
+
     IFactory private immutable factory;
     IUniversalImageStorage private immutable universalImageStorage;
 
     /*//////////////////////////////////////////////////////////////
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
+
     constructor(address _factory, address _universalImageStorage) initializer {
         factory = IFactory(_factory);
         universalImageStorage = IUniversalImageStorage(_universalImageStorage); 
@@ -49,6 +51,7 @@ contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Assign token to a new image
     /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to a new image
@@ -130,6 +133,7 @@ contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                             UTILITY
     //////////////////////////////////////////////////////////////*/
+    
     /// @notice Create an image and add it to universal image storage
     /// @param _creator The image creator
     /// @param _imageURI The URI for the image to be created

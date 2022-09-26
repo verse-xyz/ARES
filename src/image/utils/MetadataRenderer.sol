@@ -8,6 +8,10 @@ import { Base64 } from "@openzeppelin/contracts/utils/Base64.sol";
 /// @author neuroswish
 /// @notice Library for rendering hyperimage metadata
 library MetadataRenderer {
+    /*//////////////////////////////////////////////////////////////
+                            FUNCTIONS
+    //////////////////////////////////////////////////////////////*/
+    
     /// @notice Create metadata for a token
     /// @param name The image name
     /// @param imageURI The imageURI
