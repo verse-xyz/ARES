@@ -1,6 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
+/// @title ImageTypes
+/// @author neuroswish
+/// @notice Types for the image contract
 interface ImageTypes {
     /// @notice Full attributes for an image
     struct Image {

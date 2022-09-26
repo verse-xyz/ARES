@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
+/// @title TokenTypes
+/// @author neuroswish
+/// @notice Types for the token contract
 interface TokenTypes {
-    /// @notice The token config type
-    /// @param image The address of the associated image contract
+    /// @notice Token configuration settings
     struct Config {
         address image;
         address creator;
