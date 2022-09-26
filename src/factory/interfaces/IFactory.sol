@@ -8,6 +8,7 @@ interface IFactory is FactoryTypes, IOwnable {
   /*//////////////////////////////////////////////////////////////
                             ERRORS
   //////////////////////////////////////////////////////////////*/
+  
   /// @dev Reverts if token params are invalid
   error INVALID_TOKEN_PARAMS();
 
