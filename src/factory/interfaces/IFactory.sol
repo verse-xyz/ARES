@@ -1,8 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IUUPS} from "../../interfaces/IUUPS.sol";
-import {IOwnable} from "../../interfaces/IOwnable.sol";
+import { IOwnable } from "../../interfaces/IOwnable.sol";
 
 interface IFactory is IOwnable {
     /*//////////////////////////////////////////////////////////////
@@ -13,16 +12,6 @@ interface IFactory is IOwnable {
     /// @param token The ERC-721 token address
     /// @param image The image rendering address
     event HyperimageDeployed(address token, address image);
-
-    /// @notice Emitted when an upgrade is registered by Verse
-    /// @param baseImpl The base implementation address
-    /// @param upgradeImpl The upgrade implementation address
-    event UpgradeRegistered(address baseImpl, address upgradeImpl);
-
-    /// @notice Emitted when an upgrade is unregistered by Verse
-    /// @param baseImpl The base implementation address
-    /// @param upgradeImpl The upgrade implementation address
-    event UpgradeRemoved(address baseImpl, address upgradeImpl);
 
     /*//////////////////////////////////////////////////////////////
                               STRUCTS
