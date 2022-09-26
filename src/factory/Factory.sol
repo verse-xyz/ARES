@@ -7,9 +7,8 @@ import { IImage } from "../image/interfaces/IImage.sol";
 import { IUniversalImageStorage } from "../image/interfaces/IUniversalImageStorage.sol";
 import { IToken } from "../token/interfaces/IToken.sol";
 import { IFactory } from "./interfaces/IFactory.sol";
-import { FactoryStorage } from "./storage/FactoryStorage.sol";
 
-contract Factory is IFactory, FactoryStorage, Ownable {
+contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
     //////////////////////////////////////////////////////////////*/
