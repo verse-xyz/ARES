@@ -8,7 +8,7 @@ import { Initializable } from "../utils/Initializable.sol";
 /// @title Autonomous Reactive Emissions System (ARES)
 /// @author neuroswish
 /// @notice Rearchitected Linear VRGDA that enables fully autonomous, programmable markets inside NFTs
-/// @notice Credit to transmissions11 <t11s@paradigm.xyz> and FrankieIsLost <frankie@paradigm.xyz> for the original VRGDA architecture (https://github.com/transmissions11/VRGDAs)
+/// @notice Credit to transmissions11 <t11s@paradigm.xyz>, Dave White <dave@paradigm.xyz>, and FrankieIsLost <frankie@paradigm.xyz> for the original VRGDA architecture (https://github.com/transmissions11/VRGDAs)
 
 contract ARES is IARES, Initializable {
   /*//////////////////////////////////////////////////////////////
