@@ -12,7 +12,7 @@ contract UniversalImageStorage is IUniversalImageStorage {
     /// @notice Full attributes for an image hash
     mapping(bytes32 => Image) internal images;
 
-    /// @notice Mirror counts for a content hash
+    /// @notice Provenance count for an image hash
     mapping(bytes32 => uint256) internal provenanceCount;
 
     /// @notice Full attributes for an image hash

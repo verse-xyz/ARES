@@ -10,16 +10,24 @@ import {IOwnable} from "../../interfaces/IOwnable.sol";
 interface IImage {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
-//////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
+    /// @dev Reverts if the caller was not the associated token contract
+    error ONLY_TOKEN();
+
+    /// @dev Reverts if an image hash already exists
+    error EXISTING_IMAGE();
+
+    /// @dev Reverts if an image hash does not exist
+    error NONEXISTENT_IMAGE();
 
     /*//////////////////////////////////////////////////////////////
                             EVENTS
-//////////////////////////////////////////////////////////////*/
+    //////////////////////////////////////////////////////////////*/
 
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
-//////////////////////////////////////////////////////////////*/
-    /// @notice Initializes a Token's image contract
+    //////////////////////////////////////////////////////////////*/
+    /// @notice Initializes a hyperimage's image contract
     /// @param initStrings The encoded token and metadata initialization strings
     /// @param token The associated ERC-721 token address
     function initialize(bytes calldata initStrings, address creator, address token) external;

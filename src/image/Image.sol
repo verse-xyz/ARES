@@ -1,13 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IImage} from "./interfaces/IImage.sol";
-import {Initializable} from "../utils/Initializable.sol";
-import {UUPS} from "../proxy/UUPS.sol";
-import {Ownable} from "../utils/Ownable.sol";
-import {ImageStorage} from "./storage/ImageStorage.sol";
-import {IUniversalImageStorage} from "./interfaces/IUniversalImageStorage.sol";
-import {MetadataRenderer} from "./utils/MetadataRenderer.sol";
+import { Initializable } from "../utils/Initializable.sol";
+import { MetadataRenderer } from "./utils/MetadataRenderer.sol";
+import { IImage } from "./interfaces/IImage.sol";
+import { ImageStorage } from "./storage/ImageStorage.sol";
+import { IUniversalImageStorage } from "./interfaces/IUniversalImageStorage.sol";
 import { IFactory } from "../factory/interfaces/IFactory.sol";
 
 contract Image is IImage, ImageStorage, Initializable {
@@ -34,10 +32,12 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @param _creator The hyperimage creator
     /// @param _token The associated ERC-721 token address
     function initialize(bytes calldata _initStrings, address _creator, address _token) external initializer {
+        // Store initialization variables in configuration storage
         (string memory _name, string memory _initImageURI) = abi.decode(_initStrings, (string, string));
         config.name = _name;
         config.token = _token;
-
+        
+        // Create the initial image hash and assign it to the first token
         bytes32 initImageHash = _createImage(_creator, _initImageURI);
         tokenToImage[1] = universalImageStorage.getUniversalImage(initImageHash);
         universalImageStorage.incrementProvenanceCount(initImageHash);
@@ -51,26 +51,42 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
     function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external {
-        // only token contract can call this function
+        // Ensure the caller is the token contract
+        if (msg.sender != config.token) revert ONLY_TOKEN();
         (string memory _imageURI) = abi.decode(imageURI, (string));
+
+        // Create the new image and assign it to the token
         bytes32 imageHash = _createImage(creator, _imageURI);
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
     }
 
+    /// @notice Assign token to an existing, propagating image
+    /// @param tokenId The token being assigned to the image
+    /// @param imageHash The hash of the image to be mirrored
     function mirrorToken(uint256 tokenId, bytes32 imageHash) external {
-        require(imageHash != bytes32(0), "Image: token does not exist");
-        // image must be "alive" for it to be mirrored
-        require(universalImageStorage.getProvenanceCount(imageHash) > 0, "Image is dead");
+        // Ensure the caller is the token contract
+        if (msg.sender != config.token) revert ONLY_TOKEN();
+
+        // Image must be alive to be mirrored
+        if (universalImageStorage.getProvenanceCount(imageHash) < 1) revert NONEXISTENT_IMAGE();
+
+        // Assign the token to the image
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
     }
 
+    /// @notice Decrement the provenance count of the image assigned to a token being burned
+    /// @param tokenId The token being burned
     function burnToken(uint256 tokenId) external {
+        // Decrement the provenance count of the image assigned to the burned token
         bytes32 imageHash = tokenToImage[tokenId].imageHash;
         universalImageStorage.decrementProvenanceCount(imageHash);
     }
 
+    /// @notice Return the URI of a token
+    /// @param tokenId The specified token
+    /// @return The URI of the token
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         return MetadataRenderer.createMetadata(
             config.name,
@@ -80,16 +96,23 @@ contract Image is IImage, ImageStorage, Initializable {
         );
     }
 
+    /// @notice Return the URI of the associated token contract
+    /// @return The URI of the token contract
     function contractURI() external view returns (string memory) {
         return MetadataRenderer.encodeMetadataJSON(
             abi.encodePacked('{"name": "', config.name, '", "image": "', tokenToImage[1].imageURI, '"}')
         );
     }
 
+    /// @notice Return the address of the associated token contract
+    /// @return The address of the token contract
     function token() external view returns (address) {
         return config.token;
     }
 
+    /// @notice Return the image attributes assigned to a token
+    /// @param tokenId The specified token
+    /// @return The attributes of the image assigned to the specified token
     function tokenDetails(uint256 tokenId) external view returns (Image memory) {
         return tokenToImage[tokenId];
     }
@@ -104,6 +127,7 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @return The image hash
     function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
         bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
+        if (universalImageStorage.getProvenanceCount(imageHash) > 0) revert EXISTING_IMAGE();
         universalImageStorage.addUniversalImage(_imageURI, _creator, block.timestamp, imageHash);
         return imageHash;
     }
