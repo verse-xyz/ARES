@@ -2,6 +2,7 @@
 pragma solidity ^0.8.11;
 
 interface ImageTypes {
+    /// @notice Full attributes for an image
     struct Image {
         string imageURI;
         address creator;
@@ -9,6 +10,7 @@ interface ImageTypes {
         bytes32 imageHash;
     }
 
+    /// @notice Configuration for an image contract
     struct Config {
         address token;
         string name;

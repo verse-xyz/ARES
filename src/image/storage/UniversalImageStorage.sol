@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {ImageTypes} from "../types/ImageTypes.sol";
 import { IUniversalImageStorage } from "../interfaces/IUniversalImageStorage.sol";
 
 /// @title UniversalImageStorage
@@ -15,25 +14,37 @@ contract UniversalImageStorage is IUniversalImageStorage {
     /// @notice Provenance count for an image hash
     mapping(bytes32 => uint256) internal provenanceCount;
 
-    /// @notice Full attributes for an image hash
-    function addUniversalImage(string memory _imageURI, address _creator, uint256 _timestamp, bytes32 _imageHash) external {
-        images[_imageHash] = Image(_imageURI, _creator, _timestamp, _imageHash);
+    /// @notice Add an image to universal image storage
+    /// @param imageURI The imageURI
+    /// @param creator The imageURI
+    /// @param imageHash The image hash
+    /// @param timestamp The timestamp of creation
+    function addUniversalImage(string memory imageURI, address creator, bytes32 imageHash, uint256 timestamp) external {
+        images[imageHash] = Image(imageURI, creator, timestamp, imageHash);
     }
 
+    /// @notice Return an image from universal image storage
+    /// @param imageHash The image hash
+    /// @return timestamp Full image attributes for an image hash
     function getUniversalImage(bytes32 imageHash) external view returns (Image memory) {
         return images[imageHash];
     }
 
+    /// @notice Get the provenance count for an image
+    /// @param imageHash The image hash
+    /// @return provenanceCount The provenance count of the image
     function getProvenanceCount(bytes32 imageHash) external view returns (uint256) {
         return provenanceCount[imageHash];
     }
     
-    /// @notice Mirror counts for a content hash
+    /// @notice Increment the provenance count for an image
+    /// @param imageHash The image hash
     function incrementProvenanceCount(bytes32 imageHash) external {
         provenanceCount[imageHash]++;
     }
 
-    /// @notice Mirror counts for a content hash
+    /// @notice Decrement the provenance count for an image
+    /// @param imageHash The image hash
     function decrementProvenanceCount(bytes32 imageHash) external {
         provenanceCount[imageHash]--;
     }

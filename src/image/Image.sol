@@ -137,7 +137,7 @@ contract Image is IImage, ImageStorage, Initializable {
     function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
         bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
         if (universalImageStorage.getProvenanceCount(imageHash) > 0) revert EXISTING_IMAGE();
-        universalImageStorage.addUniversalImage(_imageURI, _creator, block.timestamp, imageHash);
+        universalImageStorage.addUniversalImage(_imageURI, _creator, imageHash, block.timestamp);
         emit ImageCreated(_creator, _imageURI, imageHash, block.timestamp);
         return imageHash;
     }

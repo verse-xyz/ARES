@@ -1,17 +1,19 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {Strings} from "@openzeppelin/contracts/utils/Strings.sol";
-import {Base64} from "@openzeppelin/contracts/utils/Base64.sol";
+import { Strings } from "@openzeppelin/contracts/utils/Strings.sol";
+import { Base64 } from "@openzeppelin/contracts/utils/Base64.sol";
 
-/// NFT metadata library for rendering metadata associated with editions
+/// @title MetadataRenderer
+/// @author neuroswish
+/// @notice Library for rendering hyperimage metadata
 library MetadataRenderer {
-    /// Generate edition metadata from storage information as base64-json blob
-    /// Combines the media data and metadata
-    /// @param name Name of NFT in metadata
-    /// @param imageURI URL of image to render for edition
-    /// @param creator Token ID for specific token
-    /// @param provenanceCount Size of entire edition to show
+    /// @notice Create metadata for a token
+    /// @param name The image name
+    /// @param imageURI The imageURI
+    /// @param creator The image creator
+    /// @param provenanceCount The image's provenance count
+    /// @return The metadata for the token
     function createMetadata(string memory name, string memory imageURI, address creator, uint256 provenanceCount)
         internal
         pure
@@ -21,11 +23,12 @@ library MetadataRenderer {
         return encodeMetadataJSON(json);
     }
 
-    /// Function to create the metadata json string for the nft edition
-    /// @param name Name of NFT in metadata
-    /// @param imageURI Description of NFT in metadata
-    /// @param creator Token ID for specific token
-    /// @param provenanceCount Size of entire edition to show
+    /// @notice Create the metadata JSON string for a hyperimage
+    /// @param name The image name
+    /// @param imageURI The imageURI
+    /// @param creator The image creator
+    /// @param provenanceCount The image's provenance count
+    /// @return The metadata JSON for the token
     function createMetadataJSON(string memory name, string memory imageURI, address creator, uint256 provenanceCount)
         internal
         pure
@@ -45,7 +48,9 @@ library MetadataRenderer {
     }
 
     /// Encodes the argument json bytes into base64-data uri format
-    /// @param json Raw json to base64 and turn into a data-uri
+    /// @notice Encode JSON bytes into base64-data URI format
+    /// @param json Raw JSON to base64 and turn into a data URI
+    /// @return The base64 data URI
     function encodeMetadataJSON(bytes memory json) internal pure returns (string memory) {
         return string(abi.encodePacked("data:application/json;base64,", Base64.encode(json)));
     }
