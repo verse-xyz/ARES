@@ -12,11 +12,12 @@ import {IImage} from "../image/interfaces/IImage.sol";
 import { IFactory } from "../factory/interfaces/IFactory.sol";
 import {Image} from "../image/Image.sol";
 import {LinearVRGDA} from "../market/LinearVRGDA.sol";
+import {ARES} from "../market/ARES.sol";
 
 import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
 import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
 
-contract Token is IToken, ERC721, LinearVRGDA, ReentrancyGuard, TokenStorage {
+contract Token is IToken, ERC721, ARES, ReentrancyGuard, TokenStorage {
     /*//////////////////////////////////////////////////////////////
                           STORAGE
     //////////////////////////////////////////////////////////////*/
@@ -117,4 +118,5 @@ contract Token is IToken, ERC721, LinearVRGDA, ReentrancyGuard, TokenStorage {
             SafeTransferLib.safeTransferETH(msg.sender, price);
         }
     }
+        
 }

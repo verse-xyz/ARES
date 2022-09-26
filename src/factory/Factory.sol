@@ -43,7 +43,7 @@ contract Factory is IFactory, FactoryStorage, UUPS, Ownable {
         universalImageStorage = _universalImageStorage;
 
         // hash of proxy bytecode and image implementation
-        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, "")));
+        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, ""))); 
     }
 
     /*//////////////////////////////////////////////////////////////
