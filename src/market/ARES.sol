@@ -10,39 +10,41 @@ import { Initializable } from "../utils/Initializable.sol";
 /// @notice Rearchitected Linear VRGDA that enables fully autonomous, programmable markets inside NFTs.
 /// @notice Credit to transmissions11 <t11s@paradigm.xyz> and FrankieIsLost <frankie@paradigm.xyz> for the original VRGDA architecture (https://github.com/transmissions11/VRGDAs).
 
-
 contract ARES is IARES, Initializable {
   /*//////////////////////////////////////////////////////////////
-                          ARES PARAMETERS
+                          STORAGE
   //////////////////////////////////////////////////////////////*/
-
-  /// @notice Target price for a token, to be scaled according to sales pace.
-  /// @dev Represented as an 18 decimal fixed point number.
+  /// @notice Target price for a token, to be scaled according to sales pace
+  /// @dev Represented as an 18 decimal fixed point number
   int256 public targetPrice;
 
-  /// @dev Precomputed constant that allows us to rewrite a pow() as an exp().
-  /// @dev Represented as an 18 decimal fixed point number.
+  /// @dev Precomputed constant that allows us to rewrite a pow() as an exp()
+  /// @dev Represented as an 18 decimal fixed point number
   int256 internal decayConstant;
 
-  /// @dev The total number of tokens to target selling every full unit of time.
-  /// @dev Represented as an 18 decimal fixed point number.
+  /// @dev The total number of tokens to target selling every full unit of time
+  /// @dev Represented as an 18 decimal fixed point number
   int256 internal perTimeUnit;
 
-  /// @notice Sets target price and per period price decrease for the ARES.
-  /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18.
-  /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
-  function __ARES_init(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit) internal onlyInitializing {
+  /*//////////////////////////////////////////////////////////////
+                            INITIALIZER
+  //////////////////////////////////////////////////////////////*/
+  /// @notice Sets target price and per period price decrease for the ARES
+  /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
+  /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18
+  /// @param _perTimeUnit The total number of tokens to target selling every full unit of time
+  function __ARES_init(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit) internal initializer {
       targetPrice = _targetPrice;
       decayConstant = wadLn(1e18 - _priceDecreasePercent);
+
       // The decay constant must be negative for VRGDAs to work.
       if (decayConstant < 0) revert NON_NEGATIVE_DECAY_CONSTANT();
       perTimeUnit = _perTimeUnit;
   }
 
   /*//////////////////////////////////////////////////////////////
-                            PRICING LOGIC
+                            FUNCTIONS
   //////////////////////////////////////////////////////////////*/
-
   /// @notice Calculate the price of a token according to the VRGDA formula.
   /// @param timeSinceStart Time passed since the VRGDA began, scaled by 1e18.
   /// @param sold The total number of tokens that have been sold so far.

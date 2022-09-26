@@ -3,7 +3,7 @@ pragma solidity ^0.8.11;
 
 /// @title IARES
 /// @author neuroswish
-/// @notice The external ARES events, errors, and functions
+/// @notice The ARES events, errors, and functions
 
 interface IARES {
   /*//////////////////////////////////////////////////////////////
@@ -29,7 +29,8 @@ interface IARES {
   /// relative, such that 0 means the tokens should be sold immediately when the VRGDA begins.
   function getTargetSaleTime(int256 sold) external view returns (int256);
 
-  /// @dev Given a number of tokens sold, return the minimum ETH required in the contract to facilitate autonomous selling.
+  /// @notice Given a number of tokens sold, return the minimum ETH required in the contract to facilitate autonomous selling.
+  /// @param timeSinceStart Time passed since the VRGDA began, scaled by 1e18.
   /// @param sold A number of tokens sold, scaled by 1e18, to get the corresponding required ETH reserves for.
   /// @return The minimum amount of ETH required in the contract to facilitate autonomous selling, where the
   /// creator is able to withdraw all excess reserves.
