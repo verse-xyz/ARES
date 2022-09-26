@@ -7,7 +7,6 @@ interface IFactory is IOwnable {
     /*//////////////////////////////////////////////////////////////
                               EVENTS
     //////////////////////////////////////////////////////////////*/
-
     /// @notice Emitted when a hyperimage is deployed
     /// @param token The ERC-721 token address
     /// @param image The image rendering address
@@ -16,7 +15,6 @@ interface IFactory is IOwnable {
     /*//////////////////////////////////////////////////////////////
                               STRUCTS
     //////////////////////////////////////////////////////////////*/
-
     /// @notice The hyperimage token parameters
     /// @param initStrings The encoded token name and initializing image URI
     /// @param targetPrice The target price for a token if sold on pace, scaled by 1e18.
