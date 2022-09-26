@@ -1,21 +1,17 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {UUPS} from "../proxy/UUPS.sol";
-import {Ownable} from "../utils/Ownable.sol";
-import {Initializable} from "../utils/Initializable.sol";
-import {ReentrancyGuard} from "../utils/ReentrancyGuard.sol";
-import {ERC721} from "../utils/ERC721.sol";
-import {TokenStorage} from "./storage/TokenStorage.sol";
-import {IToken} from "./interfaces/IToken.sol";
-import {IImage} from "../image/interfaces/IImage.sol";
+import { SafeTransferLib } from "solmate/utils/SafeTransferLib.sol";
+import { toDaysWadUnsafe } from "solmate/utils/SignedWadMath.sol";
+import { ReentrancyGuard } from "../utils/ReentrancyGuard.sol";
+import { ERC721 } from "../utils/ERC721.sol";
+import { TokenStorage } from "./storage/TokenStorage.sol";
+import { IToken } from "./interfaces/IToken.sol";
+import { IImage } from "../image/interfaces/IImage.sol";
 import { IFactory } from "../factory/interfaces/IFactory.sol";
-import {Image} from "../image/Image.sol";
-import {LinearVRGDA} from "../market/LinearVRGDA.sol";
-import {ARES} from "../market/ARES.sol";
-
-import {SafeTransferLib} from "solmate/utils/SafeTransferLib.sol";
-import {toDaysWadUnsafe} from "solmate/utils/SignedWadMath.sol";
+import { Image } from "../image/Image.sol";
+import { ARES } from "../market/ARES.sol";
+import { LinearVRGDA } from "../market/LinearVRGDA.sol";
 
 contract Token is IToken, ERC721, ARES, ReentrancyGuard, TokenStorage {
     /*//////////////////////////////////////////////////////////////
@@ -61,7 +57,7 @@ contract Token is IToken, ERC721, ARES, ReentrancyGuard, TokenStorage {
         __ERC721_init(_name, "");
 
         // setup market
-        __LinearVRGDA_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
+        __ARES_init(_targetPrice, _priceDecayPercent, _perTimeUnit);
 
         // setup token config
         config.image = _image;
@@ -117,6 +113,13 @@ contract Token is IToken, ERC721, ARES, ReentrancyGuard, TokenStorage {
             }
             SafeTransferLib.safeTransferETH(msg.sender, price);
         }
+    }
+
+    function redeem() public nonReentrant {
+        require(msg.sender == config.creator, "Token: Not creator");
+        uint256 reserves = getMinimumReserves(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply);
+        require(reserves > address(this).balance, "Token: Insufficient reserves");
+        SafeTransferLib.safeTransferETH(msg.sender, reserves - address(this).balance);
     }
         
 }

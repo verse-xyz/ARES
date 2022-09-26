@@ -33,5 +33,5 @@ interface IARES {
   /// @param sold A number of tokens sold, scaled by 1e18, to get the corresponding required ETH reserves for.
   /// @return The minimum amount of ETH required in the contract to facilitate autonomous selling, where the
   /// creator is able to withdraw all excess reserves.
-  function getMinimumReserves(int256 timeSinceStart, uint256 sold) external view returns (uint256)
+  function getMinimumReserves(int256 timeSinceStart, uint256 sold) external view returns (uint256);
 }

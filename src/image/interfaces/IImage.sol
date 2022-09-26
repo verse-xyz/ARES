@@ -32,5 +32,5 @@ interface IImage {
     function contractURI() external view returns (string memory);
 
     /// @notice The associated token contract
-    function token() external view returns (address);
+    function token() external view returns (address); 
 }

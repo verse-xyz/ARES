@@ -52,4 +52,6 @@ interface IToken {
     function mirror(bytes32 imageHash) external payable returns (uint256);
 
     function burn(uint256 tokenId) external;
+    
+    function redeem() external;
 }
