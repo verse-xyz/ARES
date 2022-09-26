@@ -2,28 +2,36 @@
 pragma solidity ^0.8.11;
 
 import { IOwnable } from "../../interfaces/IOwnable.sol";
+import { FactoryTypes } from "../types/FactoryTypes.sol";
 
-interface IFactory is IOwnable {
-    /*//////////////////////////////////////////////////////////////
-                              EVENTS
-    //////////////////////////////////////////////////////////////*/
-    /// @notice Emitted when a hyperimage is deployed
-    /// @param token The ERC-721 token address
-    /// @param image The image rendering address
-    event HyperimageDeployed(address token, address image);
+interface IFactory is FactoryTypes, IOwnable {
+  /*//////////////////////////////////////////////////////////////
+                            ERRORS
+  //////////////////////////////////////////////////////////////*/
+  /// @dev Reverts if token params are invalid
+  error INVALID_TOKEN_PARAMS();
 
-    /*//////////////////////////////////////////////////////////////
-                              STRUCTS
-    //////////////////////////////////////////////////////////////*/
-    /// @notice The hyperimage token parameters
-    /// @param initStrings The encoded token name and initializing image URI
-    /// @param targetPrice The target price for a token if sold on pace, scaled by 1e18.
-    /// @param priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18.
-    /// @param perTimeUnit The number of tokens to target selling in 1 full unit of time, scaled by 1e18.
-    struct TokenParams {
-        bytes initStrings;
-        int256 targetPrice;
-        int256 priceDecayPercent;
-        int256 perTimeUnit;
-    }
+  /*//////////////////////////////////////////////////////////////
+                            EVENTS
+  //////////////////////////////////////////////////////////////*/
+
+  /// @notice Emitted when a hyperimage is deployed
+  /// @param token The ERC-721 token address
+  /// @param image The image rendering address
+  event HyperimageDeployed(address token, address image);
+
+  /*//////////////////////////////////////////////////////////////
+                            FUNCTIONS
+  //////////////////////////////////////////////////////////////*/
+
+  /// @notice Deploys a hyperimage
+  /// @param _tokenParams The hyperimage token parameters
+  /// @return token The ERC-721 token address
+  /// @return image The image rendering address
+  function deploy(TokenParams calldata _tokenParams) external returns (address token, address image);
+
+  /// @notice Return a hyperimage's contracts
+  /// @param _token The hyperimage's token address
+  /// @return image The hyperimage's image rendering address
+  function getAddresses(address _token) external view returns (address image);
 }

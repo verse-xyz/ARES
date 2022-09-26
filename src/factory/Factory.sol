@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
+import { wadLn } from "solmate/utils/SignedWadMath.sol";
 import { Ownable } from "../utils/Ownable.sol";
 import { ERC1967Proxy } from "../proxy/ERC1967Proxy.sol";
 import { IImage } from "../image/interfaces/IImage.sol";
@@ -12,6 +13,7 @@ contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           IMMUTABLES
     //////////////////////////////////////////////////////////////*/
+
     ///@notice The token implementation address
     address public immutable tokenImpl;
 
@@ -27,6 +29,7 @@ contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
+
     constructor(address _token, address _image, address _universalImageStorage) {
         tokenImpl = _token;
         imageImpl = _image;
@@ -37,6 +40,7 @@ contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Initializes ownership of the factory contract
     /// @param _owner The address of the owner (transferred to Verse once deployed)
     function initialize(address _owner) external initializer {
@@ -48,11 +52,16 @@ contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           HYPERIMAGE DEPLOY
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Deploys a hyperimage
     /// @param _tokenParams The hyperimage token parameters
     /// @return token The ERC-721 token address
     /// @return image The image rendering address
     function deploy(TokenParams calldata _tokenParams) external returns (address token, address image) {
+        // The decay constant must be negative for the market to work
+        int256 decayConstant = wadLn(1e18 - _tokenParams.priceDecayPercent);
+        if (decayConstant < 0) revert INVALID_TOKEN_PARAMS();
+        
         // Deploy the hyperimage's token
         token = address(new ERC1967Proxy(tokenImpl, ""));
 
@@ -81,6 +90,7 @@ contract Factory is IFactory, Ownable {
     /*//////////////////////////////////////////////////////////////
                           HYPERIMAGE ADDRESSES
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Return a hyperimage's contracts
     /// @param _token The hyperimage's token address
     /// @return image The hyperimage's image rendering address

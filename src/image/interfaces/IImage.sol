@@ -29,15 +29,15 @@ interface IImage is ImageTypes {
 
     /// @notice Emitted when a new image is created
     /// @param creator The image creator
-    /// @param imageURI The imageURI
-    /// @param imageHash The imageHash
-    /// @param timestamp The timestamp of creation
+    /// @param imageURI The image URI
+    /// @param imageHash The image hash
+    /// @param timestamp Timestamp of image creation
     event ImageCreated(address creator, string imageURI, bytes32 imageHash, uint256 timestamp);
 
     /// @notice Emitted when an image's provenance count is updated
-    /// @param imageURI The imageURI
-    /// @param imageHash The imageHash
-    /// @param updatedProvenanceCount The updated provenanceCount
+    /// @param imageURI The image URI
+    /// @param imageHash The image Hash
+    /// @param updatedProvenanceCount The updated provenance count
     event ImageProvenanceCountUpdated(string imageURI, bytes32 imageHash, uint256 updatedProvenanceCount);
     
     /*//////////////////////////////////////////////////////////////

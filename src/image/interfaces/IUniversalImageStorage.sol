@@ -12,10 +12,10 @@ interface IUniversalImageStorage is ImageTypes {
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Add an image to universal image storage
-    /// @param imageURI The imageURI
-    /// @param creator The imageURI
+    /// @param imageURI The image URI
+    /// @param creator The image creator
     /// @param imageHash The image hash
-    /// @param timestamp The timestamp of creation
+    /// @param timestamp Timestamp of image creation
     function addUniversalImage(string memory imageURI, address creator, bytes32 imageHash, uint256 timestamp) external;
 
     /// @notice Return an image from universal image storage
