@@ -1,57 +1,88 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IImage} from "../../image/interfaces/IImage.sol";
-import {TokenTypes} from "../types/TokenTypes.sol";
+import { IImage } from "../../image/interfaces/IImage.sol";
+import { TokenTypes } from "../types/TokenTypes.sol";
 import {IFactory} from "../../factory/interfaces/IFactory.sol";
 
-/// @notice Interface for Verse Hyperobject Contract
+/// @title IToken
+/// @author neuroswish
+/// @notice Token errors, events, and functions
 interface IToken {
-    // ======== Access Errors ========
+    /*//////////////////////////////////////////////////////////////
+                            ERRORS
+    //////////////////////////////////////////////////////////////*/
+    /// @dev Reverts if the caller was not the factory contract
+    error ONLY_FACTORY();
 
-    /// @notice Only admin can access this function
-    error Access_OnlyAdmin();
-    /// @notice Missing the given role or admin access
-    error Access_MissingRoleOrAdmin(bytes32 role);
+    /// @dev Reverts if the caller was not the token owner
+    error ONLY_OWNER();
 
-    // ======== Admin Errors ========
+    /// @dev Reverts if the caller was not the hyperimage creator
+    error ONLY_CREATOR();
 
-    /// @notice Reward percentage too high
-    error Setup_RewardPercentageTooHigh(uint16 maxRoyaltyBPS);
-    /// @notice Invalid admin upgrade address
-    error Admin_InvalidUpgradeAddress(address proposedAddress);
+    /*//////////////////////////////////////////////////////////////
+                            EVENTS
+    //////////////////////////////////////////////////////////////*/
+    /// @notice Emitted when a new token is knitted
+    /// @param tokenId The ID of the knitted token
+    /// @param creator The image creator
+    /// @param imageURI The imageURI
+    /// @param price The price paid to knit the token
+    event Knitted(uint256 tokenId, address creator, string imageURI, uint256 price);
 
-    // ======== Market Errors ========
+    /// @notice Emitted when a new token is mirrored
+    /// @param tokenId The ID of the mirrored token
+    /// @param mirrorer The mirroring address
+    /// @param imageHash The image hash of the mirrored token
+    /// @param price The price paid to mirror the token
+    event Mirrored(uint256 tokenId, address mirrorer, bytes32 imageHash, uint256 price);
 
-    // ======== Events ========
+    /// @notice Emitted when a token is burned
+    /// @param tokenId The ID of the burned token
+    /// @param price The price received for burning the token
+    event Burned(uint256 tokenId, uint256 price);
 
-    // ======== Structs ========
+    /// @notice Emitted when the creator redeems reward ETH
+    /// @param amount The ETH amount redeemed by the creator
+    event Redeemed(uint256 amount);
 
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-
-
-    // /// @notice Update the metadata renderer
-    // /// @param newRenderer new address for renderer
-    // /// @param setupRenderer data to call to bootstrap data for the new renderer (optional)
-    // function setMetadataRenderer(IMetadataRenderer newRenderer, bytes memory setupRenderer) external;
-
+    /// @notice Initializes a hyperimage's token contract 
+    /// @dev Only callable by the factory contract
+    /// @param _initStrings The encoded token and metadata initialization strings
+    /// @param _creator The hyperimage creator
+    /// @param _image The image contract address
+    /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
+    /// @param _priceDecayPercent Percent price decrease per unit of time, scaled by 1e18
+    /// @param _perTimeUnit The total number of tokens to target selling every full unit of time
     function initialize(
         bytes calldata _initStrings,
-        address creator,
-        address image,
-        int256 targetPrice,
-        int256 priceDecayPercent,
-        int256 perTimeUnit
+        address _creator,
+        address _image,
+        int256 _targetPrice,
+        int256 _priceDecayPercent,
+        int256 _perTimeUnit
     ) external;
 
+    /// @notice Knit a new token to the hyperimage
+    /// @param imageURI The URI of the image to knit
+    /// @return tokenId The ID of the newly knitted token
+    function knit(string memory imageURI) external payable returns (uint256 tokenId);
 
-    function knit(string memory imageURI) external payable returns (uint256);
+    /// @notice Mirror a new token to the hyperimage
+    /// @param imageHash The hash of the image to mirror
+    /// @return tokenId The ID of the newly mirrored token
+    function mirror(bytes32 imageHash) external payable returns (uint256 tokenId);
 
-    function mirror(bytes32 imageHash) external payable returns (uint256);
-
+    /// @notice Burn a hyperimage token
+    /// @dev Only callable by token owner
+    /// @param tokenId The ID of the token to burn
     function burn(uint256 tokenId) external;
     
+    /// @notice Redeem reward ETH
+    /// @dev Only callable by hyperimage creator
     function redeem() external;
 }
