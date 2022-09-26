@@ -1,16 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-/**
- * @dev Contract module which provides a basic access control mechanism, where
- * there is an account (an owner) that can be granted exclusive access to
- * specific functions.
- *
- * @title IOwnable
- * @author Rohan Kulkarni, Zora
- * @notice The external Ownable events, errors, and functions
- *
- */
+/// @title IOwnable
+/// @author Rohan Kulkarni, Zora
+/// @notice The external Ownable events, errors, and functions
 interface IOwnable {
     /*//////////////////////////////////////////////////////////////
                                 EVENTS

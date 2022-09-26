@@ -52,15 +52,15 @@ interface IToken {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-    
+
     /// @notice Initializes a hyperimage's token contract 
-    /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _creator The hyperimage creator
     /// @param _image The image contract address
     /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
     /// @param _priceDecayPercent Percent price decrease per unit of time, scaled by 1e18
     /// @param _perTimeUnit The total number of tokens to target selling every full unit of time
+    /// @dev Only callable by the factory contract
     function initialize(
         bytes calldata _initStrings,
         address _creator,
@@ -81,8 +81,8 @@ interface IToken {
     function mirror(bytes32 imageHash) external payable returns (uint256 tokenId);
 
     /// @notice Burn a hyperimage token
-    /// @dev Only callable by token owner
     /// @param tokenId The ID of the token to burn
+    /// @dev Only callable by token owner
     function burn(uint256 tokenId) external;
     
     /// @notice Redeem reward ETH

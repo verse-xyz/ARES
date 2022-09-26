@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {Initializable} from "../utils/Initializable.sol";
+import { Initializable } from "../utils/Initializable.sol";
 
 /// @notice Modified from OpenZeppelin Contracts v4.7.3 (security/ReentrancyGuardUpgradeable.sol)
 /// - Uses custom error `REENTRANCY()

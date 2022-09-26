@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IERC721} from "../interfaces/IERC721.sol";
-import {Initializable} from "../utils/Initializable.sol";
-import {ERC721TokenReceiver} from "../utils/TokenReceiver.sol";
-import {Address} from "../utils/Address.sol";
+import { IERC721 } from "../interfaces/IERC721.sol";
+import { Initializable } from "../utils/Initializable.sol";
+import { ERC721TokenReceiver } from "../utils/TokenReceiver.sol";
+import { Address } from "../utils/Address.sol";
 
 /// @title ERC721
 /// @author Rohan Kulkarni

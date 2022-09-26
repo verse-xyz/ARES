@@ -13,7 +13,10 @@ contract Image is IImage, ImageStorage, Initializable {
                             IMMUTABLES
     /////////////////////////////////////////////////////////////*/
 
+    /// @dev The hyperimage factory
     IFactory private immutable factory;
+
+    /// @dev Universal image storage
     IUniversalImageStorage private immutable universalImageStorage;
 
     /*//////////////////////////////////////////////////////////////
@@ -29,11 +32,11 @@ contract Image is IImage, ImageStorage, Initializable {
                             INITIALIZER
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice Initializes a hyperimage's image contract 
-    /// @dev Only callable by the factory contract
+    /// @notice Initializes a hyperimage's image contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _creator The hyperimage creator
     /// @param _token The ERC-721 token address
+    /// @dev Only callable by the factory contract
     function initialize(bytes calldata _initStrings, address _creator, address _token) external initializer {
         // Ensure the caller is the factory contract
         if (msg.sender != address(factory)) revert ONLY_FACTORY();
@@ -53,10 +56,10 @@ contract Image is IImage, ImageStorage, Initializable {
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Assign token to a new image
-    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to a new image
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
+    /// @dev Only callable by the token contract
     function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external {
         // Ensure the caller is the token contract
         if (msg.sender != config.token) revert ONLY_TOKEN();
@@ -70,9 +73,9 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Assign token to an existing, propagating image
-    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to the image
     /// @param imageHash The hash of the image to be mirrored
+    /// @dev Only callable by the token contract
     function mirrorToken(uint256 tokenId, bytes32 imageHash) external {
         // Ensure the caller is the token contract
         if (msg.sender != config.token) revert ONLY_TOKEN();
@@ -88,8 +91,8 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Decrement the provenance count of the image assigned to a token being burned
-    /// @dev Only callable by the token contract
     /// @param tokenId The token being burned
+    /// @dev Only callable by the token contract
     function burnToken(uint256 tokenId) external {
         // Decrement the provenance count of the image assigned to the burned token
         bytes32 imageHash = tokenToImage[tokenId].imageHash;
@@ -99,7 +102,6 @@ contract Image is IImage, ImageStorage, Initializable {
 
     /// @notice Return the URI of a token
     /// @param tokenId The specified token
-    /// @return The URI of the token
     function tokenURI(uint256 tokenId) external view returns (string memory) {
         return MetadataRenderer.createMetadata(
             config.name,
@@ -110,7 +112,6 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Return the URI of the token contract
-    /// @return The URI of the token contract
     function contractURI() external view returns (string memory) {
         return MetadataRenderer.encodeMetadataJSON(
             abi.encodePacked('{"name": "', config.name, '", "image": "', tokenToImage[1].imageURI, '"}')
@@ -118,14 +119,12 @@ contract Image is IImage, ImageStorage, Initializable {
     }
 
     /// @notice Return the address of the token contract
-    /// @return The address of the token contract
     function token() external view returns (address) {
         return config.token;
     }
 
     /// @notice Return the image attributes assigned to a token
     /// @param tokenId The specified token
-    /// @return The attributes of the image assigned to the specified token
     function tokenDetails(uint256 tokenId) external view returns (Image memory) {
         return tokenToImage[tokenId];
     }
@@ -133,11 +132,10 @@ contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                             UTILITY
     //////////////////////////////////////////////////////////////*/
-    
+
     /// @notice Create an image and add it to universal image storage
     /// @param _creator The image creator
     /// @param _imageURI The URI for the image to be created
-    /// @return The image hash
     function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
         bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
         if (universalImageStorage.getProvenanceCount(imageHash) > 0) revert EXISTING_IMAGE();

@@ -25,10 +25,10 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /// @dev This is used to track net supply at any given time, calculated as totalMinted - number of tokens burned
     uint256 private circulatingSupply;
 
-    /// @notice Time of market initialization
+    /// @dev Time of market initialization
     uint256 private immutable startTime = block.timestamp;
 
-    /// @notice Address of network factory
+    /// @dev Address of network factory
     IFactory private immutable factory;
 
     /*//////////////////////////////////////////////////////////////
@@ -43,14 +43,14 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
                           INITIALIZER
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice Initializes a hyperimage's token contract 
-    /// @dev Only callable by the factory contract
+    /// @notice Initializes a hyperimage's token contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _creator The hyperimage creator
     /// @param _image The image contract address
     /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
     /// @param _priceDecayPercent Percent price decrease per unit of time, scaled by 1e18
     /// @param _perTimeUnit The total number of tokens to target selling every full unit of time
+    /// @dev Only callable by the factory contract
     function initialize(
         bytes calldata _initStrings,
         address _creator,
@@ -84,7 +84,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////
                           FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-    
+
     /// @notice Knit a new token to the hyperimage
     /// @param imageURI The URI of the image to knit
     /// @return tokenId The ID of the newly knitted token
@@ -124,8 +124,8 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     }
 
     /// @notice Burn a hyperimage token
-    /// @dev Only callable by token owner
     /// @param tokenId The ID of the token to burn
+    /// @dev Only callable by token owner
     function burn(uint256 tokenId) public {
         unchecked {
             if (ownerOf(tokenId) != msg.sender) revert ONLY_OWNER();

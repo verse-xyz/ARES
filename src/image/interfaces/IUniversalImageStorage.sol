@@ -10,7 +10,7 @@ interface IUniversalImageStorage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-    
+
     /// @notice Add an image to universal image storage
     /// @param imageURI The imageURI
     /// @param creator The imageURI
@@ -20,12 +20,10 @@ interface IUniversalImageStorage is ImageTypes {
 
     /// @notice Return an image from universal image storage
     /// @param imageHash The image hash
-    /// @return timestamp Full image attributes for an image hash
     function getUniversalImage(bytes32 imageHash) external view returns (Image memory);
 
     /// @notice Get the provenance count for an image
     /// @param imageHash The image hash
-    /// @return provenanceCount The provenance count of the image
     function getProvenanceCount(bytes32 imageHash) external view returns (uint256);
 
     /// @notice Increment the provenance count for an image

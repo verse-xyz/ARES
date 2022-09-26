@@ -10,7 +10,7 @@ interface IImage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
                             ERRORS
     //////////////////////////////////////////////////////////////*/
-    
+
     /// @dev Reverts if the caller was not the factory contract
     error ONLY_FACTORY();
 
@@ -45,23 +45,23 @@ interface IImage is ImageTypes {
     //////////////////////////////////////////////////////////////*/
 
     /// @notice Initializes a hyperimage's image contract 
-    /// @dev Only callable by the factory contract
     /// @param _initStrings The encoded token and metadata initialization strings
     /// @param _creator The hyperimage creator
     /// @param _token The ERC-721 token address
+    /// @dev Only callable by the factory contract
     function initialize(bytes calldata _initStrings, address _creator, address _token) external;
 
     /// @notice Assign token to a new image
-    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to a new image
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
+    /// @dev Only callable by the token contract
     function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external;
 
     /// @notice Assign token to an existing, propagating image
-    /// @dev Only callable by the token contract
     /// @param tokenId The token being assigned to the image
     /// @param imageHash The hash of the image to be mirrored
+    /// @dev Only callable by the token contract
     function mirrorToken(uint256 tokenId, bytes32 imageHash) external;
 
     /// @notice Decrement the provenance count of the image assigned to a token being burned
@@ -70,20 +70,15 @@ interface IImage is ImageTypes {
 
     /// @notice Return the URI of a token
     /// @param tokenId The specified token
-    /// @return The URI of the token
     function tokenURI(uint256 tokenId) external view returns (string memory);
 
     /// @notice Return the URI of the token contract
-    /// @return The URI of the token contract
     function contractURI() external view returns (string memory);
 
     /// @notice Return the address of the token contract
-    /// @return The address of the token contract
     function token() external view returns (address); 
 
     /// @notice Return the image attributes assigned to a token
     /// @param tokenId The specified token
-    /// @return The attributes of the image assigned to the specified token
-
     function tokenDetails(uint256 tokenId) external view returns (Image memory);
 }

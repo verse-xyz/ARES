@@ -24,14 +24,12 @@ contract UniversalImageStorage is IUniversalImageStorage {
 
     /// @notice Return an image from universal image storage
     /// @param imageHash The image hash
-    /// @return timestamp Full image attributes for an image hash
     function getUniversalImage(bytes32 imageHash) external view returns (Image memory) {
         return images[imageHash];
     }
 
     /// @notice Get the provenance count for an image
     /// @param imageHash The image hash
-    /// @return provenanceCount The provenance count of the image
     function getProvenanceCount(bytes32 imageHash) external view returns (uint256) {
         return provenanceCount[imageHash];
     }

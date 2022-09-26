@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IInitializable} from "../interfaces/IInitializable.sol";
-import {Address} from "../utils/Address.sol";
+import { IInitializable } from "../interfaces/IInitializable.sol";
+import { Address } from "../utils/Address.sol";
 
 /// @title Initializable
 /// @author Rohan Kulkarni

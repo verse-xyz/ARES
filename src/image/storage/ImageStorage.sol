@@ -7,7 +7,7 @@ import {ImageTypes} from "../types/ImageTypes.sol";
 /// @author neuroswish
 /// @notice The image storage contract
 contract ImageStorage is ImageTypes {
-    /// @notice The image contract configuration
+    /// @notice Image config
     Config internal config;
 
     /// @notice The image attributes for a token

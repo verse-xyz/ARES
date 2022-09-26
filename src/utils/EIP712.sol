@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {IEIP712} from "../interfaces/IEIP712.sol";
-import {Initializable} from "../utils/Initializable.sol";
+import { IEIP712 } from "../interfaces/IEIP712.sol";
+import { Initializable } from "../utils/Initializable.sol";
 
 /// @title EIP712
 /// @author Rohan Kulkarni
