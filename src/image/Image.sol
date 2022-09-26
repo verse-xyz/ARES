@@ -10,18 +10,16 @@ import {IUniversalImageStorage} from "./interfaces/IUniversalImageStorage.sol";
 import {MetadataRenderer} from "./utils/MetadataRenderer.sol";
 import { IFactory } from "../factory/interfaces/IFactory.sol";
 
-contract Image is IImage, Initializable, ImageStorage {
-    // this is how we're going to render metadata for a given token
-    // each token is going to have a name (common), image, caption, like data hash, comment data hash, creator, and an owner
-    // we also need a mirror counter
-
+contract Image is IImage, ImageStorage, Initializable {
+    /*//////////////////////////////////////////////////////////////
+                            IMMUTABLES
+    /////////////////////////////////////////////////////////////*/
     IFactory private immutable factory;
     IUniversalImageStorage private immutable universalImageStorage;
 
     /*//////////////////////////////////////////////////////////////
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
-    // in the initializer we need to specify the hyperobject source and the relevant common data for all NFTs
     constructor(address _factory, address _universalImageStorage) initializer {
         factory = IFactory(_factory);
         universalImageStorage = IUniversalImageStorage(_universalImageStorage); 
@@ -31,15 +29,15 @@ contract Image is IImage, Initializable, ImageStorage {
                             INITIALIZER
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice Initializes a Token's image contract 
+    /// @notice Initializes a hyperimage's image contract 
     /// @param _initStrings The encoded token and metadata initialization strings
+    /// @param _creator The hyperimage creator
     /// @param _token The associated ERC-721 token address
     function initialize(bytes calldata _initStrings, address _creator, address _token) external initializer {
         (string memory _name, string memory _initImageURI) = abi.decode(_initStrings, (string, string));
         config.name = _name;
         config.token = _token;
 
-        // foundational image added to the network
         bytes32 initImageHash = _createImage(_creator, _initImageURI);
         tokenToImage[1] = universalImageStorage.getUniversalImage(initImageHash);
         universalImageStorage.incrementProvenanceCount(initImageHash);
@@ -48,13 +46,13 @@ contract Image is IImage, Initializable, ImageStorage {
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
-
-    // images should only "die" when there are no active nodes propagating them
-
-    /// @notice Assign token to image
-    function knitToken(uint256 tokenId, address creator, bytes calldata imageString) external {
+    /// @notice Assign token to a new image
+    /// @param tokenId The token being assigned to a new image
+    /// @param creator The creator of the new image
+    /// @param imageURI The URI of the new image
+    function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external {
         // only token contract can call this function
-        (string memory _imageURI) = abi.decode(imageString, (string));
+        (string memory _imageURI) = abi.decode(imageURI, (string));
         bytes32 imageHash = _createImage(creator, _imageURI);
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
@@ -100,11 +98,12 @@ contract Image is IImage, Initializable, ImageStorage {
                             UTILITY
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice Add new image to network
+    /// @notice Create an image and add it to universal image storage
+    /// @param _creator The image creator
+    /// @param _imageURI The URI for the image to be created
+    /// @return The image hash
     function _createImage(address _creator, string memory _imageURI) private returns (bytes32) {
-        // only token contract can call this function
         bytes32 imageHash = bytes32(keccak256(abi.encodePacked(_imageURI, _creator)));
-        //images[imageHash] = Image({imageURI: _imageURI, creator: _creator, imageHash: imageHash});
         universalImageStorage.addUniversalImage(_imageURI, _creator, block.timestamp, imageHash);
         return imageHash;
     }
