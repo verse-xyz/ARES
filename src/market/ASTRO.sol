@@ -89,6 +89,15 @@ contract ARES is IVRGDA, Initializable {
   /// @param sold A number of tokens sold, scaled by 1e18, to get the corresponding required ETH reserves for.
   /// @return The minimum amount of ETH required in the contract to facilitate autonomous selling, where the
   /// creator is able to withdraw all excess reserves.
+  ///
+  /// @notice We determine this value by calculating the minimum amount of ETH required to facilitate the instant selling (& subsequent burning)
+  /// of all circulating tokens if all tokens happened to be sold in the same block. We are assuming that each seller receives the token spot price
+  /// (as calculated by getVRGDAPrice) in exchange for sending a single token back to the contract.
+  ///
+  /// To calculate the amount of ETH a seller receives for one token, we simply input the current circulating token supply into the getVRGDAPrice function.
+  /// To calculate the amount of ETH required to facilitate the selling of all tokens, we take the summation of the linear VRGDA formula from n=1 to n=sold.
+  /// The closed form solution to this summation is given by the following equation: https://www.wolframalpha.com/input?i=sum+from+n%3D1+to+n%3DN+of+p_0+*+%281+-+k%29%5E%28t+-+n%2Fr%29
+
   function getMinimumReserves(int256 timeSinceStart, uint256 sold) public view returns (uint256) {
       unchecked {
         // prettier-ignore
