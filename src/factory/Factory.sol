@@ -78,6 +78,9 @@ contract Factory is IFactory, FactoryStorage, Initializable {
         // Initialize the hyperimage's image contract
         IImage(image).initialize(_tokenParams.initStrings, msg.sender, token);
 
+        // Authorize the hyperimage's image contract to write to universal image storage
+        authorizedUIS[image] = true;
+
         emit HyperimageDeployed(token, image);
     }
 
@@ -96,6 +99,7 @@ contract Factory is IFactory, FactoryStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
                     UNIVERSAL IMAGE STORAGE AUTHORIZATIONS
     //////////////////////////////////////////////////////////////*/
+
     /// @notice Return authorization status of a contract to write to universal image storage
     /// @param _address The contract address
     function isAuthorized(address _address) external view returns (bool) {
