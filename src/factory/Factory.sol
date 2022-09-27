@@ -2,51 +2,45 @@
 pragma solidity ^0.8.11;
 
 import { wadLn } from "solmate/utils/SignedWadMath.sol";
+import { Initializable } from "../utils/Initializable.sol";
 import { Ownable } from "../utils/Ownable.sol";
 import { ERC1967Proxy } from "../proxy/ERC1967Proxy.sol";
 import { IImage } from "../image/interfaces/IImage.sol";
 import { IUniversalImageStorage } from "../image/interfaces/IUniversalImageStorage.sol";
 import { IToken } from "../token/interfaces/IToken.sol";
 import { IFactory } from "./interfaces/IFactory.sol";
+import { FactoryStorage } from "./storage/FactoryStorage.sol";
 
-contract Factory is IFactory, Ownable {
+contract Factory is IFactory, FactoryStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
-                          IMMUTABLES
+                          STORAGE
     //////////////////////////////////////////////////////////////*/
 
     ///@notice The token implementation address
-    address public immutable tokenImpl;
-
+    address public tokenImpl;
+ 
     ///@notice The image implementation address
-    address public immutable imageImpl;
+    address public imageImpl;
 
     ///@notice The universal image storage address
-    address public immutable universalImageStorage;
+    address public universalImageStorage;
 
     ///@notice The image implementation hash
-    bytes32 private immutable imageHash;
-
-    /*//////////////////////////////////////////////////////////////
-                          CONSTRUCTOR
-    //////////////////////////////////////////////////////////////*/
-
-    constructor(address _token, address _image, address _universalImageStorage) {
-        tokenImpl = _token;
-        imageImpl = _image;
-        universalImageStorage = _universalImageStorage;
-        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, ""))); 
-    }
+    bytes32 private imageHash;
 
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
     //////////////////////////////////////////////////////////////*/
 
-    /// @notice Initializes ownership of the factory contract
-    /// @param _owner The address of the owner (transferred to Verse once deployed)
-    function initialize(address _owner) external initializer {
-        if (_owner == address(0)) revert ADDRESS_ZERO();
-        // Set contract owner
-        __Ownable_init(_owner);
+    /// @notice Initializes the factory contract
+    /// @param _token The token implementation address
+    /// @param _image The image implementation address
+    /// @param _universalImageStorage The universal image storage address
+    function initialize(address _token, address _image, address _universalImageStorage) external initializer {
+        tokenImpl = _token;
+        imageImpl = _image;
+        universalImageStorage = _universalImageStorage;
+        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, ""))); 
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -61,7 +55,7 @@ contract Factory is IFactory, Ownable {
         // The decay constant must be negative for the market to work
         int256 decayConstant = wadLn(1e18 - _tokenParams.priceDecayPercent);
         if (decayConstant < 0) revert INVALID_TOKEN_PARAMS();
-        
+
         // Deploy the hyperimage's token
         token = address(new ERC1967Proxy(tokenImpl, ""));
 
@@ -97,6 +91,15 @@ contract Factory is IFactory, Ownable {
     function getAddresses(address _token) external view returns (address image) {
         bytes32 salt = bytes32(uint256(uint160(_token)) << 96);
         image = address(uint160(uint256(keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, imageHash)))));
+    }
+
+    /*//////////////////////////////////////////////////////////////
+                    UNIVERSAL IMAGE STORAGE AUTHORIZATIONS
+    //////////////////////////////////////////////////////////////*/
+    /// @notice Return authorization status of a contract to write to universal image storage
+    /// @param _address The contract address
+    function isAuthorized(address _address) external view returns (bool) {
+        return authorizedUIS[_address];
     }
 
 }

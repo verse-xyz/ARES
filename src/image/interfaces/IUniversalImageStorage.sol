@@ -8,6 +8,12 @@ import { ImageTypes } from "../types/ImageTypes.sol";
 /// @notice Universal Image Storage errors, events, and functions
 interface IUniversalImageStorage is ImageTypes {
     /*//////////////////////////////////////////////////////////////
+                            ERRORS
+    //////////////////////////////////////////////////////////////*/
+    /// @dev Reverts if caller is not authorized to update universal image storage
+    error NOT_AUTHORIZED();
+
+    /*//////////////////////////////////////////////////////////////
                             FUNCTIONS
     //////////////////////////////////////////////////////////////*/
 

@@ -4,11 +4,11 @@ pragma solidity ^0.8.11;
 import { IOwnable } from "../../interfaces/IOwnable.sol";
 import { FactoryTypes } from "../types/FactoryTypes.sol";
 
-interface IFactory is FactoryTypes, IOwnable {
+interface IFactory is FactoryTypes {
   /*//////////////////////////////////////////////////////////////
                             ERRORS
   //////////////////////////////////////////////////////////////*/
-  
+
   /// @dev Reverts if token params are invalid
   error INVALID_TOKEN_PARAMS();
 
@@ -25,6 +25,12 @@ interface IFactory is FactoryTypes, IOwnable {
                             FUNCTIONS
   //////////////////////////////////////////////////////////////*/
 
+  /// @notice Initializes the factory contract
+  /// @param _token The token implementation address
+  /// @param _image The image implementation address
+  /// @param _universalImageStorage The universal image storage address
+  function initialize(address _token, address _image, address _universalImageStorage) external;
+  
   /// @notice Deploys a hyperimage
   /// @param _tokenParams The hyperimage token parameters
   /// @return token The ERC-721 token address
@@ -35,4 +41,8 @@ interface IFactory is FactoryTypes, IOwnable {
   /// @param _token The hyperimage's token address
   /// @return image The hyperimage's image rendering address
   function getAddresses(address _token) external view returns (address image);
+
+  /// @notice Return authorization status of a contract to write to universal image storage
+  /// @param _address The contract address
+  function isAuthorized(address _address) external view returns (bool);
 }
