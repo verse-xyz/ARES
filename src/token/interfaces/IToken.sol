@@ -3,7 +3,7 @@ pragma solidity ^0.8.11;
 
 import { IImage } from "../../image/interfaces/IImage.sol";
 import { TokenTypes } from "../types/TokenTypes.sol";
-import {IFactory} from "../../factory/interfaces/IFactory.sol";
+import { IFactory } from "../../factory/interfaces/IFactory.sol";
 
 /// @title IToken
 /// @author neuroswish
@@ -91,4 +91,23 @@ interface IToken {
     /// @notice Redeem reward ETH
     /// @dev Only callable by hyperimage creator
     function redeem() external;
+
+    /// @notice The URI for a token
+    /// @param tokenId The ERC-721 token id
+    function tokenURI(uint256 tokenId) external view returns (string memory);
+
+    /// @notice The URI for the contract
+    function contractURI() external view returns (string memory);
+
+    /// @notice The circulating supply of tokens
+    function getSupply() external view returns (uint256);
+
+    /// @notice The current token price
+    function getPrice() external view returns (uint256);
+
+    /// @notice The image contract address
+    function getImage() external view returns (address);
+
+    /// @notice The hyperimage creator
+    function getCreator() external view returns (address);
 }

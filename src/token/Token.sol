@@ -160,5 +160,36 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         SafeTransferLib.safeTransferETH(msg.sender, reserves - address(this).balance);
         emit Redeemed(reserves - address(this).balance);
     }
+
+    /// @notice The URI for a token
+    /// @param tokenId The ERC-721 token id
+    function tokenURI(uint256 tokenId) public view override(IToken, ERC721) returns (string memory) {
+        return IImage(config.image).tokenURI(tokenId);
+    }
+
+    /// @notice The URI for the contract
+    function contractURI() public view override(IToken, ERC721) returns (string memory) {
+        return IImage(config.image).contractURI();
+    }
+
+    /// @notice The circulating supply of tokens
+    function getSupply() public view returns (uint256) {
+        return circulatingSupply;
+    }
+
+    /// @notice The current token price
+    function getPrice() public view returns (uint256) {
+        return getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply);
+    }
+
+    /// @notice The image contract address
+    function getImage() public view returns (address) {
+        return config.image;
+    }
+
+    /// @notice The hyperimage creator
+    function getCreator() public view returns (address) {
+        return config.creator;
+    }
         
 }
