@@ -161,6 +161,10 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         emit Redeemed(reserves - address(this).balance);
     }
 
+    /*//////////////////////////////////////////////////////////////
+                          UTILITY
+    //////////////////////////////////////////////////////////////*/
+
     /// @notice The URI for a token
     /// @param tokenId The ERC-721 token id
     function tokenURI(uint256 tokenId) public view override(IToken, ERC721) returns (string memory) {
