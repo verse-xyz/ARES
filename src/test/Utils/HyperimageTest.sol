@@ -50,7 +50,13 @@ contract HyperimageTest is Test {
   IFactory.TokenParams internal tokenParams;
 
   function setMockTokenParams() internal virtual {
-
+    setTokenParams(
+      "Verse",
+      "instagram.com/verse",
+      1e18,
+      0.33e18,
+      1e18
+    );
   }
 
   function setTokenParams(
@@ -67,5 +73,45 @@ contract HyperimageTest is Test {
       priceDecayPercent: _priceDecayPercent,
       perTimeUnit: _perTimeUnit
     }); 
+  }
+
+  /*//////////////////////////////////////////////////////////////
+                          HYPERIMAGE DEPLOY UTILS
+  //////////////////////////////////////////////////////////////*/
+
+  Token internal token;
+  Image internal image;
+
+  function deployMock() internal virtual {
+
+  }
+
+  function deploy(
+    IFactory.TokenParams memory _tokenParams
+  ) internal virtual {
+    (address _token, address _image) = factory.deploy(_tokenParams);
+    
+    token = Token(_token);
+    image = Image(_image);
+
+    vm.label(address(token), "TOKEN");
+    vm.label(address(image), "IMAGE");
+  }
+
+  /*//////////////////////////////////////////////////////////////
+                          USER UTILS
+  //////////////////////////////////////////////////////////////*/
+  address[] internal sampleUsers;
+
+  function createUsers(uint256 _numUsers, uint256 _balance) internal virtual {
+    sampleUsers = new address[](_numUsers);
+
+    unchecked {
+      for (uint256 i; i < _numUsers; ++i) {
+        address user = vm.addr(i + 1);
+        vm.deal(user, _balance);
+        sampleUsers[i] = user;
+      }
+    }
   }
 }
