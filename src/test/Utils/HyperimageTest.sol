@@ -83,7 +83,9 @@ contract HyperimageTest is Test {
   Image internal image;
 
   function deployMock() internal virtual {
-
+    setMockTokenParams();
+    vm.prank(creator);
+    deploy(tokenParams);
   }
 
   function deploy(
