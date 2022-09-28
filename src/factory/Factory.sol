@@ -40,7 +40,8 @@ contract Factory is IFactory, FactoryStorage, Initializable {
         tokenImpl = _token;
         imageImpl = _image;
         universalImageStorage = _universalImageStorage;
-        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, ""))); 
+        imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, "")));
+        authorizedUIS[address(this)] = true;
     }
 
     /*//////////////////////////////////////////////////////////////
