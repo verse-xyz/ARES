@@ -65,6 +65,9 @@ contract Factory is IFactory, FactoryStorage, Initializable {
 
         // Deploy the hyperimage's image contract using the salt 
         image = address(new ERC1967Proxy{ salt: salt }(imageImpl, ""));
+        
+        // Authorize the hyperimage's image contract to write to universal image storage
+        authorizedUIS[image] = true;
 
         // Initialize the hyperimage's token contract
         IToken(token).initialize( 
@@ -78,10 +81,6 @@ contract Factory is IFactory, FactoryStorage, Initializable {
 
         // Initialize the hyperimage's image contract
         IImage(image).initialize(_tokenParams.initStrings, msg.sender, token);
-
-        // Authorize the hyperimage's image contract to write to universal image storage
-        authorizedUIS[image] = true;
-
         emit HyperimageDeployed(token, image);
     }
 
