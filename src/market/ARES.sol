@@ -35,12 +35,12 @@ contract ARES is IARES, Initializable {
   /// @param _targetPrice The target price for a token if sold on pace, scaled by 1e18
   /// @param _priceDecreasePercent Percent price decrease per unit of time, scaled by 1e18
   /// @param _perTimeUnit The total number of tokens to target selling every full unit of time
-  function __ARES_init(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit) internal initializer {
+  function __ARES_init(int256 _targetPrice, int256 _priceDecreasePercent, int256 _perTimeUnit) internal onlyInitializing {
       targetPrice = _targetPrice;
       decayConstant = wadLn(1e18 - _priceDecreasePercent);
 
       // The decay constant must be negative for VRGDAs to work.
-      if (decayConstant < 0) revert NON_NEGATIVE_DECAY_CONSTANT();
+      if (decayConstant >= 0) revert NON_NEGATIVE_DECAY_CONSTANT();
       perTimeUnit = _perTimeUnit;
   }
 

@@ -54,7 +54,7 @@ contract Factory is IFactory, FactoryStorage, Initializable {
     function deploy(TokenParams calldata _tokenParams) external returns (address token, address image) {
         // The decay constant must be negative for the market to work
         int256 decayConstant = wadLn(1e18 - _tokenParams.priceDecayPercent);
-        if (decayConstant > 0) revert INVALID_TOKEN_PARAMS();
+        if (decayConstant >= 0) revert INVALID_TOKEN_PARAMS();
 
         // Deploy the hyperimage's token
         token = address(new ERC1967Proxy(tokenImpl, ""));

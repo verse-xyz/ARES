@@ -23,7 +23,7 @@ contract Image is IImage, ImageStorage, Initializable {
                             CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _factory, address _universalImageStorage) initializer {
+    constructor(address _factory, address _universalImageStorage) {
         factory = IFactory(_factory);
         universalImageStorage = IUniversalImageStorage(_universalImageStorage); 
     }

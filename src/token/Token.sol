@@ -4,6 +4,8 @@ pragma solidity ^0.8.11;
 import { SafeTransferLib } from "solmate/utils/SafeTransferLib.sol";
 import { toDaysWadUnsafe } from "solmate/utils/SignedWadMath.sol";
 import { ReentrancyGuard } from "../utils/ReentrancyGuard.sol";
+import { Initializable } from "../utils/Initializable.sol";
+import { UUPS } from "../proxy/UUPS.sol";
 import { ERC721 } from "../utils/ERC721.sol";
 import { TokenStorage } from "./storage/TokenStorage.sol";
 import { IToken } from "./interfaces/IToken.sol";
@@ -35,7 +37,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
                           CONSTRUCTOR
     //////////////////////////////////////////////////////////////*/
 
-    constructor(address _factory) initializer {
+    constructor(address _factory) {
         factory = IFactory(_factory);
     }
 

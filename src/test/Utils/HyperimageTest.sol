@@ -38,6 +38,10 @@ contract HyperimageTest is Test {
     universalImageStorage = address(new UniversalImageStorage(address(factory)));
     imageImpl = address(new Image(address(factory), address(universalImageStorage)));
 
+    // vm.prank(address(factory));
+    // setMockTokenParams();
+
+
     vm.prank(verse);
     factory.initialize(tokenImpl, imageImpl, universalImageStorage);
 
@@ -52,7 +56,7 @@ contract HyperimageTest is Test {
   function setMockTokenParams() internal virtual {
     setTokenParams(
       "Verse",
-      "instagram.com/verse",
+      "verse.xyz",
       1e18,
       0.33e18,
       1e18
