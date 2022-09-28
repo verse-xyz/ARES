@@ -1,4 +1,4 @@
-# Ares, by Verse
+# ARES, a protocol by Verse
 
 # Overview
 
