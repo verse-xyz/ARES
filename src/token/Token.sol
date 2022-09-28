@@ -84,6 +84,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         
         // Mint first token for creator with a tokenId of 1
         _mint(_creator, 1);
+        circulatingSupply++;
         totalMinted++;
     }
 

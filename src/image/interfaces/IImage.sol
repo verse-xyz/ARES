@@ -78,6 +78,9 @@ interface IImage is ImageTypes {
     /// @notice Return the address of the token contract
     function token() external view returns (address); 
 
+    /// @notice Return the hyperimage name
+    function name() external view returns (string memory); 
+
     /// @notice Return the image attributes assigned to a token
     /// @param tokenId The specified token
     function tokenDetails(uint256 tokenId) external view returns (Image memory);

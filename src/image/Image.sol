@@ -123,6 +123,11 @@ contract Image is IImage, ImageStorage, Initializable {
         return config.token;
     }
 
+    /// @notice Return the hyperimage name
+    function name() external view returns (string memory) {
+        return config.name;
+    }
+
     /// @notice Return the image attributes assigned to a token
     /// @param tokenId The specified token
     function tokenDetails(uint256 tokenId) external view returns (Image memory) {

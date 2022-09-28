@@ -8,19 +8,17 @@ import { IToken, Token } from "../../src/token/Token.sol";
 import { IImage, Image } from "../../src/image/Image.sol";
 import { IARES, ARES } from "../../src/market/ARES.sol";
 
-import { TokenTypes } from "../../src/token/types/TokenTypes.sol";
+import { ImageTypes } from "../../src/image/types/ImageTypes.sol";
 
-contract TokenTest is HyperimageTest, TokenTypes {
+contract ImageTest is HyperimageTest, ImageTypes {
   function setUp() public virtual override {
     super.setUp();
   }
 
-  function test_MockTokenInit() public {
+  function test_MockImageInit() public {
     deployMock();
 
-    assertEq(token.name(), "Verse");
-    assertEq(token.getCreator(), creator);
-    assertEq(token.getImage(), address(image));
-    assertEq(token.getSupply(), 1);
+    assertEq(image.name(), "Verse");
+    assertEq(image.token(), address(token));
   }
 }
