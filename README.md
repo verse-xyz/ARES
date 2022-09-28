@@ -1,8 +1,8 @@
-# Verse, the hyperexchange protocol
+# Ares, by Verse
 
 # Overview
 
-The Verse protocol enables every digital object to have an embedded, autonomous exchange. Structurally, this means that every ERC-721 NFT created through Verse is natively backed by an underlying ERC-20 market. Let’s break down how it works.
+ARES (Autonomous Reactive Emissions System) is a protocol for hyperobjects on Ethereum. Because a new internet needs new mediums.
 
 Through the protocol, a creator deploys a contract `Pair` consisting of an ERC-20 `Exchange` contract and an ERC-721 `Hyperobject` contract. The dynamic price and supply of the ERC-20 token is managed by a bonding curve acting as an AMM. Simply, this means that anyone can `buy` and `sell` the token at any time with instant liquidity, and the contract will programmatically adjust the price based on the circulating supply. Holders of at least 1 atomic unit of the ERC-20 token can then `redeem` their token. Redeeming a token transfers the holder’s ERC-20 to the paired `Hyperobject` contract, which mints a new NFT and transfers it to the redeemer in exchange.
 
