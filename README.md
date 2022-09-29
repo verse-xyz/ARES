@@ -2,7 +2,7 @@
 
 ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse. Because a new internet needs new mediums.
 
-# TLDR?
+# TLDR
 
 Hyperimage = [ image ] + [ market ] + [ network ]
 
