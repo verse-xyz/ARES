@@ -6,7 +6,7 @@ ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse. B
 
 Hyperimage = [ image ] + [ market ] + [ network ]
 
-Ares rethinks the concept of an "image" from first principles, creating a new internet-native and crypto-native medium for images that are more than just static files. In a new internet powered by crypto rails, images are a substrate for memetic coordination. If the web1-web2 era was defined by images that were static, 2D files, Verse believes the next era of the internet will be defined by the hyperimage: an image that is a digital object with a self-contained state, market, and social network programmed into the image itself.
+Ares rethinks the concept of an "image" from first principles, creating a new internet-native & crypto-native (same thing) medium for images that are more than just static files. In a new internet powered by crypto rails, images are a substrate for memetic coordination. If the web1-web2 era was defined by images that were static, 2D files, Verse believes the next era of the internet will be defined by the hyperimage: an image that is a digital object with a self-contained state, market, and social network programmed into the image itself.
 
 Images = Static, single-player, all value is created by external experiences.
 
@@ -52,36 +52,8 @@ In any network of images, curation is paramount. It would be impossible to have 
 
 When a creator initially deploys the hyperimage contract, they define a target price and growth rate for the network. For example, in the Zorb example above, the creator might set the target price to 1 ETH and the growth rate to 5 NFTs per day. This means that the contract will dynamically adjust the price to mint a new NFT to try and achieve this schedule, automatically raising and lowering based on demand. 
 
+At any given time, the price to knit or mirror a new NFT from the contract is calculated by the contract. Additionally, current NFT holders can also burn their NFT, sending it back to the contract in exchange for the spot price of ETH. Together, these functions create a completely autonomous, self-sustaining market embedded in the hyperimage itself, serving as an on-chain indicator of the image's value as a function of its context and network. 
+
 # Just Imagine
 
 The Ares protocol reimagines images as internet-native objects. The protocol provides all the infrastructure for digital images to be memetic building blocks that incentivize coordinated creation, curation, and distribution for a new internet powered by crypto rails. We've seen these behaviors already in internet structures like subreddits, hashtags, micronetworks, and meme pages. But we've never seen formal infrastructure designed to weave these behaviors into the fabric of the media itself. When you look at a hyperimage you own in your wallet, you're not just looking at a static image that you own. You're looking at a constantly evolving, dynamic network. You can see the value of the image you own in the context of the network it's a part of. You can see all the other images it's linked to. You can see the meme grow in real time.
-
-
-
-
-# Hyperobject Pair
-
-The cornerstone of the protocol is the `PairFactory` contract. The `PairFactory` is a factory contract which handles deployment of hyperobject pairs as minimal clone proxies delegating functionality to corresponding logic contracts. Each pair consists of a `Hyperobject` contract (an ERC-721 NFT contract) and an `Exchange` contract (an ERC-20 contract). The `create` function deploys a new pair.
-
-# Hyperobject Contract
-
-Each `Hyperobject` contract deployed is an ERC-721 contract. The `tokenURI`s for each NFT minted through this contract are identical and are set to the `baseURI` passed at construction. Minting functionality of NFTs is managed exclusively by the paired `Exchange` contract.
-
-# Exchange Contract
-Each `Exchange` contract deployed is an ERC-20 contract. This contract has a built-in autonomous exchange governing the price and supply of the underlying token through the use of a bonding curve. Anyone can buy and sell tokens from this contract with instant liquidity, meaning that the contract will mint and burn tokens on-demand, respectively. The bonding curve is based on a power function, and so the price of the token increases as supply increases, and the price decreases as supply decreases.
-
-Anyone who owns >= 1 atomic token for this contract can call the `redeem` function. This function makes a call to the paired ERC-721 contract. Upon the token owner calling this function, the contract transfers 1 token from the caller to the paired ERC-721 contract. In exchange, the ERC-721 contract mints and transfers an NFT to the caller. In effect, the redeemed ERC-20 token is now locked in the ERC-721 contract. This has the effect of maintaining some base price level for the NFT, as the redeemed token can never be burned and subsequently decrease the token's price. 
-
-Additionally, upon deployment, the pair creator can specify a `CreatorShare`. The `CreatorShare` represents a royalty fee on each transaction that occurs through the contract. By specifying a share percentage, the creator can be perpetually compensated for trades that happen with the token. 
-
-# Summary + Vision
-This new exchange structure produces numerous benefits for both creators and consumers.
-
-**Consumers** now have instant liquidity to buy and sell continuous quantities of the NFT. Those individuals who may have been priced out of participating in a fixed-price NFT can now buy fractions of the underlying ERC-20, while whales can still scoop up larger quantities. Thus, the mechanism enables exchanging all along the price curve and maximizes efficiency in the market.
-
-Additionally, **creators** have complete control in determining how their NFT is priced throughout its lifecycle. The creator can specify the underlying reserve ratio and initial slope of the ERC-20 price curve, fine-tuning how they want their object to be priced as demand rises and falls. In this way, creators can set a practical limit on the NFT’s supply and enforce a level of scarcity.
-
-Perhaps most importantly, Verse enables digital objects to live autonomously, anywhere on the internet, without ever needing to link out to a marketplace. Imagine scrolling on a website, seeing a Verse-created NFT, and being able to exchange it right then and there. It’s like if you were walking down the street, saw a pair of Nike Dunks, and could snap your fingers to put a pair on your feet - rather than having to track down the lowest price, go to the store, and then buy them. Thus, the protocol catalyzes new forms of discovery with the ability for objects to be exchanged where they are consumed.
-
-The scope of digital objects is impossible to comprehend, but one thing is certain. They will fundamentally transform the construction of the internet, affecting our relationships with media, culture, digital infrastructure, identity, and more. **Verse is a hyperexchange: a hyperstructure enabling the autonomous exchange of digital objects and creating a composable, infinite internet.**
-
