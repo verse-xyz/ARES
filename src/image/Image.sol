@@ -63,8 +63,7 @@ contract Image is IImage, ImageStorage, Initializable {
     function knitToken(uint256 tokenId, address creator, string memory imageURI) external {
         // Ensure the caller is the token contract
         if (msg.sender != config.token) revert ONLY_TOKEN();
-        //(string memory _imageURI) = abi.decode(imageURI, (string));
-
+        
         // Create the new image and assign it to the token
         bytes32 imageHash = _createImage(creator, imageURI);
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
