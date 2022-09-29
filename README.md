@@ -43,13 +43,16 @@ Let's say that my friend Jacob deployed a hyperimage contract titled "Zorbs" wit
 # Mechanisms!
 Ares relies on a few fundamental mechanisms to create hyperimages with an internal state, market, and social network.
 
-## State & Social Network
+## State & Network
 The bread and butter of a hyperimage contract is the ability for individuals to create/add their own images to the network. The verb we use to describe this behavior is "Knit" - analogous to multiple strands of fabric being knitted together to form a cohesive whole. Anyone can call the `knit` function on the contract - this is the primary "create" behavior.
 
 In any network of images, curation is paramount. It would be impossible to have a self-sustaining memetic economy without a way to curate the best creations. Additionally, individuals shouldn't be forced to add something new just to get exposure/participate in the network. This is why the `mirror` function exists. Instead of knitting a new image to the network, I can choose to "mirror" an existing image. Thus, when I mint a new NFT from the contract, my tokenURI will mirror another tokenURI of an existing NFT that I really like. This function creates a native curation system and social behavior within the network, since the best images will be mirrored the most as people want to own them. In web2 terms, you could analogize this behavior as "liking" or "reposting" an image.
 
 ## Market
-When a creator initially deploys the hyperimage contract, they define a target price and growth rate for the network. For example, in the Zorb example above, the creator might set the target price to 1 ETH and the growth rate to 5 NFTs per day. This means that the creator wants the network to grow at a rate of 5 NFTs per day, and that each NFT should be priced at 1 ETH. The creator can change these parameters at any time, and the contract will dynamically adjust the price to mint a new NFT to match the target price.
+
+When a creator initially deploys the hyperimage contract, they define a target price and growth rate for the network. For example, in the Zorb example above, the creator might set the target price to 1 ETH and the growth rate to 5 NFTs per day. This means that the contract will dynamically adjust the price to mint a new NFT to try and achieve this schedule, automatically raising and lowering based on demand. 
+
+# Just Imagine
 
 The Ares protocol reimagines images as internet-native objects. The protocol provides all the infrastructure for digital images to be memetic building blocks that incentivize coordinated creation, curation, and distribution for a new internet powered by crypto rails. We've seen these behaviors already in internet structures like subreddits, hashtags, micronetworks, and meme pages. But we've never seen formal infrastructure designed to weave these behaviors into the fabric of the media itself. When you look at a hyperimage you own in your wallet, you're not just looking at a static image that you own. You're looking at a constantly evolving, dynamic network. You can see the value of the image you own in the context of the network it's a part of. You can see all the other images it's linked to. You can see the meme grow in real time.
 
