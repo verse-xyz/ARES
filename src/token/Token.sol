@@ -101,7 +101,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             totalMinted++;
             circulatingSupply++;
             if (msg.value < price) revert UNDERPAID();
-            Image(config.image).knitToken(tokenId, msg.sender, bytes(imageURI));
+            Image(config.image).knitToken(tokenId, msg.sender, imageURI);
             _mint(msg.sender, tokenId);
             // Note: We do this at the end to avoid creating a reentrancy vector.
             // Refund the user any ETH they spent over the current price of the NFT.

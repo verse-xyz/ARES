@@ -60,16 +60,16 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
     /// @dev Only callable by the token contract
-    function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external {
+    function knitToken(uint256 tokenId, address creator, string memory imageURI) external {
         // Ensure the caller is the token contract
         if (msg.sender != config.token) revert ONLY_TOKEN();
-        (string memory _imageURI) = abi.decode(imageURI, (string));
+        //(string memory _imageURI) = abi.decode(imageURI, (string));
 
         // Create the new image and assign it to the token
-        bytes32 imageHash = _createImage(creator, _imageURI);
+        bytes32 imageHash = _createImage(creator, imageURI);
         tokenToImage[tokenId] = universalImageStorage.getUniversalImage(imageHash);
         universalImageStorage.incrementProvenanceCount(imageHash);
-        emit ImageProvenanceCountUpdated(_imageURI, imageHash, universalImageStorage.getProvenanceCount(imageHash));
+        emit ImageProvenanceCountUpdated(imageURI, imageHash, universalImageStorage.getProvenanceCount(imageHash));
     }
 
     /// @notice Assign token to an existing, propagating image
@@ -78,7 +78,7 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @dev Only callable by the token contract
     function mirrorToken(uint256 tokenId, bytes32 imageHash) external {
         // Ensure the caller is the token contract
-        if (msg.sender != config.token) revert ONLY_TOKEN();
+        if (msg.sender != config.token) revert ONLY_TOKEN(); 
 
         // Image must be alive to be mirrored
         if (universalImageStorage.getProvenanceCount(imageHash) < 1) revert NONEXISTENT_IMAGE();

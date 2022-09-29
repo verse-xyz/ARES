@@ -56,7 +56,7 @@ interface IImage is ImageTypes {
     /// @param creator The creator of the new image
     /// @param imageURI The URI of the new image
     /// @dev Only callable by the token contract
-    function knitToken(uint256 tokenId, address creator, bytes calldata imageURI) external;
+    function knitToken(uint256 tokenId, address creator, string memory imageURI) external;
 
     /// @notice Assign token to an existing, propagating image
     /// @param tokenId The token being assigned to the image
