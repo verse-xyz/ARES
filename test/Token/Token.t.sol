@@ -28,18 +28,34 @@ contract TokenTest is HyperimageTest, TokenTypes {
   function testKnit() public {
     deployMock();
     createUsers(3, 10e18);
-    address sampleUser = sampleUsers[0];
-    vm.prank(sampleUser);
+    address knitter = sampleUsers[0];
+    vm.prank(knitter);
     // knit
     token.knit{value: 5e18}("verse.xyz/image");
-    assertEq(token.ownerOf(2), sampleUser);
+    assertEq(token.ownerOf(2), knitter);
+    assertEq(token.getSupply(), 2);
   }
 
   function testRevertKnit() public {
-
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    vm.prank(knitter);
+    // knit
+    vm.expectRevert(abi.encodeWithSignature("UNDERPAID()"));
+    token.knit{value: 3e18}("verse.xyz/image");
   }
 
   function testMirror() public {
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    address mirrorer = sampleUsers[1];
+    vm.prank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    // mirror
+    vm.prank(mirrorer);
 
   }
 
