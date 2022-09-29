@@ -1,4 +1,4 @@
-# ARES, created by Verse
+# ARES, a protocol by Verse
 
 ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse. Because a new internet needs new mediums.
 
