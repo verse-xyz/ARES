@@ -25,6 +25,9 @@ interface IToken {
     /// @dev Reverts if the contract contains insufficient reserves
     error INSUFFICIENT_RESERVES();
 
+    /// @dev Reverts if the caller underpays
+    error UNDERPAID();
+
     /*//////////////////////////////////////////////////////////////
                             EVENTS
     //////////////////////////////////////////////////////////////*/

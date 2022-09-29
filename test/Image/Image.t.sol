@@ -17,8 +17,10 @@ contract ImageTest is HyperimageTest, ImageTypes {
 
   function test_MockImageInit() public {
     deployMock();
-
     assertEq(image.name(), "Verse");
     assertEq(image.token(), address(token));
   }
+
+
+
 }

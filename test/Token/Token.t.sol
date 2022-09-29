@@ -15,12 +15,53 @@ contract TokenTest is HyperimageTest, TokenTypes {
     super.setUp();
   }
 
-  function test_MockTokenInit() public {
+  function testMockTokenInit() public {
     deployMock();
-
+    // initializing parameters are set
     assertEq(token.name(), "Verse");
     assertEq(token.getCreator(), creator);
     assertEq(token.getImage(), address(image));
     assertEq(token.getSupply(), 1);
+    assertEq(token.ownerOf(1), creator);
   }
+
+  function testKnit() public {
+    deployMock();
+    createUsers(3, 10e18);
+    address sampleUser = sampleUsers[0];
+    vm.prank(sampleUser);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    assertEq(token.ownerOf(2), sampleUser);
+  }
+
+  function testRevertKnit() public {
+
+  }
+
+  function testMirror() public {
+
+  }
+
+  function testRevertMirror() public {
+
+  }
+
+  function testBurn() public {
+
+  }
+
+  function testRevertBurn() public {
+
+  }
+
+  function testRedeem() public {
+
+  }
+
+  function testRevertRedeem() public {
+
+  }
+
+  receive() external payable {}
 }

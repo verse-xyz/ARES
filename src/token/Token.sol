@@ -97,9 +97,10 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /// @return tokenId The ID of the newly knitted token
     function knit(string memory imageURI) public payable returns (uint256 tokenId) {
         unchecked {
-            uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+            uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = (totalMinted + 1));
+            totalMinted++;
             circulatingSupply++;
-            require(msg.value >= price, "Token: Insufficient payment");
+            if (msg.value < price) revert UNDERPAID();
             Image(config.image).knitToken(tokenId, msg.sender, bytes(imageURI));
             _mint(msg.sender, tokenId);
             // Note: We do this at the end to avoid creating a reentrancy vector.
@@ -118,7 +119,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         unchecked {
             uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
             circulatingSupply++;
-            require(msg.value >= price, "Token: Insufficient payment");
+            if (msg.value < price) revert UNDERPAID();
             Image(config.image).mirrorToken(tokenId, imageHash);
             tokenIsMirror[tokenId] = true;
             _mint(msg.sender, tokenId);
@@ -159,7 +160,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     function redeem() public nonReentrant {
         if(msg.sender != config.creator) revert ONLY_CREATOR();
         uint256 reserves = getMinimumReserves(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply);
-        require(reserves > address(this).balance, "Token: Insufficient reserves");
+        if (reserves < address(this).balance) revert INSUFFICIENT_RESERVES();
         SafeTransferLib.safeTransferETH(msg.sender, reserves - address(this).balance);
         emit Redeemed(reserves - address(this).balance);
     }
