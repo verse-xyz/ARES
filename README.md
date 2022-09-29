@@ -1,10 +1,17 @@
-# ARES, a protocol by Verse
+# ARES, created by Verse
 
-# Overview
+# WTF?
 
-ARES (Autonomous Reactive Emissions System) is a protocol by Verse. Because a new internet needs new mediums.
+ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse. Because a new internet needs new mediums.
 
-Through the protocol, a creator deploys a contract `Pair` consisting of an ERC-20 `Exchange` contract and an ERC-721 `Hyperobject` contract. The dynamic price and supply of the ERC-20 token is managed by a bonding curve acting as an AMM. Simply, this means that anyone can `buy` and `sell` the token at any time with instant liquidity, and the contract will programmatically adjust the price based on the circulating supply. Holders of at least 1 atomic unit of the ERC-20 token can then `redeem` their token. Redeeming a token transfers the holder’s ERC-20 to the paired `Hyperobject` contract, which mints a new NFT and transfers it to the redeemer in exchange.
+# Background
+First, we had pictures. From cave drawings to religious pamphlets to renaissance oil paintings, the first forms of images were created and distributed by hand. Then came photos; the advent of the camera meant that we now had a tool to instantly capture what we experienced live. This new medium synthesized the ability for people to directly see the world through other people's eyes. Memetic forces became stronger. The internet supercharged the effect of photos. As a meme proliferation machine, the internet has made digital imagery the most powerful coordination medium in history, the substrate of the new prime layer of reality. Digital images affect every aspect of humanity, and with the development of new AI-driven tools, will certainly influence the growth of our species more than text, audio, kinesis, or any other informational medium.
+
+As mentioned, images as a communicative substrate have evolved profoundly over time, from pictures, to photos, to digtially-created works. For current digital society, our perception of an "image" is simply a static file. It exists somewhere on a server
+
+# WTF
+
+Crypto infrastructure enables us to create the next evolution of images that are programmable; living, breathing objects that have three fundamental components: a state, a market, and a network. Through the protocol, a creator deploys a contract `Pair` consisting of an ERC-20 `Exchange` contract and an ERC-721 `Hyperobject` contract. The dynamic price and supply of the ERC-20 token is managed by a bonding curve acting as an AMM. Simply, this means that anyone can `buy` and `sell` the token at any time with instant liquidity, and the contract will programmatically adjust the price based on the circulating supply. Holders of at least 1 atomic unit of the ERC-20 token can then `redeem` their token. Redeeming a token transfers the holder’s ERC-20 to the paired `Hyperobject` contract, which mints a new NFT and transfers it to the redeemer in exchange.
 
 
 # Hyperobject Pair
