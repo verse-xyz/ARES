@@ -1,8 +1,6 @@
 # ARES, a protocol by Verse
 
-ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse. Because a new internet needs new mediums.
-
-# TLDR
+ARES (Autonomous Reactive Emissions System) is a hyperimage protocol by Verse.
 
 Hyperimage = [ image ] + [ market ] + [ network ]
 
@@ -22,13 +20,13 @@ It's imperative to create a new medium for digital images that is decentralized,
 
 # Where do NFTs come into play?
 
-Current NFT structures have started to solve the problem of native value generation for digital images, but are underdeveloped. Today, the majority of the NFT space looks like this: you mint an NFT, and that's it. The NFT is still a static object; All the subsequent curation, economic activity, cultural remixing, and community interaction happens externally to the NFT (in a token-gated discord, on Twitter, etc). 
+Current NFT implementations have started to solve the problem of native value generation for digital images, but are critically underdeveloped and overly skeuomorphic. Today, the majority of the NFT space looks like this: you mint an NFT, and that's pretty much all the interactivity you have. The NFT is still a static object; All the subsequent curation, economic activity, cultural remixing, and community interaction happens externally to the NFT (in a token-gated discord, on Twitter, etc). 
 
-But what if we actually program the social behaviors & interaction modalities into the NFT itself? Then, we’re operating on a whole new premise that is inherently more interactive and powerful. Images are no longer static files, they're living, breathing objects, informational currencies.
+But what if we actually program the social behaviors & interaction modalities into the NFT itself? Then, we’re operating on a whole new paradigm that is inherently more interactive and powerful. Images are no longer static files, they're living, breathing objects, informational currencies.
 
 # So how does Ares work?
 
-The Ares protocol is a new medium for internet-native images: hyperimages. Hyperimages can be analogized as collectively-created albums; they're images with a self-contained state, market, and social network programmed into the image itself. 
+The Ares protocol is a new medium for internet-native images: hyperimages. Hyperimages can be analogized as collectively-created-and-curated image networks; a self-contained state, market, and social network programmed into the image itself. 
 
 Through the protocol, a creator deploys a hyperimage NFT contract with a name and founding image that sets the theme of the network. The creator also sets the rate at which they want the network to grow (ex: "I want 5 NFTs to be minted from this contract per day at a target price of 1 ETH"). Anyone can then mint a new NFT from this contract. Here's where it gets interesting. At mint time, the minter uploads a new imageURI for the NFT that they mint. The minter is incentivized to add a high quality contribution to the network to drive more attention to the network and draw in subsequent participants. As the attention and cultural relevance around the network grows, demand increases for people to get their creations included in the network. This creates a virtuous cycle of attention and value accrual. The sole purpose of the hyperimage network is to attract attention to itself - similar to any NFT collection. However, the powerful feature here is that the only way to drive value is by adding better content to the network over time. There’s literally only one way to add value to the network, and this constraint serves as a native social interaction that is programmed into the NFT itself.
 
