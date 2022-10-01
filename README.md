@@ -12,7 +12,7 @@ Hyperimages = Dynamic, multiplayer, value accrues to the image by virtue of its 
 
 The image is the market is the social network.
 
-![hyperimage](../assets/diagrams/hyperimage.png)
+![hyperimage](./assets/diagrams/hyperimage.png)
 
 # Why?
 
@@ -48,11 +48,11 @@ Ares relies on a few fundamental mechanisms to create hyperimages with an intern
 ## State & Network
 The bread and butter of a hyperimage contract is the ability for individuals to create/add their own images to the network. The verb used to describe this behavior is "Knit" - analogous to multiple strands of fabric being knitted together to form a cohesive whole. Anyone can call the `knit` function on the contract - this is the primary "create" behavior.
 
-![hyperimage](../assets/diagrams/knit.png)
+![hyperimage](./assets/diagrams/knit.png)
 
 In any network of images, curation is paramount. It would be impossible to have a self-sustaining memetic economy without a way to curate the best creations. Additionally, individuals shouldn't be forced to add something new just to get exposure/participate in the network. This is why the `mirror` function exists. Instead of knitting a new image to the network, I can choose to "mirror" an existing image. Thus, when I mint a new NFT from the contract, my tokenURI will mirror another tokenURI of an existing NFT that I really like. This function creates a native curation system and social behavior within the network, since the best images will be mirrored the most as people want to own them. In web2 terms, you could analogize this behavior as "liking" or "reposting" an image.
 
-![hyperimage](../assets/diagrams/mirror.png)
+![hyperimage](./assets/diagrams/mirror.png)
 
 ## Market
 
@@ -60,7 +60,7 @@ When a creator initially deploys the hyperimage contract, the creator defines a 
 
 At any given time, the price to knit or mirror a new NFT from the contract is calculated by the contract. Additionally, current NFT holders can also `burn` their NFT, sending it back to the contract in exchange for the spot price of ETH. Together, these functions create a completely autonomous, self-sustaining market embedded in the hyperimage itself, serving as an on-chain indicator of the image's value as a function of its context and network. 
 
-![hyperimage](../assets/diagrams/burn.png)
+![hyperimage](./assets/diagrams/burn.png)
 
 # Just Imagine
 
