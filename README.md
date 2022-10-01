@@ -12,6 +12,8 @@ Hyperimages = Dynamic, multiplayer, value accrues to the image by virtue of its 
 
 The image is the market is the social network.
 
+![hyperimage](../assets/diagrams/hyperimage.png)
+
 # Why?
 
 Let's consider how images exist on the internet today. On the modern internet, most images are just static files hosted on some centralized servers. We create and freely distribute these images on large networks like Instagram, YouTube, and Twitter. The problem is that these images have no interally programmed mechanisms to accrue value. Intuitively, it makes sense that an image becomes more valuable as a function of the attention it generates within a demand-constrained attention economy. The more people look at, share, or curate an image, the more valuable it becomes. However, all of these social mechanisms are monopolized by centralized platforms that rent-seek these behaviors and extract much of the value for themselves.
@@ -46,13 +48,19 @@ Ares relies on a few fundamental mechanisms to create hyperimages with an intern
 ## State & Network
 The bread and butter of a hyperimage contract is the ability for individuals to create/add their own images to the network. The verb used to describe this behavior is "Knit" - analogous to multiple strands of fabric being knitted together to form a cohesive whole. Anyone can call the `knit` function on the contract - this is the primary "create" behavior.
 
+![hyperimage](../assets/diagrams/knit.png)
+
 In any network of images, curation is paramount. It would be impossible to have a self-sustaining memetic economy without a way to curate the best creations. Additionally, individuals shouldn't be forced to add something new just to get exposure/participate in the network. This is why the `mirror` function exists. Instead of knitting a new image to the network, I can choose to "mirror" an existing image. Thus, when I mint a new NFT from the contract, my tokenURI will mirror another tokenURI of an existing NFT that I really like. This function creates a native curation system and social behavior within the network, since the best images will be mirrored the most as people want to own them. In web2 terms, you could analogize this behavior as "liking" or "reposting" an image.
+
+![hyperimage](../assets/diagrams/mirror.png)
 
 ## Market
 
 When a creator initially deploys the hyperimage contract, the creator defines a target price and growth rate for the network. For example, in the Zorb example above, the creator might set the target price to 1 ETH and the growth rate to 5 NFTs per day. This means that the contract will dynamically adjust the price to mint a new NFT to try and achieve this schedule, automatically raising and lowering based on demand. 
 
-At any given time, the price to knit or mirror a new NFT from the contract is calculated by the contract. Additionally, current NFT holders can also burn their NFT, sending it back to the contract in exchange for the spot price of ETH. Together, these functions create a completely autonomous, self-sustaining market embedded in the hyperimage itself, serving as an on-chain indicator of the image's value as a function of its context and network. 
+At any given time, the price to knit or mirror a new NFT from the contract is calculated by the contract. Additionally, current NFT holders can also `burn` their NFT, sending it back to the contract in exchange for the spot price of ETH. Together, these functions create a completely autonomous, self-sustaining market embedded in the hyperimage itself, serving as an on-chain indicator of the image's value as a function of its context and network. 
+
+![hyperimage](../assets/diagrams/burn.png)
 
 # Just Imagine
 
