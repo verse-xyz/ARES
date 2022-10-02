@@ -162,8 +162,9 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         if(msg.sender != config.creator) revert ONLY_CREATOR();
         uint256 reserves = getMinimumReserves(toDaysWadUnsafe(block.timestamp - startTime), circulatingSupply);
         if (reserves < address(this).balance) revert INSUFFICIENT_RESERVES();
-        SafeTransferLib.safeTransferETH(msg.sender, reserves - address(this).balance);
-        emit Redeemed(reserves - address(this).balance);
+        uint256 reward = reserves - address(this).balance;
+        SafeTransferLib.safeTransferETH(msg.sender, reward);
+        emit Redeemed(reward);
     }
 
     /*//////////////////////////////////////////////////////////////
