@@ -27,7 +27,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testKnit() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     vm.prank(knitter);
     // knit
@@ -38,7 +38,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testRevertKnit() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     vm.prank(knitter);
     // knit
@@ -61,7 +61,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testRevertMirror_InvalidHash() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     address mirrorer = sampleUsers[1];
     vm.prank(knitter);
@@ -76,7 +76,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testRevertMirror_Underpaid() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     address mirrorer = sampleUsers[1];
     vm.prank(knitter);
@@ -90,7 +90,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testBurn() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     vm.startPrank(knitter);
     // knit
@@ -102,7 +102,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testRevertBurn_InvalidId() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     vm.prank(knitter);
     // knit
@@ -113,7 +113,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testRevertBurn_InvalidOwner() public {
     deployMock();
-    createUsers(3, 10e18);
+    createUsers(3, 100e18);
     address knitter = sampleUsers[0];
     address random = sampleUsers[1];
     vm.prank(knitter);
@@ -125,11 +125,31 @@ contract TokenTest is HyperimageTest, TokenTypes {
   }
 
   function testRedeem() public {
-
+    deployMock();
+    createUsers(3, 100e18);
+    address knitter = sampleUsers[0];
+    address mirrorer = sampleUsers[1];
+    vm.prank(knitter);
+    token.knit{value: 5e18}("verse.xyz/image");
+    vm.prank(mirrorer);
+    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
+    vm.prank(creator);
+    token.redeem();
   }
 
   function testRevertRedeem() public {
-
+    deployMock();
+    createUsers(3, 100e18);
+    address knitter = sampleUsers[0];
+    address mirrorer = sampleUsers[1];
+    address random = sampleUsers[2];
+    vm.prank(knitter);
+    token.knit{value: 5e18}("verse.xyz/image");
+    vm.prank(mirrorer);
+    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
+    vm.prank(random);
+    vm.expectRevert(abi.encodeWithSignature("ONLY_CREATOR()"));
+    token.redeem();
   }
 
   receive() external payable {}
