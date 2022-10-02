@@ -117,7 +117,8 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /// @return tokenId The ID of the newly mirrored token
     function mirror(bytes32 imageHash) public payable returns (uint256 tokenId) {
         unchecked {
-            uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = totalMinted++);
+            uint256 price = getVRGDAPrice(toDaysWadUnsafe(block.timestamp - startTime), tokenId = (totalMinted + 1));
+            totalMinted++;
             circulatingSupply++;
             if (msg.value < price) revert UNDERPAID();
             Image(config.image).mirrorToken(tokenId, imageHash);

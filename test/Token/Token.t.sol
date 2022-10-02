@@ -48,6 +48,19 @@ contract TokenTest is HyperimageTest, TokenTypes {
 
   function testMirror() public {
     deployMock();
+    createUsers(3, 100e18);
+    address knitter = sampleUsers[0];
+    address mirrorer = sampleUsers[1];
+    vm.prank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    // mirror
+    vm.prank(mirrorer);
+    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
+  }
+
+  function testRevertMirror() public {
+    deployMock();
     createUsers(3, 10e18);
     address knitter = sampleUsers[0];
     address mirrorer = sampleUsers[1];
@@ -56,11 +69,8 @@ contract TokenTest is HyperimageTest, TokenTypes {
     token.knit{value: 5e18}("verse.xyz/image");
     // mirror
     vm.prank(mirrorer);
-
-  }
-
-  function testRevertMirror() public {
-
+    vm.expectRevert(abi.encodeWithSignature("NONEXISTENT_IMAGE()"));
+    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
   }
 
   function testBurn() public {
