@@ -21,6 +21,35 @@ contract ImageTest is HyperimageTest, ImageTypes {
     assertEq(image.token(), address(token));
   }
 
+  function testRevertKnitToken() public {
+    deployMock();
+    createUsers(3, 100e18);
+    address random = sampleUsers[0];
+    vm.startPrank(random);
+    vm.expectRevert(abi.encodeWithSignature("ONLY_TOKEN()"));
+    image.knitToken(1, random, "verse.xyz/image");
+    vm.stopPrank();
+  }
+
+  function testRevertMirrorToken() public {
+    deployMock();
+    createUsers(3, 100e18);
+    address random = sampleUsers[0];
+    vm.startPrank(random);
+    vm.expectRevert(abi.encodeWithSignature("ONLY_TOKEN()"));
+    image.mirrorToken(1, 0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
+    vm.stopPrank();
+  }
+
+  function testRevertBurnToken() public {
+    deployMock();
+    createUsers(3, 100e18);
+    address random = sampleUsers[0];
+    vm.startPrank(random);
+    vm.expectRevert(abi.encodeWithSignature("ONLY_TOKEN()"));
+    image.burnToken(1);
+    vm.stopPrank();
+  }
 
 
 }
