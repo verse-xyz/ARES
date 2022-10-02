@@ -59,7 +59,7 @@ contract TokenTest is HyperimageTest, TokenTypes {
     token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
   }
 
-  function testRevertMirror() public {
+  function testRevertMirror_InvalidHash() public {
     deployMock();
     createUsers(3, 10e18);
     address knitter = sampleUsers[0];
@@ -70,15 +70,58 @@ contract TokenTest is HyperimageTest, TokenTypes {
     // mirror
     vm.prank(mirrorer);
     vm.expectRevert(abi.encodeWithSignature("NONEXISTENT_IMAGE()"));
-    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
+    // input a random hash that for sure does not exist
+    token.mirror{value: 10e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb39);
+  }
+
+  function testRevertMirror_Underpaid() public {
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    address mirrorer = sampleUsers[1];
+    vm.prank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    // mirror
+    vm.prank(mirrorer);
+    vm.expectRevert(abi.encodeWithSignature("UNDERPAID()"));
+    token.mirror{value: 1e18}(0xbe0f0127806aeb66d17b9dbc056a4da57ffff6ba2807bfa7a70eddb7fc50bb38);
   }
 
   function testBurn() public {
-
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    vm.startPrank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    // burn
+    token.burn(2);
+    vm.stopPrank();
   }
 
-  function testRevertBurn() public {
+  function testRevertBurn_InvalidId() public {
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    vm.prank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    vm.expectRevert(abi.encodeWithSignature("ONLY_OWNER()"));
+    token.burn(2);
+  }
 
+  function testRevertBurn_InvalidOwner() public {
+    deployMock();
+    createUsers(3, 10e18);
+    address knitter = sampleUsers[0];
+    address random = sampleUsers[1];
+    vm.prank(knitter);
+    // knit
+    token.knit{value: 5e18}("verse.xyz/image");
+    vm.prank(random);
+    vm.expectRevert(abi.encodeWithSignature("ONLY_OWNER()"));
+    token.burn(2);
   }
 
   function testRedeem() public {
