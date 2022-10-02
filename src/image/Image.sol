@@ -93,6 +93,9 @@ contract Image is IImage, ImageStorage, Initializable {
     /// @param tokenId The token being burned
     /// @dev Only callable by the token contract
     function burnToken(uint256 tokenId) external {
+        // Ensure the caller is the token contract
+        if (msg.sender != config.token) revert ONLY_TOKEN(); 
+        
         // Decrement the provenance count of the image assigned to the burned token
         bytes32 imageHash = tokenToImage[tokenId].imageHash;
         universalImageStorage.decrementProvenanceCount(imageHash);
