@@ -41,7 +41,11 @@ contract Factory is IFactory, FactoryStorage, Initializable {
         imageImpl = _image;
         universalImageStorage = _universalImageStorage;
         imageHash = keccak256(abi.encodePacked(type(ERC1967Proxy).creationCode, abi.encode(_image, "")));
-        authorizedUIS[address(this)] = true;
+        authorizedUIS[imageImpl] = true;
+        // initialize token and image contracts
+        bytes memory initStrings = abi.encode("Verse", "verse.xyz");
+        IToken(tokenImpl).initialize(initStrings, msg.sender, imageImpl, 1e18, 0.33e18, 1e18);
+        IImage(imageImpl).initialize(initStrings, msg.sender, tokenImpl);
     }
 
     /*//////////////////////////////////////////////////////////////
