@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IImage } from "../../image/interfaces/IImage.sol";
-import { TokenTypes } from "../types/TokenTypes.sol";
-import { IFactory } from "../../factory/interfaces/IFactory.sol";
 
 /// @title IToken
 /// @author neuroswish
@@ -34,26 +31,32 @@ interface IToken {
 
     /// @notice Emitted when a new token is knitted
     /// @param tokenId The ID of the knitted token
-    /// @param creator The image creator
+    /// @param creator The image creator/knitter
+    /// @param imageHash The image hash
     /// @param imageURI The imageURI
     /// @param price The price paid to knit the token
-    event Knitted(uint256 tokenId, address creator, string imageURI, uint256 price);
+    event Knitted(uint256 tokenId, address creator, bytes32 imageHash, string imageURI, uint256 price);
 
     /// @notice Emitted when a new token is mirrored
     /// @param tokenId The ID of the mirrored token
-    /// @param mirrorer The mirroring address
+    /// @param mirrorer The mirrorer
     /// @param imageHash The image hash of the mirrored token
+    /// @param imageURI The image URI of the mirrored token
     /// @param price The price paid to mirror the token
-    event Mirrored(uint256 tokenId, address mirrorer, bytes32 imageHash, uint256 price);
+    event Mirrored(uint256 tokenId, address mirrorer, bytes32 imageHash, string imageURI, uint256 price);
 
     /// @notice Emitted when a token is burned
     /// @param tokenId The ID of the burned token
+    /// @param burner The burner
+    /// @param imageHash The image hash of the burned token
+    /// @param imageURI The image URI of the burned token
     /// @param price The price received for burning the token
-    event Burned(uint256 tokenId, uint256 price);
+    event Burned(uint256 tokenId, address burner, bytes32 imageHash, string imageURI, uint256 price);
 
     /// @notice Emitted when the creator redeems reward ETH
+    /// @param redeemer The redeeming address
     /// @param amount The ETH amount redeemed by the creator
-    event Redeemed(uint256 amount);
+    event Redeemed(address redeemer, uint256 amount);
 
     /*//////////////////////////////////////////////////////////////
                             FUNCTIONS

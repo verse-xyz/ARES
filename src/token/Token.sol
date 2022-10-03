@@ -38,7 +38,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
 
     constructor(address _factory) {
         factory = IFactory(_factory);
-    }
+    } 
 
     /*//////////////////////////////////////////////////////////////
                           INITIALIZER
@@ -85,6 +85,8 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         _mint(_creator, 1);
         circulatingSupply++;
         totalMinted++;
+
+        emit Knitted(1, _creator, Image(config.image).tokenDetails(1).imageHash, Image(config.image).tokenDetails(1).imageURI, 0); 
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -106,7 +108,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             // Refund the user any ETH they spent over the current price of the NFT.
             // Unchecked is safe here because we validate msg.value >= price above.
             SafeTransferLib.safeTransferETH(msg.sender, msg.value - price);
-            emit Knitted(tokenId, msg.sender, imageURI, price);
+            emit Knitted(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, imageURI, price);
         }
         
     }
@@ -127,7 +129,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             // Refund the user any ETH they spent over the current price of the NFT.
             // Unchecked is safe here because we validate msg.value >= price above.
             SafeTransferLib.safeTransferETH(msg.sender, msg.value - price);
-            emit Mirrored(tokenId, msg.sender, imageHash, price);
+            emit Mirrored(tokenId, msg.sender, imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price);
         }
     }
 
@@ -146,10 +148,10 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
                 address payable creator = payable(Image(config.image).tokenDetails(tokenId).creator);
                 SafeTransferLib.safeTransferETH(creator, price);
                 SafeTransferLib.safeTransferETH(msg.sender, price);
-                emit Burned(tokenId, price * 2);
+                emit Burned(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price * 2);
             } else {
                 SafeTransferLib.safeTransferETH(msg.sender, price);
-                emit Burned(tokenId, price);
+                emit Burned(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price);
             }
             
         }
@@ -163,7 +165,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         if (reserves < address(this).balance) revert INSUFFICIENT_RESERVES();
         uint256 reward = reserves - address(this).balance;
         SafeTransferLib.safeTransferETH(msg.sender, reward);
-        emit Redeemed(reward);
+        emit Redeemed(msg.sender, reward);
     }
 
     /*//////////////////////////////////////////////////////////////
