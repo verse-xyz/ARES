@@ -86,7 +86,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
         circulatingSupply++;
         totalMinted++;
 
-        emit Knitted(1, _creator, Image(config.image).tokenDetails(1).imageHash, Image(config.image).tokenDetails(1).imageURI, 0); 
+        emit Knitted(1, _creator, IImage(config.image).tokenDetails(1).imageHash, Image(config.image).tokenDetails(1).imageURI, 0); 
     }
 
     /*//////////////////////////////////////////////////////////////
@@ -102,13 +102,13 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             totalMinted++;
             circulatingSupply++;
             if (msg.value < price) revert UNDERPAID();
-            Image(config.image).knitToken(tokenId, msg.sender, imageURI);
+            IImage(config.image).knitToken(tokenId, msg.sender, imageURI);
             _mint(msg.sender, tokenId);
             // Note: We do this at the end to avoid creating a reentrancy vector.
             // Refund the user any ETH they spent over the current price of the NFT.
             // Unchecked is safe here because we validate msg.value >= price above.
             SafeTransferLib.safeTransferETH(msg.sender, msg.value - price);
-            emit Knitted(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, imageURI, price);
+            emit Knitted(tokenId, msg.sender, IImage(config.image).tokenDetails(tokenId).imageHash, imageURI, price);
         }
         
     }
@@ -129,7 +129,7 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             // Refund the user any ETH they spent over the current price of the NFT.
             // Unchecked is safe here because we validate msg.value >= price above.
             SafeTransferLib.safeTransferETH(msg.sender, msg.value - price);
-            emit Mirrored(tokenId, msg.sender, imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price);
+            emit Mirrored(tokenId, msg.sender, imageHash, IImage(config.image).tokenDetails(tokenId).imageURI, price);
         }
     }
 
@@ -145,13 +145,13 @@ contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
             // If token is a mirror, split returned ETH evenly between the owner and the original image creator
             if (tokenIsMirror[tokenId]) {
                 price = price / 2;
-                address payable creator = payable(Image(config.image).tokenDetails(tokenId).creator);
+                address payable creator = payable(IImage(config.image).tokenDetails(tokenId).creator);
                 SafeTransferLib.safeTransferETH(creator, price);
                 SafeTransferLib.safeTransferETH(msg.sender, price);
-                emit Burned(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price * 2);
+                emit Burned(tokenId, msg.sender, IImage(config.image).tokenDetails(tokenId).imageHash, IImage(config.image).tokenDetails(tokenId).imageURI, price * 2);
             } else {
                 SafeTransferLib.safeTransferETH(msg.sender, price);
-                emit Burned(tokenId, msg.sender, Image(config.image).tokenDetails(tokenId).imageHash, Image(config.image).tokenDetails(tokenId).imageURI, price);
+                emit Burned(tokenId, msg.sender, IImage(config.image).tokenDetails(tokenId).imageHash, IImage(config.image).tokenDetails(tokenId).imageURI, price);
             }
             
         }
