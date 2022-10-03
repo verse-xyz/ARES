@@ -175,10 +175,10 @@ A subgraph for the ARES protocol on the Goerli testnet is currently [available](
 
 Additionally, the protocol contracts can be found on the Goerli testnet at the following addresses:
 
-Factory: https://goerli.etherscan.io/address/0x0ef9f82d527b5d02bd2433e66253c686db770c33
-Token: https://goerli.etherscan.io/address/0x44761fec1d1b911fb772b649dc31dbc611a73604
-Image: https://goerli.etherscan.io/address/0x047972e161da8605d718eb6cf65e744daa781c09
-UniversalImageStorage: https://goerli.etherscan.io/address/0xea0cefb9e3c30c8cd21ad9b9ee47426582fb7c9c
+- Factory: https://goerli.etherscan.io/address/0x0ef9f82d527b5d02bd2433e66253c686db770c33
+- Token: https://goerli.etherscan.io/address/0x44761fec1d1b911fb772b649dc31dbc611a73604
+- Image: https://goerli.etherscan.io/address/0x047972e161da8605d718eb6cf65e744daa781c09
+- UniversalImageStorage: https://goerli.etherscan.io/address/0xea0cefb9e3c30c8cd21ad9b9ee47426582fb7c9c
 
 ## Setup
 Install Dependencies:
