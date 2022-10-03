@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import {ImageTypes} from "../types/ImageTypes.sol";
+import {ImageTypes} from "src/image/types/ImageTypes.sol";
 
 /// @title ImageStorage
 /// @author neuroswish

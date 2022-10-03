@@ -1,9 +1,9 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { wadExp, wadLn, wadMul, wadDiv, unsafeWadMul, toWadUnsafe, unsafeWadDiv } from "./utils/SignedWadMath.sol";
-import { IARES } from "./interfaces/IARES.sol";
-import { Initializable } from "../utils/Initializable.sol";
+import { wadExp, wadLn, wadMul, wadDiv, unsafeWadMul, toWadUnsafe, unsafeWadDiv } from "solmate/utils/SignedWadMath.sol";
+import { IARES } from "src/market/interfaces/IARES.sol";
+import { Initializable } from "src/utils/Initializable.sol";
 
 /// @title Autonomous Reactive Emissions System (ARES)
 /// @author neuroswish

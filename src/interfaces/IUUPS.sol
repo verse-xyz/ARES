@@ -2,7 +2,7 @@
 pragma solidity ^0.8.11;
 
 import { IERC1822Proxiable } from "@openzeppelin/contracts/interfaces/draft-IERC1822.sol";
-import { IERC1967Upgrade } from "./IERC1967Upgrade.sol";
+import { IERC1967Upgrade } from "src/interfaces/IERC1967Upgrade.sol";
 
 /// @title IUUPS
 /// @author Rohan Kulkarni

@@ -3,16 +3,15 @@ pragma solidity ^0.8.11;
 
 import { SafeTransferLib } from "solmate/utils/SafeTransferLib.sol";
 import { toDaysWadUnsafe } from "solmate/utils/SignedWadMath.sol";
-import { ReentrancyGuard } from "../utils/ReentrancyGuard.sol";
-import { Initializable } from "../utils/Initializable.sol";
-import { UUPS } from "../proxy/UUPS.sol";
-import { ERC721 } from "../utils/ERC721.sol";
-import { TokenStorage } from "./storage/TokenStorage.sol";
-import { IToken } from "./interfaces/IToken.sol";
-import { IImage } from "../image/interfaces/IImage.sol";
-import { IFactory } from "../factory/interfaces/IFactory.sol";
-import { Image } from "../image/Image.sol";
-import { ARES } from "../market/ARES.sol";
+import { ReentrancyGuard } from "src/utils/ReentrancyGuard.sol";
+import { Initializable } from "src/utils/Initializable.sol";
+import { ERC721 } from "src/utils/ERC721.sol";
+import { TokenStorage } from "src/token/storage/TokenStorage.sol";
+import { IToken } from "src/token/interfaces/IToken.sol";
+import { IImage } from "src/image/interfaces/IImage.sol";
+import { IFactory } from "src/factory/interfaces/IFactory.sol";
+import { Image } from "src/image/Image.sol";
+import { ARES } from "src/market/ARES.sol";
 
 contract Token is IToken, TokenStorage, ERC721, ARES, ReentrancyGuard {
     /*//////////////////////////////////////////////////////////////

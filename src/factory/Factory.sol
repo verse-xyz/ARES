@@ -2,14 +2,13 @@
 pragma solidity ^0.8.11;
 
 import { wadLn } from "solmate/utils/SignedWadMath.sol";
-import { Initializable } from "../utils/Initializable.sol";
-import { Ownable } from "../utils/Ownable.sol";
-import { ERC1967Proxy } from "../proxy/ERC1967Proxy.sol";
-import { IImage } from "../image/interfaces/IImage.sol";
-import { IUniversalImageStorage } from "../image/interfaces/IUniversalImageStorage.sol";
-import { IToken } from "../token/interfaces/IToken.sol";
-import { IFactory } from "./interfaces/IFactory.sol";
-import { FactoryStorage } from "./storage/FactoryStorage.sol";
+import { Initializable } from "src/utils/Initializable.sol";
+import { ERC1967Proxy } from "src/proxy/ERC1967Proxy.sol";
+import { IImage } from "src/image/interfaces/IImage.sol";
+import { IUniversalImageStorage } from "src/image/interfaces/IUniversalImageStorage.sol";
+import { IToken } from "src/token/interfaces/IToken.sol";
+import { IFactory } from "src/factory/interfaces/IFactory.sol";
+import { FactoryStorage } from "src/factory/storage/FactoryStorage.sol";
 
 contract Factory is IFactory, FactoryStorage, Initializable {
     /*//////////////////////////////////////////////////////////////

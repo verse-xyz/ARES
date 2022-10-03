@@ -1,12 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { Initializable } from "../utils/Initializable.sol";
-import { MetadataRenderer } from "./utils/MetadataRenderer.sol";
-import { IImage } from "./interfaces/IImage.sol";
-import { ImageStorage } from "./storage/ImageStorage.sol";
-import { IUniversalImageStorage } from "./interfaces/IUniversalImageStorage.sol";
-import { IFactory } from "../factory/interfaces/IFactory.sol";
+import { Initializable } from "src/utils/Initializable.sol";
+import { MetadataRenderer } from "src/image/utils/MetadataRenderer.sol";
+import { IImage } from "src/image/interfaces/IImage.sol";
+import { ImageStorage } from "src/image/storage/ImageStorage.sol";
+import { IUniversalImageStorage } from "src/image/interfaces/IUniversalImageStorage.sol";
+import { IFactory } from "src/factory/interfaces/IFactory.sol";
 
 contract Image is IImage, ImageStorage, Initializable {
     /*//////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ contract Image is IImage, ImageStorage, Initializable {
     function burnToken(uint256 tokenId) external {
         // Ensure the caller is the token contract
         if (msg.sender != config.token) revert ONLY_TOKEN(); 
-        
+
         // Decrement the provenance count of the image assigned to the burned token
         bytes32 imageHash = tokenToImage[tokenId].imageHash;
         universalImageStorage.decrementProvenanceCount(imageHash);

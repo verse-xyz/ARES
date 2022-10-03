@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.11;
 
-import { IUniversalImageStorage } from "../interfaces/IUniversalImageStorage.sol";
-import { IFactory } from "../../factory/interfaces/IFactory.sol";
+import { IUniversalImageStorage } from "src/image/interfaces/IUniversalImageStorage.sol";
+import { IFactory } from "src/factory/interfaces/IFactory.sol";
 
 /// @title UniversalImageStorage
 /// @author neuroswish
