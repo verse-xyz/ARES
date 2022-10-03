@@ -11,6 +11,7 @@ Documentation for interacting with the ARES Protocol.
 
 ## Architecture
 
+```ml
 factory
 ├─ Factory — "Network deployer"
 ├─ interfaces
@@ -59,6 +60,7 @@ interfaces
 ├─ IOwnable — "Interface for Ownable implementation"
 ├─ IReentrancyGuard — "Interface for Reentrancy Guard implementation"
 ├─ ITokenReceiver — "Interface for Token Receiver implementation"
+```
 
 ## Interactions
 
